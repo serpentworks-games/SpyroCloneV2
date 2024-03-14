@@ -50,5 +50,10 @@ namespace ScalePact.Core.Input
         {
             MovementVector = context.ReadValue<Vector2>();
         }
+
+        public void OnCamera(InputAction.CallbackContext context)
+        {
+            
+        }
     }
 }

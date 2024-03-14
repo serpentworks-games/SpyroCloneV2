@@ -64,6 +64,15 @@ namespace ScalePact.Core.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Camera"",
+                    ""type"": ""Value"",
+                    ""id"": ""f04e6239-29e3-4615-b518-24ac0866e3e0"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -253,6 +262,28 @@ namespace ScalePact.Core.Input
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b3874e4-3083-4a3e-9e53-dfe67622c5a8"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""MouseKeyboard"",
+                    ""action"": ""Camera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cf2b162c-3d13-432e-9b6e-5844292a563b"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Camera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -293,6 +324,7 @@ namespace ScalePact.Core.Input
             m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
             m_Player_Dodge = m_Player.FindAction("Dodge", throwIfNotFound: true);
             m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
+            m_Player_Camera = m_Player.FindAction("Camera", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -358,6 +390,7 @@ namespace ScalePact.Core.Input
         private readonly InputAction m_Player_Interact;
         private readonly InputAction m_Player_Dodge;
         private readonly InputAction m_Player_Movement;
+        private readonly InputAction m_Player_Camera;
         public struct PlayerActions
         {
             private @InputActions m_Wrapper;
@@ -366,6 +399,7 @@ namespace ScalePact.Core.Input
             public InputAction @Interact => m_Wrapper.m_Player_Interact;
             public InputAction @Dodge => m_Wrapper.m_Player_Dodge;
             public InputAction @Movement => m_Wrapper.m_Player_Movement;
+            public InputAction @Camera => m_Wrapper.m_Player_Camera;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -387,6 +421,9 @@ namespace ScalePact.Core.Input
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
+                @Camera.started += instance.OnCamera;
+                @Camera.performed += instance.OnCamera;
+                @Camera.canceled += instance.OnCamera;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -403,6 +440,9 @@ namespace ScalePact.Core.Input
                 @Movement.started -= instance.OnMovement;
                 @Movement.performed -= instance.OnMovement;
                 @Movement.canceled -= instance.OnMovement;
+                @Camera.started -= instance.OnCamera;
+                @Camera.performed -= instance.OnCamera;
+                @Camera.canceled -= instance.OnCamera;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -444,6 +484,7 @@ namespace ScalePact.Core.Input
             void OnInteract(InputAction.CallbackContext context);
             void OnDodge(InputAction.CallbackContext context);
             void OnMovement(InputAction.CallbackContext context);
+            void OnCamera(InputAction.CallbackContext context);
         }
     }
 }

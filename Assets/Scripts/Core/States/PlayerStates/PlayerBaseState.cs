@@ -7,6 +7,8 @@ namespace ScalePact.Core.States
     {
         protected PlayerStateMachine stateMachine;
 
+        protected const float kAnimatorDampTime = 0.1f;
+
         public PlayerBaseState(PlayerStateMachine stateMachine)
         {
             this.stateMachine = stateMachine;
@@ -19,6 +21,11 @@ namespace ScalePact.Core.States
 
         public override void Tick(float deltaTime)
         {
+        }
+
+        public override void PhysicsTick(float deltaTime)
+        {
+
         }
 
         public override void Exit()
