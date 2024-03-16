@@ -14,6 +14,7 @@ namespace ScalePact.Core.StateMachines
         [field: SerializeField] public float BaseMoveSpeed { get; private set; } = 5f;
         [field: SerializeField] public float BaseRotationSpeed { get; private set; } = 10f;
         [field: SerializeField] public float TargettedMoveSpeed { get; private set; } = 4f;
+        [field: SerializeField] public float BaseCrossFadeDuration { get; private set; } = 0.1f;
 
         [field: Header("Combat Data")]
         [field: SerializeField] public AttackData[] Attacks { get; private set; }

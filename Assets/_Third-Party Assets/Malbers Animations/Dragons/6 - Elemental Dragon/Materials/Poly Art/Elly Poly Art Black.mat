@@ -2,20 +2,24 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Elly Poly Art Black
   m_Shader: {fileID: 4800000, guid: b28b4ccf675226b4fb3b743cde719709, type: 3}
-  m_ShaderKeywords: 
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -40,7 +44,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Gradient:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 0f424a347039ef447a763d3d4b4782b0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -63,6 +67,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
@@ -72,7 +77,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _GradientIntensity: 1
+    - _GradientIntensity: 0.2
     - _GradientOffset: 0
     - _GradientPower: 1
     - _GradientScale: 1
@@ -93,7 +98,7 @@ Material:
     - _Color10: {r: 0.06433824, g: 0.2165315, b: 0.5147059, a: 0.291}
     - _Color11: {r: 0.119701564, g: 0.5472332, b: 0.9044118, a: 0.291}
     - _Color12: {r: 0.9333334, g: 0.7058824, b: 0.21960786, a: 1}
-    - _Color13: {r: 1, g: 0.9086207, b: 0.6102941, a: 0.272}
+    - _Color13: {r: 0.7924528, g: 0.68563706, b: 0.33268064, a: 0.272}
     - _Color14: {r: 1, g: 1, b: 1, a: 0.047}
     - _Color15: {r: 0.39916742, g: 0.5943027, b: 0.78676474, a: 0}
     - _Color16: {r: 0.18431373, g: 0.18823531, b: 0.22352943, a: 0.134}
@@ -110,11 +115,11 @@ Material:
     - _Color_15: {r: 0, g: 0.46206856, b: 1, a: 0.829}
     - _Color_16: {r: 0.17254902, g: 0.1764706, b: 0.21960786, a: 0.378}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GradientColor: {r: 0, g: 0, b: 0, a: 0}
+    - _GradientColor: {r: 0.024875412, g: 0.22900766, b: 0.4056604, a: 1}
     - _MRE1: {r: 0, g: 1, b: 0, a: 0}
-    - _MRE10: {r: 0, g: 1, b: 0, a: 0}
-    - _MRE11: {r: 0, g: 1, b: 0, a: 0}
-    - _MRE12: {r: 0, g: 1, b: 0, a: 0}
+    - _MRE10: {r: 1, g: 0, b: 0.029075146, a: 0}
+    - _MRE11: {r: 1, g: 0, b: 0.08203983, a: 0}
+    - _MRE12: {r: 1, g: 0, b: 0.009792328, a: 0}
     - _MRE13: {r: 0, g: 1, b: 0, a: 0}
     - _MRE14: {r: 0, g: 1, b: 0, a: 0}
     - _MRE15: {r: 0, g: 1, b: 0, a: 0}
@@ -126,6 +131,6 @@ Material:
     - _MRE6: {r: 0, g: 1, b: 0, a: 0}
     - _MRE7: {r: 0, g: 1, b: 0, a: 0}
     - _MRE8: {r: 0, g: 1, b: 0, a: 0}
-    - _MRE9: {r: 0, g: 1, b: 0, a: 0}
+    - _MRE9: {r: 1, g: 0, b: 0.08483076, a: 0}
     - _Tint: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

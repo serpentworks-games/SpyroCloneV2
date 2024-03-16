@@ -15,7 +15,7 @@ namespace ScalePact.Core.States
         {
             //stateMachine.InputManager.JumpEvent += SwitchStateToJump;
             stateMachine.InputManager.ToggleTargetEvent += SwitchToTargetting;
-            stateMachine.Animator.Play(PlayerHashIDs.FreeLookMoveHash);
+            stateMachine.Animator.CrossFadeInFixedTime(PlayerHashIDs.FreeLookMoveHash, stateMachine.BaseCrossFadeDuration);
             base.Enter();
         }
 

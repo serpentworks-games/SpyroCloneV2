@@ -14,7 +14,7 @@ namespace ScalePact.Core.States
         public override void Enter()
         {
             stateMachine.InputManager.ToggleTargetEvent += SwitchToFreeLook;
-            stateMachine.Animator.Play(PlayerHashIDs.TargettingMoveHash);
+            stateMachine.Animator.CrossFadeInFixedTime(PlayerHashIDs.TargettingMoveHash, stateMachine.BaseCrossFadeDuration);
             base.Enter();
         }
 
