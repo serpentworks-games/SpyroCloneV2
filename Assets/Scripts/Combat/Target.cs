@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,16 +7,10 @@ namespace ScalePact.Combat
 {
     public class Target : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
-        {
+        public event Action<Target> OnTargetDestroyed;
 
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
+        private void OnDestroy() {
+            OnTargetDestroyed?.Invoke(this);
         }
     }
 }

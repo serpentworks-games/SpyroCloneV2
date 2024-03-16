@@ -73,6 +73,24 @@ namespace ScalePact.Core.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ToggleTarget"",
+                    ""type"": ""Button"",
+                    ""id"": ""6c865922-6bc9-4ca5-b125-5ce520f5bf84"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LightAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""ceb86b2b-c5c6-42c0-85ae-c5d3ec882437"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -284,6 +302,39 @@ namespace ScalePact.Core.Input
                     ""action"": ""Camera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f3e04d06-302a-4e38-9699-1f2d3ed835a6"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""MouseKeyboard"",
+                    ""action"": ""ToggleTarget"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""36911212-5947-4b46-82d8-0cf94ceb5538"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""ToggleTarget"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""92c0d89c-3971-4215-98bb-9d19395ec94c"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""MouseKeyboard"",
+                    ""action"": ""LightAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -325,6 +376,8 @@ namespace ScalePact.Core.Input
             m_Player_Dodge = m_Player.FindAction("Dodge", throwIfNotFound: true);
             m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
             m_Player_Camera = m_Player.FindAction("Camera", throwIfNotFound: true);
+            m_Player_ToggleTarget = m_Player.FindAction("ToggleTarget", throwIfNotFound: true);
+            m_Player_LightAttack = m_Player.FindAction("LightAttack", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -391,6 +444,8 @@ namespace ScalePact.Core.Input
         private readonly InputAction m_Player_Dodge;
         private readonly InputAction m_Player_Movement;
         private readonly InputAction m_Player_Camera;
+        private readonly InputAction m_Player_ToggleTarget;
+        private readonly InputAction m_Player_LightAttack;
         public struct PlayerActions
         {
             private @InputActions m_Wrapper;
@@ -400,6 +455,8 @@ namespace ScalePact.Core.Input
             public InputAction @Dodge => m_Wrapper.m_Player_Dodge;
             public InputAction @Movement => m_Wrapper.m_Player_Movement;
             public InputAction @Camera => m_Wrapper.m_Player_Camera;
+            public InputAction @ToggleTarget => m_Wrapper.m_Player_ToggleTarget;
+            public InputAction @LightAttack => m_Wrapper.m_Player_LightAttack;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -424,6 +481,12 @@ namespace ScalePact.Core.Input
                 @Camera.started += instance.OnCamera;
                 @Camera.performed += instance.OnCamera;
                 @Camera.canceled += instance.OnCamera;
+                @ToggleTarget.started += instance.OnToggleTarget;
+                @ToggleTarget.performed += instance.OnToggleTarget;
+                @ToggleTarget.canceled += instance.OnToggleTarget;
+                @LightAttack.started += instance.OnLightAttack;
+                @LightAttack.performed += instance.OnLightAttack;
+                @LightAttack.canceled += instance.OnLightAttack;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -443,6 +506,12 @@ namespace ScalePact.Core.Input
                 @Camera.started -= instance.OnCamera;
                 @Camera.performed -= instance.OnCamera;
                 @Camera.canceled -= instance.OnCamera;
+                @ToggleTarget.started -= instance.OnToggleTarget;
+                @ToggleTarget.performed -= instance.OnToggleTarget;
+                @ToggleTarget.canceled -= instance.OnToggleTarget;
+                @LightAttack.started -= instance.OnLightAttack;
+                @LightAttack.performed -= instance.OnLightAttack;
+                @LightAttack.canceled -= instance.OnLightAttack;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -485,6 +554,8 @@ namespace ScalePact.Core.Input
             void OnDodge(InputAction.CallbackContext context);
             void OnMovement(InputAction.CallbackContext context);
             void OnCamera(InputAction.CallbackContext context);
+            void OnToggleTarget(InputAction.CallbackContext context);
+            void OnLightAttack(InputAction.CallbackContext context);
         }
     }
 }

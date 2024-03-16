@@ -8,6 +8,7 @@ namespace ScalePact.Core.States
         public abstract void Tick(float deltaTime);
         public abstract void PhysicsTick(float deltaTime);
         public abstract void Exit();
+        public abstract void UpdateAnimator(float deltaTime);
     }
 
 }

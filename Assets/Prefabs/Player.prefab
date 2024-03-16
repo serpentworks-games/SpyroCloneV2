@@ -169,7 +169,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7186693040258036687}
   - component: {fileID: 5176985095448884354}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Spine2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -356,7 +356,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5110063640727000792}
   - component: {fileID: 2811711424383932173}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Elemental_Toon_Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -433,6 +433,72 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.047897115, y: -0.019292839, z: 0.05887467}
     m_Extent: {x: 0.2266926, y: 0.09188082, z: 0.14815074}
   m_DirtyAABB: 0
+--- !u!1 &877955488772546811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3847119447246103440}
+  - component: {fileID: 2425429716196168908}
+  - component: {fileID: 3416040137270134236}
+  m_Layer: 0
+  m_Name: BiteWeapon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3847119447246103440
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877955488772546811}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8334244979094551209}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &2425429716196168908
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877955488772546811}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Radius: 0.25
+  m_Center: {x: 0, y: 0.56, z: 0}
+--- !u!114 &3416040137270134236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877955488772546811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670c24a9cfa449f4091fee89a1f5c5dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &905294650060579515
 GameObject:
   m_ObjectHideFlags: 0
@@ -505,7 +571,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3270401749767459656}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Tail08
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -525,9 +591,78 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4291511490750759976}
+  - {fileID: 3430244098512307124}
   m_Father: {fileID: 3720788148167677940}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1023183605215851098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3430244098512307124}
+  - component: {fileID: 484321714606897005}
+  - component: {fileID: 6604774536427779024}
+  m_Layer: 0
+  m_Name: TailWeapon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3430244098512307124
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023183605215851098}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3270401749767459656}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &484321714606897005
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023183605215851098}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 0
+  m_Center: {x: 0.26, y: 0, z: 0}
+--- !u!114 &6604774536427779024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023183605215851098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670c24a9cfa449f4091fee89a1f5c5dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1102535345441880376
 GameObject:
   m_ObjectHideFlags: 0
@@ -767,6 +902,7 @@ GameObject:
   - component: {fileID: 3652741422194457488}
   - component: {fileID: 8870856373619424720}
   - component: {fileID: 133294932676202800}
+  - component: {fileID: 745648714759658510}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -854,10 +990,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <BaseMoveSpeed>k__BackingField: 5
   <BaseRotationSpeed>k__BackingField: 10
-  <FloorOffsetY>k__BackingField: 0.04
-  <FloorRaycastLength>k__BackingField: 0.5
-  <RaycastWidthX>k__BackingField: 0.5
-  <RaycastWidthZ>k__BackingField: 0.75
+  <TargettedMoveSpeed>k__BackingField: 4
+  <Attacks>k__BackingField:
+  - <AttackName>k__BackingField: 0
+    <TransitionDuration>k__BackingField: 0
+    <ComboStateIndex>k__BackingField: -1
+    <ComboBlendTime>k__BackingField: 0
+    <AttackForce>k__BackingField: 0
+    <AttackForceBlendTime>k__BackingField: 0
+    <DamageHandler>k__BackingField: {fileID: 3416040137270134236}
+  - <AttackName>k__BackingField: 1
+    <TransitionDuration>k__BackingField: 0
+    <ComboStateIndex>k__BackingField: -1
+    <ComboBlendTime>k__BackingField: 0
+    <AttackForce>k__BackingField: 0
+    <AttackForceBlendTime>k__BackingField: 0
+    <DamageHandler>k__BackingField: {fileID: 0}
+  - <AttackName>k__BackingField: 2
+    <TransitionDuration>k__BackingField: 0
+    <ComboStateIndex>k__BackingField: -1
+    <ComboBlendTime>k__BackingField: 0
+    <AttackForce>k__BackingField: 0
+    <AttackForceBlendTime>k__BackingField: 0
+    <DamageHandler>k__BackingField: {fileID: 0}
 --- !u!114 &133294932676202800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -870,6 +1025,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab786dd3f50c6c84bb3412ee464c73b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &745648714759658510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897627774749870500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a220a57e77d0a654aaa466b29eb22f5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Drag>k__BackingField: 0
+  <FloorOffsetY>k__BackingField: 0
+  <FloorRaycastLength>k__BackingField: 1
+  <RaycastWidthX>k__BackingField: 0.5
+  <RaycastWidthZ>k__BackingField: 2
 --- !u!1 &2299013130233228657
 GameObject:
   m_ObjectHideFlags: 0
@@ -964,7 +1136,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15b34655bffe8e14195a89f563a47e87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targets: []
+  <TargetRadius>k__BackingField: 10
+  <TargetGroup>k__BackingField: {fileID: 0}
 --- !u!1 &2339317129624781589
 GameObject:
   m_ObjectHideFlags: 0
@@ -1259,7 +1432,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8334244979094551209}
   - component: {fileID: 8084691983564734024}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1281,6 +1454,7 @@ Transform:
   - {fileID: 3039246498667236529}
   - {fileID: 5369694312588796235}
   - {fileID: 5694610288421578742}
+  - {fileID: 3847119447246103440}
   m_Father: {fileID: 4414108156737356107}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1339,6 +1513,74 @@ Transform:
   m_Father: {fileID: 3679763564358731594}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3253787069535106159
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9075590234059813837}
+  - component: {fileID: 4345248922066059443}
+  - component: {fileID: 2957579320775631225}
+  m_Layer: 0
+  m_Name: PawWeapon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9075590234059813837
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3253787069535106159}
+  m_LocalRotation: {x: 0.000000048428756, y: -0.00000007078049, z: -0.2513237, w: 0.9679031}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6480877246467248586}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -29.112}
+--- !u!136 &4345248922066059443
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3253787069535106159}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.25
+  m_Height: 0.75
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2957579320775631225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3253787069535106159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670c24a9cfa449f4091fee89a1f5c5dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3384174356342888269
 GameObject:
   m_ObjectHideFlags: 0
@@ -1417,7 +1659,7 @@ GameObject:
   - component: {fileID: 3032952563856397841}
   - component: {fileID: 1157808250727545278}
   - component: {fileID: 1468631326023716668}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Elemental_Toon_Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1608,7 +1850,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5147836902551347546}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: R Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1675,7 +1917,7 @@ GameObject:
   m_Component:
   - component: {fileID: 309198488585235258}
   - component: {fileID: 6456035557918201055}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: L UpperArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1918,7 +2160,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3720788148167677940}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Tail07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2044,7 +2286,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1549075821174417926}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: R Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2142,7 +2384,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8070756528874824397}
   - component: {fileID: 7477724328705780860}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Elemental_Toon_Wings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2291,7 +2533,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4896515602216452284}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: L Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2549,7 +2791,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2673959387871139733}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Wing R Finger 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2675,7 +2917,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8895627220173264117}
   - component: {fileID: 7740531184834396643}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Spine1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2797,7 +3039,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8234696805080169115}
   - component: {fileID: 4432961376218780265}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: R UpperArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2916,7 +3158,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 634661872313774817}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Wing L Finger 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2980,9 +3222,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3995505752724470457}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Elemental Dragon Toon Small
-  m_TagString: Animal
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3047,7 +3289,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6480877246467248586}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: L Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3069,6 +3311,7 @@ Transform:
   - {fileID: 2991239672910019934}
   - {fileID: 5713495081726829650}
   - {fileID: 5451624701133322115}
+  - {fileID: 9075590234059813837}
   m_Father: {fileID: 2965654368811373156}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3082,7 +3325,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1570290557028113727}
   - component: {fileID: 6292831251590743211}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Spine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3296,7 +3539,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4492331262284031073}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: LookAtTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3390,7 +3633,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2928270713656189560}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Tail10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3550,7 +3793,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1490104087325193958}
   - component: {fileID: 7427777866917010344}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Elemental_Toon_Tail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
