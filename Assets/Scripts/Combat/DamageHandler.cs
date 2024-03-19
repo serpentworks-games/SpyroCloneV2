@@ -10,7 +10,7 @@ namespace ScalePact.Combat
 
         List<Collider> alreadyCollidedWith = new();
 
-        Collider collider;
+        new Collider collider;
 
         private void Awake()
         {
@@ -35,15 +35,10 @@ namespace ScalePact.Combat
 
             if (alreadyCollidedWith.Contains(other)) return;
 
-            Debug.Log("Adding collider");
-
             alreadyCollidedWith.Add(other);
-
-            Debug.Log("Trying to apply damage...");
 
             if(other.TryGetComponent<Health>(out Health health))
             {
-                Debug.Log("Applying damage");
                 health.ApplyDamage(1);
             }
         }

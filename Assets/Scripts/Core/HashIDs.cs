@@ -19,6 +19,10 @@ public static class PlayerHashIDs
 
 public class EnemyHashIDs
 {
+    public static int SpeedHash = Animator.StringToHash("Speed");
+
+    public static int LocomotionHash = Animator.StringToHash("Locomotion");
+    public static int Attack1Hash = Animator.StringToHash("Attack1");
 
 }
 

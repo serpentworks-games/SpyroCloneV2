@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Cinemachine;
 using ScalePact.Combat;
 using ScalePact.Core.Input;
 using ScalePact.Core.States;

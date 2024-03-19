@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 045ceec40e491e84ab46429111a2533f
 ModelImporter:
-  serializedVersion: 21300
+  serializedVersion: 22200
   internalIDToNameTable:
   - first:
       74: 1827226128182048838
@@ -23,7 +23,11 @@ ModelImporter:
     removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
-    rigImportWarnings: 
+    rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Bone length in
+      copied configuration does not match position in animation file:\n\t'R_L Foot'
+      : position error = 27.611298 mm\n\t'R_L Toe0' : position error = 31.769424
+      mm\n\t'R_R Foot' : position error = 27.611238 mm\n\t'R_R Toe0' : position error
+      = 31.800035 mm\n"
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -62,7 +66,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.31442177
+        functionName: EnableCollider
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.44811028
+        functionName: DisableCollider
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -75,6 +93,7 @@ ModelImporter:
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 0
     importBlendShapes: 0
     importCameras: 0
@@ -102,6 +121,7 @@ ModelImporter:
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 2
@@ -665,8 +685,7 @@ ModelImporter:
     - name: R_L Finger22
       parentName: R_L Finger21
       position: {x: -0.037881315, y: 0, z: 0.000000009536743}
-      rotation: {x: -0.0000000036028596, y: -0.0000000016389401, z: -0.062994495,
-        w: 0.9980139}
+      rotation: {x: -0.0000000036028596, y: -0.0000000016389401, z: -0.062994495, w: 0.9980139}
       scale: {x: 1, y: 1, z: 1}
     - name: R_L Finger3
       parentName: R_L Hand
@@ -850,13 +869,13 @@ ModelImporter:
     hasTranslationDoF: 1
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: d9a8fb1864c033e4b990da223ac23ead,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: d9a8fb1864c033e4b990da223ac23ead, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
   avatarSetup: 2
   addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
   remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 

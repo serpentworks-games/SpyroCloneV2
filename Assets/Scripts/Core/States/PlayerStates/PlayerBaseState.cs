@@ -1,5 +1,4 @@
 using ScalePact.Core.StateMachines;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace ScalePact.Core.States
@@ -17,7 +16,7 @@ namespace ScalePact.Core.States
 
         public override void Enter()
         {
-            Debug.Log($"Entering {this}");
+            
         }
 
         public override void Tick(float deltaTime)
@@ -31,7 +30,7 @@ namespace ScalePact.Core.States
 
         public override void Exit()
         {
-            Debug.Log($"Exiting {this}");
+            
         }
 
         public override void UpdateAnimator(float deltaTime)

@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Drag>k__BackingField: 0.03
+  <UsesRigidBody>k__BackingField: 1
   <FloorOffsetY>k__BackingField: 0
   <FloorRaycastLength>k__BackingField: 1
   <RaycastWidthX>k__BackingField: 0.5

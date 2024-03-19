@@ -8,6 +8,7 @@ namespace ScalePact.Core
         [field: SerializeField] public float Drag { get; private set; }
         //Serialized Fields
         [field: Header("Finding the Floor")]
+        [field: SerializeField] public bool UsesRigidBody { get; private set; } = false;
         [field: SerializeField] public float FloorOffsetY { get; private set; }
         [field: SerializeField] public float FloorRaycastLength { get; private set; } = 1f;
         [field: SerializeField] public float RaycastWidthX { get; private set; }
@@ -16,7 +17,8 @@ namespace ScalePact.Core
         //public properties
         public Vector3 Movement => impact + Vector3.up * verticalVelocity;
 
-        Rigidbody rigidbody;
+        new Rigidbody rigidbody;
+        CharacterController controller;
 
         Vector3 impact;
         float verticalVelocity;
@@ -27,12 +29,18 @@ namespace ScalePact.Core
 
         private void Awake()
         {
-            rigidbody = GetComponent<Rigidbody>();
+            if (UsesRigidBody)
+            {
+                rigidbody = GetComponent<Rigidbody>();
+            }
+            else
+            {
+                controller = GetComponent<CharacterController>();
+            }
         }
 
         private void FixedUpdate()
         {
-
             if (verticalVelocity < 0f && IsGrounded())
             {
                 verticalVelocity = Physics.gravity.y * Time.fixedDeltaTime;
@@ -45,11 +53,17 @@ namespace ScalePact.Core
             impact = Vector3.SmoothDamp(impact, Vector3.zero, ref dampingVelocity, Drag);
         }
 
+
         public Vector3 GetFloorMovement()
         {
             return new Vector3(rigidbody.position.x, FindFloor().y + FloorOffsetY, rigidbody.position.z);
         }
 
+        public Vector3 GetFloorMovement(Vector3 transform)
+        {
+            return new Vector3(transform.x, FindFloor().y + FloorOffsetY, transform.z);
+        }
+        
         public void AddForce(Vector3 forceToAdd)
         {
             impact += forceToAdd;
@@ -57,10 +71,15 @@ namespace ScalePact.Core
 
         bool IsGrounded()
         {
-            if (GetFloorRaycasts(0, 0, 0.6f) != Vector3.zero)
+            if (UsesRigidBody)
             {
-                return true;
+                if (GetFloorRaycasts(0, 0, 0.6f) != Vector3.zero) return true;
             }
+            else
+            {
+                if (controller.isGrounded) return true;
+            }
+
             return false;
         }
 

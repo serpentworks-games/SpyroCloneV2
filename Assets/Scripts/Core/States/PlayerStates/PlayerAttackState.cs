@@ -1,15 +1,14 @@
-using System;
 using ScalePact.Combat;
 using ScalePact.Core.StateMachines;
 using ScalePact.Core.States;
 using UnityEngine;
-using UnityEngine.ProBuilder;
 
 public class PlayerAttackState : PlayerBaseState
 {
     float previousFrameTime;
     bool hasForceAlreadyBeenApplied = false;
     AttackData attackData;
+    
     public PlayerAttackState(PlayerStateMachine stateMachine, int attackIndex) : base(stateMachine)
     {
         attackData = stateMachine.Attacks[attackIndex];
