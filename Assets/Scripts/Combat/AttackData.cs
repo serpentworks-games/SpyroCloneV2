@@ -12,6 +12,7 @@ namespace ScalePact.Combat
         [field: SerializeField] public float AttackForce { get; private set; }
         [field: SerializeField] public float AttackForceBlendTime { get; private set; }
         [field: SerializeField] public DamageHandler DamageHandler { get; private set; }
+        [field: SerializeField] public float KnockBackForce { get; private set; }
     }
 
     [System.Serializable]

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ScalePact.Core;
 using UnityEngine;
 
 namespace ScalePact.Combat
@@ -11,6 +12,8 @@ namespace ScalePact.Combat
         List<Collider> alreadyCollidedWith = new();
 
         new Collider collider;
+
+        float knockBackForce;
 
         private void Awake()
         {
@@ -30,16 +33,28 @@ namespace ScalePact.Combat
             collider.enabled = false;
         }
 
-        private void OnTriggerEnter(Collider other) {
+        public void SetUpAttack(float knockBackForce)
+        {
+            this.knockBackForce = knockBackForce;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
             if (other == rootCollider) return;
 
             if (alreadyCollidedWith.Contains(other)) return;
 
             alreadyCollidedWith.Add(other);
 
-            if(other.TryGetComponent<Health>(out Health health))
+            if (other.TryGetComponent<Health>(out Health health))
             {
                 health.ApplyDamage(1);
+            }
+
+            if (other.TryGetComponent<ForceReceiver>(out ForceReceiver forceReceiver))
+            {
+                Vector3 knockBackVector = other.transform.position - collider.transform.position;
+                forceReceiver.AddForce(knockBackVector.normalized * knockBackForce);
             }
         }
     }

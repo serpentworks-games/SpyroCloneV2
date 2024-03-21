@@ -16,7 +16,7 @@ namespace ScalePact.Core.States
 
         public override void Enter()
         {
-            
+
         }
 
         public override void Tick(float deltaTime)
@@ -30,12 +30,24 @@ namespace ScalePact.Core.States
 
         public override void Exit()
         {
-            
+
         }
 
         public override void UpdateAnimator(float deltaTime)
         {
 
+        }
+
+        protected void ReturnToMovementState()
+        {
+            if (stateMachine.TargetScanner.CurrentTarget != null)
+            {
+                stateMachine.SwitchState(new PlayerTargetState(stateMachine));
+            }
+            else
+            {
+                stateMachine.SwitchState(new PlayerMoveState(stateMachine));
+            }
         }
 
         protected void MovementWithForces(Vector3 motion, float desiredMoveSpeed, float deltaTime)

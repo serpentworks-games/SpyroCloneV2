@@ -15,6 +15,7 @@ namespace ScalePact.Core.StateMachines
         [field: SerializeField] public float BaseCrossFadeDuration { get; private set; } = 0.1f;
 
         [field: Header("Combat Data")]
+        [field: SerializeField] public float MaxImpactDuration { get; private set; } = 1f;
         [field: SerializeField] public AttackData[] Attacks { get; private set; }
 
 

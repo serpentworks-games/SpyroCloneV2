@@ -31,7 +31,7 @@ public class NPCHashIDs
 
 }
 
-public class MiscHashIDs
+public class SharedHashIDs
 {
-
+    public static int ImpactStateHash = Animator.StringToHash("Impact");
 }

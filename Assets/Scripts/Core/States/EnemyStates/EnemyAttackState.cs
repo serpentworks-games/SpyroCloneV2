@@ -10,11 +10,17 @@ public class EnemyAttackState : EnemyBaseState
 
     public override void Enter()
     {
+        stateMachine.Weapon.SetUpAttack(stateMachine.Attack.KnockBackForce);
         stateMachine.Animator.CrossFadeInFixedTime(EnemyHashIDs.Attack1Hash, stateMachine.BaseCrossFadeDuration);
     }
 
     public override void Tick(float deltaTime)
     {
+        if (GetNormalizedAnimTime(stateMachine.Animator) >= 1)
+        {
+            stateMachine.SwitchState(new EnemyChaseState(stateMachine));
+        }
+
         MovementWithForces(Vector3.zero, deltaTime);
         FacePlayer();
     }

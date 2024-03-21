@@ -25,7 +25,7 @@ public class PlayerAttackState : PlayerBaseState
         MovementWithForces(Vector3.zero, 0, deltaTime);
         FaceTarget();
 
-        float normalizedTime = GetNormalizedAnimTime();
+        float normalizedTime = GetNormalizedAnimTime(stateMachine.Animator);
 
         if (normalizedTime < 1f)
         {
@@ -40,16 +40,9 @@ public class PlayerAttackState : PlayerBaseState
         }
         else
         {
-            if (stateMachine.TargetScanner.CurrentTarget != null)
-            {
-                stateMachine.SwitchState(new PlayerTargetState(stateMachine));
-            }
-            else
-            {
-                stateMachine.SwitchState(new PlayerMoveState(stateMachine));
-            }
-
+            ReturnToMovementState();
         }
+        
         previousFrameTime = normalizedTime;
     }
 
@@ -86,25 +79,5 @@ public class PlayerAttackState : PlayerBaseState
         Vector3 forceToAdd = stateMachine.transform.forward * attackData.AttackForce;
         stateMachine.ForceReceiver.AddForce(forceToAdd);
         hasForceAlreadyBeenApplied = true;
-    }
-
-    float GetNormalizedAnimTime()
-    {
-        AnimatorStateInfo currentAnimStateInfo = stateMachine.Animator.GetCurrentAnimatorStateInfo(0);
-        AnimatorStateInfo nextAnimStateInfo = stateMachine.Animator.GetNextAnimatorStateInfo(0);
-
-        if (stateMachine.Animator.IsInTransition(0) && nextAnimStateInfo.IsTag("Attack"))
-        {
-            return nextAnimStateInfo.normalizedTime;
-        }
-
-        else if (!stateMachine.Animator.IsInTransition(0) && currentAnimStateInfo.IsTag("Attack"))
-        {
-            return currentAnimStateInfo.normalizedTime;
-        }
-        else
-        {
-            return 0;
-        }
     }
 }

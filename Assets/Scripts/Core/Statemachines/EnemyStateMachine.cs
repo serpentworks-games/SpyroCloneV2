@@ -11,7 +11,9 @@ namespace ScalePact.Core.StateMachines
 
         [field: Header("Combat Variables")]
         [field: SerializeField] public DamageHandler Weapon { get; private set; }
+        [field: SerializeField] public AttackData Attack { get; private set; }
         [field: SerializeField] public float AttackRange { get; private set; } = 2f;
+        [field: SerializeField] public float MaxImpactDuration { get; private set; } = 1f;
 
         [field: Header("Other Variables")]
         [field: SerializeField] public float BaseMovementSpeed { get; private set; } = 6f;

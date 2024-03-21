@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace ScalePact.Core
 {
@@ -19,6 +20,7 @@ namespace ScalePact.Core
 
         new Rigidbody rigidbody;
         CharacterController controller;
+        NavMeshAgent agent;
 
         Vector3 impact;
         float verticalVelocity;
@@ -35,6 +37,7 @@ namespace ScalePact.Core
             }
             else
             {
+                agent = GetComponent<NavMeshAgent>();
                 controller = GetComponent<CharacterController>();
             }
         }
@@ -51,6 +54,11 @@ namespace ScalePact.Core
             }
 
             impact = Vector3.SmoothDamp(impact, Vector3.zero, ref dampingVelocity, Drag);
+
+            if(impact == Vector3.zero && agent != null)
+            {
+                agent.enabled = true;
+            }
         }
 
 
@@ -67,6 +75,10 @@ namespace ScalePact.Core
         public void AddForce(Vector3 forceToAdd)
         {
             impact += forceToAdd;
+            if(agent != null)
+            {
+                agent.enabled = false;
+            }
         }
 
         bool IsGrounded()
