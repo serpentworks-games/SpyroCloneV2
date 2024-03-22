@@ -6,15 +6,15 @@ using UnityEngine;
 
 namespace ScalePact.Core.States
 {
-    public class PlayerJumpState : PlayerBaseState
+    public class PlayerFallState : PlayerBaseState
     {
-        public PlayerJumpState(PlayerStateMachine stateMachine) : base(stateMachine)
+        public PlayerFallState(PlayerStateMachine stateMachine) : base(stateMachine)
         {
         }
 
         public override void Enter()
         {
-            stateMachine.Animator.CrossFadeInFixedTime(PlayerHashIDs.JumpStartHash, stateMachine.BaseCrossFadeDuration);
+            stateMachine.Animator.CrossFadeInFixedTime(PlayerHashIDs.JumpLandHash, 0.2f);
         }
 
         public override void Tick(float deltaTime)
@@ -27,7 +27,7 @@ namespace ScalePact.Core.States
             }
             else
             {
-                stateMachine.SwitchState(new PlayerFallState(stateMachine));
+                ReturnToMovementState();
             }
 
             previousFrameTime = normalizedTime;
@@ -35,7 +35,7 @@ namespace ScalePact.Core.States
 
         public override void PhysicsTick(float deltaTime)
         {
-            MovementWithForces(Vector3.zero, 0, deltaTime);
+
         }
 
         public override void Exit()

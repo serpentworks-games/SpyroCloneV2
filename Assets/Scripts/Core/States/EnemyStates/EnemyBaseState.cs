@@ -14,33 +14,15 @@ namespace ScalePact.Core.States
             this.stateMachine = stateMachine;
         }
 
-        public override void Enter()
-        {
-            Debug.Log($"Entering {this}");
-        }
-
-        public override void Tick(float deltaTime)
-        {
-
-        }
-
         public override void PhysicsTick(float deltaTime)
         {
-
-        }
-
-        public override void Exit()
-        {
-            Debug.Log($"Exiting {this}");
-        }
-
-        public override void UpdateAnimator(float deltaTime)
-        {
-
+            //unused
         }
 
         protected bool IsInChaseRange()
         {
+            if (stateMachine.PlayerRef.IsDead) return false;
+            
             float distToPlayer = Vector3.Distance(stateMachine.PlayerRef.transform.position, stateMachine.transform.position);
             return distToPlayer <= stateMachine.ChaseRange;
         }
@@ -53,8 +35,11 @@ namespace ScalePact.Core.States
 
         protected void MoveTowardsPlayer(float deltaTime)
         {
-            stateMachine.NavMeshAgent.destination = stateMachine.PlayerRef.transform.position;
-            MovementWithForces(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.BaseMovementSpeed, deltaTime);
+            if (stateMachine.NavMeshAgent.isOnNavMesh)
+            {
+                stateMachine.NavMeshAgent.destination = stateMachine.PlayerRef.transform.position;
+                MovementWithForces(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.BaseMovementSpeed, deltaTime);
+            }
             stateMachine.NavMeshAgent.velocity = stateMachine.CharacterController.velocity;
         }
 

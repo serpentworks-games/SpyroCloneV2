@@ -15,6 +15,9 @@ public static class PlayerHashIDs
     public static int LightAttack1Hash = Animator.StringToHash("LightAttack1");
     public static int LightAttack2Hash = Animator.StringToHash("LightAttack2");
     public static int LightAttack3Hash = Animator.StringToHash("LightAttack3");
+    public static int JumpStartHash = Animator.StringToHash("JumpStart");
+    public static int JumpLandHash = Animator.StringToHash("JumpLand");
+    public static int GlideHash = Animator.StringToHash("Glide");
 }
 
 public class EnemyHashIDs
@@ -34,4 +37,5 @@ public class NPCHashIDs
 public class SharedHashIDs
 {
     public static int ImpactStateHash = Animator.StringToHash("Impact");
+    public static int DeathStateHash = Animator.StringToHash("Death");
 }

@@ -7,6 +7,7 @@ namespace ScalePact.Core.States
 {
     public class PlayerTargetState : PlayerBaseState
     {
+      
         public PlayerTargetState(PlayerStateMachine stateMachine) : base(stateMachine)
         {
         }
@@ -14,6 +15,8 @@ namespace ScalePact.Core.States
         public override void Enter()
         {
             stateMachine.InputManager.ToggleTargetEvent += SwitchToFreeLook;
+            stateMachine.InputManager.DodgeEvent += ApplyDodge;
+            stateMachine.InputManager.JumpEvent += SwitchStateToJump;
             stateMachine.Animator.CrossFadeInFixedTime(PlayerHashIDs.TargettingMoveHash, stateMachine.BaseCrossFadeDuration);
             base.Enter();
         }
@@ -37,7 +40,7 @@ namespace ScalePact.Core.States
 
         public override void PhysicsTick(float deltaTime)
         {
-            MovementWithForces(CalculateTargettedMovement(), stateMachine.TargettedMoveSpeed, deltaTime);
+            MovementWithForces(CalculateTargettedMovement(deltaTime), stateMachine.TargettedMoveSpeed, deltaTime);
             FaceTarget();
             base.PhysicsTick(deltaTime);
         }
@@ -45,6 +48,8 @@ namespace ScalePact.Core.States
         public override void Exit()
         {
             stateMachine.InputManager.ToggleTargetEvent -= SwitchToFreeLook;
+            stateMachine.InputManager.DodgeEvent -= ApplyDodge;
+            stateMachine.InputManager.JumpEvent -= SwitchStateToJump;
             base.Exit();
         }
 
@@ -78,6 +83,20 @@ namespace ScalePact.Core.States
         {
             stateMachine.TargetScanner.ClearCurrentTarget();
             stateMachine.SwitchState(new PlayerMoveState(stateMachine));
+        }
+
+        void SwitchStateToJump()
+        {
+            stateMachine.SwitchState(new PlayerJumpState(stateMachine));
+        }
+
+        void ApplyDodge()
+        {
+            if(Time.time - stateMachine.PreviousDodgeTime < stateMachine.DodgeCooldown) return;
+
+            stateMachine.SetDodgeTime(Time.time);
+            dodgeInput = stateMachine.InputManager.MovementVector;
+            remainingDodgeTime = stateMachine.MaxDodgeDuration;
         }
     }
 }

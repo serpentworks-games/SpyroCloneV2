@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using ScalePact.Core;
+using ScalePact.Forces;
 using UnityEngine;
 
 namespace ScalePact.Combat
@@ -54,7 +55,7 @@ namespace ScalePact.Combat
             if (other.TryGetComponent<ForceReceiver>(out ForceReceiver forceReceiver))
             {
                 Vector3 knockBackVector = other.transform.position - collider.transform.position;
-                forceReceiver.AddForce(knockBackVector.normalized * knockBackForce);
+                forceReceiver.AddForce(knockBackVector * knockBackForce);
             }
         }
     }

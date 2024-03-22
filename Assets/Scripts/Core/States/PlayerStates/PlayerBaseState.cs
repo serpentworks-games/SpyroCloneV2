@@ -9,6 +9,10 @@ namespace ScalePact.Core.States
 
         protected const float kAnimatorDampTime = 0.1f;
 
+        protected float previousFrameTime;
+        protected float remainingDodgeTime;
+        protected Vector2 dodgeInput;
+
         public PlayerBaseState(PlayerStateMachine stateMachine)
         {
             this.stateMachine = stateMachine;
@@ -83,11 +87,22 @@ namespace ScalePact.Core.States
             return moveDir;
         }
 
-        protected Vector3 CalculateTargettedMovement()
+        protected Vector3 CalculateTargettedMovement(float deltaTime)
         {
             Vector3 movement = new();
-            movement += stateMachine.transform.right * stateMachine.InputManager.MovementVector.x;
-            movement += stateMachine.transform.forward * stateMachine.InputManager.MovementVector.y;
+            if (remainingDodgeTime > 0f)
+            {
+                float distOverTime = stateMachine.MaxDodgeDistance / stateMachine.MaxDodgeDuration;
+                movement += stateMachine.transform.right * dodgeInput.x * distOverTime;
+                movement += stateMachine.transform.forward * dodgeInput.y * distOverTime;
+
+                remainingDodgeTime = Mathf.Max(remainingDodgeTime - deltaTime, 0f);
+            }
+            else
+            {
+                movement += stateMachine.transform.right * stateMachine.InputManager.MovementVector.x;
+                movement += stateMachine.transform.forward * stateMachine.InputManager.MovementVector.y;
+            }
             return movement;
         }
 

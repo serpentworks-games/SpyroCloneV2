@@ -29,7 +29,10 @@ namespace ScalePact.Core.States
             MovementWithForces(Vector3.zero, 0f, deltaTime);
             impactDuration -= deltaTime;
 
-            ReturnToMovementState();
+            if (impactDuration <= 0)
+            {
+                ReturnToMovementState();
+            }
         }
 
         public override void Exit()

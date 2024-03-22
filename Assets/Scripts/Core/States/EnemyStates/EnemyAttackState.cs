@@ -12,6 +12,7 @@ public class EnemyAttackState : EnemyBaseState
     {
         stateMachine.Weapon.SetUpAttack(stateMachine.Attack.KnockBackForce);
         stateMachine.Animator.CrossFadeInFixedTime(EnemyHashIDs.Attack1Hash, stateMachine.BaseCrossFadeDuration);
+        FacePlayer();
     }
 
     public override void Tick(float deltaTime)
@@ -22,7 +23,6 @@ public class EnemyAttackState : EnemyBaseState
         }
 
         MovementWithForces(Vector3.zero, deltaTime);
-        FacePlayer();
     }
 
     public override void PhysicsTick(float deltaTime)

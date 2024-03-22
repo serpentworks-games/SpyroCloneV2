@@ -13,7 +13,7 @@ namespace ScalePact.Core.States
 
         public override void Enter()
         {
-            //stateMachine.InputManager.JumpEvent += SwitchStateToJump;
+            stateMachine.InputManager.JumpEvent += SwitchStateToJump;
             stateMachine.InputManager.ToggleTargetEvent += SwitchToTargetting;
             stateMachine.Animator.CrossFadeInFixedTime(PlayerHashIDs.FreeLookMoveHash, stateMachine.BaseCrossFadeDuration);
             base.Enter();
@@ -43,7 +43,7 @@ namespace ScalePact.Core.States
         public override void Exit()
         {
             base.Exit();
-            //stateMachine.InputManager.JumpEvent -= SwitchStateToJump;
+            stateMachine.InputManager.JumpEvent -= SwitchStateToJump;
             stateMachine.InputManager.ToggleTargetEvent -= SwitchToTargetting;
         }
 

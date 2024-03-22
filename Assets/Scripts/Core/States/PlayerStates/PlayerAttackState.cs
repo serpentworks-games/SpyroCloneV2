@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerAttackState : PlayerBaseState
 {
-    float previousFrameTime;
+    
     bool hasForceAlreadyBeenApplied = false;
     AttackData attackData;
     
@@ -18,6 +18,7 @@ public class PlayerAttackState : PlayerBaseState
     public override void Enter()
     {
         stateMachine.Animator.CrossFadeInFixedTime(attackData.AttackName.ToString(), 0.2f);
+        attackData.DamageHandler.SetUpAttack(attackData.KnockBackForce);
     }
 
     public override void Tick(float deltaTime)

@@ -12,7 +12,6 @@ namespace ScalePact.Core.States
         public override void Enter()
         {
             stateMachine.Animator.CrossFadeInFixedTime(EnemyHashIDs.LocomotionHash, stateMachine.BaseCrossFadeDuration);
-            base.Enter();
         }
 
         public override void Tick(float deltaTime)
@@ -37,9 +36,11 @@ namespace ScalePact.Core.States
 
         public override void Exit()
         {
-            stateMachine.NavMeshAgent.ResetPath();
-            stateMachine.NavMeshAgent.velocity = Vector3.zero;
-            base.Exit();
+            if (stateMachine.NavMeshAgent.enabled == true)
+            {
+                stateMachine.NavMeshAgent.ResetPath();
+                stateMachine.NavMeshAgent.velocity = Vector3.zero;
+            }
         }
 
         public override void UpdateAnimator(float deltaTime)
@@ -49,6 +50,8 @@ namespace ScalePact.Core.States
 
         bool IsInAttackRange()
         {
+            if (stateMachine.PlayerRef.IsDead) return false;
+            
             return Vector3.Distance(stateMachine.PlayerRef.transform.position, stateMachine.transform.position) <= stateMachine.AttackRange;
         }
     }
