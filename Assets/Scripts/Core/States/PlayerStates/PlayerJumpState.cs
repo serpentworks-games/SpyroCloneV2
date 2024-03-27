@@ -8,12 +8,16 @@ namespace ScalePact.Core.States
 {
     public class PlayerJumpState : PlayerBaseState
     {
+        Vector3 momentum;
+
         public PlayerJumpState(PlayerStateMachine stateMachine) : base(stateMachine)
         {
         }
 
         public override void Enter()
         {
+            stateMachine.ForceReceiver.AddJumpForce(stateMachine.ForceReceiver.JumpForce);
+            momentum = stateMachine.Rigidbody.velocity;
             stateMachine.Animator.CrossFadeInFixedTime(PlayerHashIDs.JumpStartHash, stateMachine.BaseCrossFadeDuration);
         }
 

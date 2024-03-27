@@ -15,9 +15,6 @@ namespace ScalePact.Core.StateMachines
         [field: SerializeField] public float TargettedMoveSpeed { get; private set; } = 4f;
         [field: SerializeField] public float BaseCrossFadeDuration { get; private set; } = 0.1f;
 
-        [field: Header("Jump and Glide Variables")]
-        [field: SerializeField] public float JumpForce { get; private set; }
-
         [field: Header("Dodge Variables")]
         [field: SerializeField] public float MaxDodgeDuration { get; private set; }
         [field: SerializeField] public float DodgeCooldown { get; private set; }

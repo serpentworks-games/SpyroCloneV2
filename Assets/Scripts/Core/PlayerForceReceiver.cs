@@ -1,3 +1,4 @@
+using MalbersAnimations;
 using UnityEngine;
 
 namespace ScalePact.Forces
@@ -5,6 +6,7 @@ namespace ScalePact.Forces
     public class PlayerForceReceiver : ForceReceiver
     {
         [field: Header("Jump and Glide Forces")]
+        [field: SerializeField] public float JumpForce { get; private set; }
         [field: SerializeField] public float JumpFallOff { get; private set; }
         [field: SerializeField] public float LowJumpMultiplier { get; private set; }
 
@@ -32,7 +34,7 @@ namespace ScalePact.Forces
             }
             else
             {
-                verticalVelocity += Physics.gravity.y * Time.fixedDeltaTime;
+                verticalVelocity += Physics.gravity.y * (JumpFallOff - 1) * Time.fixedDeltaTime;
             }
 
             impact = Vector3.SmoothDamp(impact, Vector3.zero, ref dampingVelocity, Drag);
@@ -46,6 +48,11 @@ namespace ScalePact.Forces
         public override void AddForce(Vector3 forceToAdd)
         {
             impact += forceToAdd;
+        }
+
+        public void AddJumpForce(float jumpForce)
+        {
+            verticalVelocity += jumpForce;
         }
 
         public override bool IsGrounded()
