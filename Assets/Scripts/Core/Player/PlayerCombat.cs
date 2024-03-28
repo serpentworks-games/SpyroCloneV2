@@ -1,7 +1,9 @@
-using System;
 using ScalePact.Combat;
 using ScalePact.Core.Input;
+using ScalePact.Utils;
 using UnityEngine;
+
+//TODO: Fix quick click combos breaking
 
 namespace ScalePact.Core.Player
 {
@@ -9,9 +11,12 @@ namespace ScalePact.Core.Player
     {
         [SerializeField] AttackData[] attackData;
 
-        int currentIndex = -1;
-        float previousFrameTime;
-        float normalizedTime;
+        public bool IsAttacking { get; private set; } = false;
+
+        int currentIndex = 0;
+        int numOfClicks = 0;
+        float lastClickTime = 0;
+        float maxComboDelay = 1f;
 
         InputManager inputManager;
         Animator animator;
@@ -34,41 +39,66 @@ namespace ScalePact.Core.Player
 
         private void Update()
         {
-
+            if (Time.time - lastClickTime > maxComboDelay)
+            {
+                IsAttacking = false;
+                numOfClicks = 0;
+            }
         }
 
         private void OnAttackPressed()
         {
+            Debug.Log("Attack pressed!");
+            lastClickTime = Time.time;
+            numOfClicks++;
+            IsAttacking = true;
+
+            animator.SetTrigger(PlayerHashIDs.AttackTriggerHash);
+
+            if (numOfClicks == 1)
+            {
+                SetAnimatorIndex(0);
+            }
+
+            numOfClicks = Mathf.Clamp(numOfClicks, 0, attackData.Length);
+
+            if (numOfClicks >= 2 && GetNormalizedTime() > attackData[0].ComboBlendTime && CheckAnimStateName(attackData[0].AttackName.ToString()))
+            {
+                SetAnimatorIndex(1);
+            }
+
+            if (numOfClicks >= 3 && GetNormalizedTime() > attackData[1].ComboBlendTime && CheckAnimStateName(attackData[1].AttackName.ToString()))
+            {
+                SetAnimatorIndex(2);
+            }
 
         }
 
-        private void Attack(int index)
+        float GetNormalizedTime()
         {
-
+            return animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
         }
 
-        private void AttemptComboAttack(AttackData attack)
+        bool CheckAnimStateName(string name)
         {
-
+            return animator.GetCurrentAnimatorStateInfo(0).IsName(name);
         }
 
-        float GetNormalizedTime(Animator animator)
+        void SetAnimatorIndex(int index)
         {
-            AnimatorStateInfo currentState = animator.GetCurrentAnimatorStateInfo(0);
-            AnimatorStateInfo nextState = animator.GetNextAnimatorStateInfo(0);
+            currentIndex = index;
+            animator.SetInteger(PlayerHashIDs.AttackIndexHash, index);
+        }
 
-            if (animator.IsInTransition(0) && nextState.IsTag("Attack"))
-            {
-                return nextState.normalizedTime;
-            }
-            else if (!animator.IsInTransition(0) && currentState.IsTag("Attack"))
-            {
-                return currentState.normalizedTime;
-            }
-            else
-            {
-                return 0f;
-            }
+        //Anim Events
+        void EnableCollider()
+        {
+            attackData[currentIndex].DamageHandler.EnableCollider();
+        }
+
+        void DisableCollider()
+        {
+            attackData[currentIndex].DamageHandler.DisableCollider();
         }
     }
 }

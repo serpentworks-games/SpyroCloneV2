@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using ScalePact.Core.StateMachines;
-using ScalePact.Core.States;
+using ScalePact.Utils;
 using UnityEngine;
 
-namespace ScalePact.Core.States
+namespace ScalePact.StateMachines.States
 {
     public class EnemyImpactState : EnemyBaseState
     {

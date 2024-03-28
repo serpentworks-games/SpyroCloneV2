@@ -68,12 +68,8 @@ namespace ScalePact.Core.Input
 
         public void OnLightAttack(InputAction.CallbackContext context)
         {
-            if (context.performed)
-            {
-                LightAttackEvent?.Invoke();
-                IsAttacking = true;
-            }
-            else if (context.canceled) { IsAttacking = false; }
+            if (!context.performed) { return; }
+            LightAttackEvent?.Invoke();
         }
     }
 }

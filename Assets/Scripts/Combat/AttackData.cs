@@ -6,8 +6,6 @@ namespace ScalePact.Combat
     public class AttackData
     {
         [field: SerializeField] public AttackName AttackName { get; private set; }
-        [field: SerializeField] public float TransitionDuration { get; private set; }
-        [field: SerializeField] public int ComboStateIndex { get; private set; } = -1;
         [field: SerializeField] public float ComboBlendTime { get; private set; }
         [field: SerializeField] public float AttackForce { get; private set; }
         [field: SerializeField] public float AttackForceBlendTime { get; private set; }

@@ -1,10 +1,10 @@
 using ScalePact.Combat;
-using ScalePact.Core.States;
-using ScalePact.Forces;
+using ScalePact.Combat.Forces;
+using ScalePact.StateMachines.States;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace ScalePact.Core.StateMachines
+namespace ScalePact.StateMachines
 {
     public class EnemyStateMachine : StateMachine
     {

@@ -1,6 +1,6 @@
 using ScalePact.Combat;
 using ScalePact.Core.Input;
-using Unity.Mathematics;
+using ScalePact.Utils;
 using UnityEngine;
 
 namespace ScalePact.Core.Player
@@ -39,6 +39,7 @@ namespace ScalePact.Core.Player
         Animator animator;
         InputManager inputManager;
         TargetScanner targetScanner;
+        PlayerCombat combat;
 
         //Base movement
         Vector3 moveDir;
@@ -60,6 +61,8 @@ namespace ScalePact.Core.Player
             animator = GetComponent<Animator>();
             targetScanner = GetComponent<TargetScanner>();
             inputManager = GetComponent<InputManager>();
+            combat = GetComponent<PlayerCombat>();
+
             mainCamera = Camera.main;
         }
 
@@ -75,7 +78,15 @@ namespace ScalePact.Core.Player
 
         private void Update()
         {
-            CalculateForwardMovement();
+            if (combat.IsAttacking)
+            {
+                rb.velocity = Vector3.zero;
+                moveDir = Vector3.zero; 
+            }
+            else
+            {
+                CalculateForwardMovement();
+            }
 
             UpdateAnimator();
         }
@@ -107,7 +118,14 @@ namespace ScalePact.Core.Player
 
         void UpdateAnimator()
         {
-            animator.SetFloat(PlayerHashIDs.BaseVelocityHash, inputManager.MovementVector.magnitude, animatorDampTime, Time.deltaTime);
+            if (!combat.IsAttacking)
+            {
+                animator.SetFloat(PlayerHashIDs.BaseVelocityHash, inputManager.MovementVector.magnitude, animatorDampTime, Time.deltaTime);
+            }
+            else
+            {
+                animator.SetFloat(PlayerHashIDs.BaseVelocityHash, 0f, animatorDampTime, Time.deltaTime);
+            }
         }
 
 
@@ -209,16 +227,6 @@ namespace ScalePact.Core.Player
             {
                 gravity.y = jumpPower;
             }
-        }
-
-        void EnableCollider()
-        {
-
-        }
-
-        void DisableCollider()
-        {
-
         }
     }
 }

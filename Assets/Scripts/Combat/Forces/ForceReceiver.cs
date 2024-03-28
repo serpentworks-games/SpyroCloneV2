@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.AI;
 
-namespace ScalePact.Forces
+namespace ScalePact.Combat.Forces
 {
     public abstract class ForceReceiver : MonoBehaviour
     {

@@ -1,7 +1,7 @@
-using ScalePact.Core.StateMachines;
+using ScalePact.StateMachines;
 using UnityEngine;
 
-namespace ScalePact.Core.States
+namespace ScalePact.StateMachines.States
 {
     public class EnemyDeathState : EnemyBaseState
     {

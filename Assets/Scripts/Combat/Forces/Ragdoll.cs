@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace ScalePact.Core
+namespace ScalePact.Combat.Forces
 {
     public class Ragdoll : MonoBehaviour
     {

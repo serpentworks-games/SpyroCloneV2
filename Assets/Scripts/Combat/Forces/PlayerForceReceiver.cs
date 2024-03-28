@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ScalePact.Forces
+namespace ScalePact.Combat.Forces
 {
     public class PlayerForceReceiver : ForceReceiver
     {

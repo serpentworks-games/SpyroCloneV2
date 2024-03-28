@@ -1,7 +1,7 @@
-using ScalePact.Core.States;
+using ScalePact.StateMachines.States;
 using UnityEngine;
 
-namespace ScalePact.Core.StateMachines
+namespace ScalePact.StateMachines
 {
     public class StateMachine : MonoBehaviour
     {

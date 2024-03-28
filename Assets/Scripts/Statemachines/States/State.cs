@@ -1,8 +1,6 @@
-using System;
-using ScalePact.Core.StateMachines;
 using UnityEngine;
 
-namespace ScalePact.Core.States
+namespace ScalePact.StateMachines.States
 {
     public abstract class State
     {

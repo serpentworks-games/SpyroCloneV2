@@ -179,12 +179,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackData:
   - <AttackName>k__BackingField: 0
-    <TransitionDuration>k__BackingField: 0
-    <ComboStateIndex>k__BackingField: -1
-    <ComboBlendTime>k__BackingField: 0
+    <ComboBlendTime>k__BackingField: 0.1
     <AttackForce>k__BackingField: 0
     <AttackForceBlendTime>k__BackingField: 0
     <DamageHandler>k__BackingField: {fileID: 513441427633781250}
+    <KnockBackForce>k__BackingField: 0
+  - <AttackName>k__BackingField: 1
+    <ComboBlendTime>k__BackingField: 0.1
+    <AttackForce>k__BackingField: 0
+    <AttackForceBlendTime>k__BackingField: 0
+    <DamageHandler>k__BackingField: {fileID: 5980369180188055502}
+    <KnockBackForce>k__BackingField: 0
+  - <AttackName>k__BackingField: 2
+    <ComboBlendTime>k__BackingField: 0.1
+    <AttackForce>k__BackingField: 0
+    <AttackForceBlendTime>k__BackingField: 0
+    <DamageHandler>k__BackingField: {fileID: 7459340440744602604}
     <KnockBackForce>k__BackingField: 0
 --- !u!1 &2299013130233228657
 GameObject:
@@ -3669,6 +3679,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6819053045219510963, guid: a4066e883f78dc541a23a72d26d6e6c0, type: 3}
   m_PrefabInstance: {fileID: 6387574367914266569}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5980369180188055502 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 746387108803254279, guid: a4066e883f78dc541a23a72d26d6e6c0, type: 3}
+  m_PrefabInstance: {fileID: 6387574367914266569}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670c24a9cfa449f4091fee89a1f5c5dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7292205236779152123
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3739,3 +3760,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8540385363491367283, guid: 017593dfe3658e242ab2a1d1419ff643, type: 3}
   m_PrefabInstance: {fileID: 7292205236779152123}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7459340440744602604 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 195898452918360343, guid: 017593dfe3658e242ab2a1d1419ff643, type: 3}
+  m_PrefabInstance: {fileID: 7292205236779152123}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670c24a9cfa449f4091fee89a1f5c5dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
