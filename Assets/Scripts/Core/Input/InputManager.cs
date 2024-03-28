@@ -15,6 +15,7 @@ namespace ScalePact.Core.Input
         public event Action InteractEvent;
         public event Action DodgeEvent;
         public event Action ToggleTargetEvent;
+        public event Action LightAttackEvent;
 
         InputActions inputActions;
 
@@ -55,20 +56,24 @@ namespace ScalePact.Core.Input
 
         public void OnCamera(InputAction.CallbackContext context)
         {
-            
+
         }
 
         public void OnToggleTarget(InputAction.CallbackContext context)
         {
-            if(!context.performed) { return; }
+            if (!context.performed) { return; }
             ToggleTargetEvent?.Invoke();
 
         }
 
         public void OnLightAttack(InputAction.CallbackContext context)
         {
-            if(context.performed) { IsAttacking = true; }
-            else if(context.canceled) { IsAttacking = false; }
+            if (context.performed)
+            {
+                LightAttackEvent?.Invoke();
+                IsAttacking = true;
+            }
+            else if (context.canceled) { IsAttacking = false; }
         }
     }
 }

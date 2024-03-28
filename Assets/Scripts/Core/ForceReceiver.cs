@@ -17,7 +17,5 @@ namespace ScalePact.Forces
 
         public abstract void AddForce(Vector3 forceToAdd);
 
-        public abstract bool IsGrounded();
-
     }
 }

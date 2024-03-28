@@ -40,7 +40,7 @@ namespace ScalePact.Forces
             
         }
 
-        public override bool IsGrounded()
+        public bool IsGrounded()
         {
             if (controller.isGrounded) return true;
             else return false;

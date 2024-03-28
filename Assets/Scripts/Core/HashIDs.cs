@@ -8,6 +8,9 @@ public static class PlayerHashIDs
     public static int BaseVelocityHash = Animator.StringToHash("BaseVelocity");
     public static int TargetForwardVelocityHash = Animator.StringToHash("TargetForwardVelocity");
     public static int TargetRightVelocityHash = Animator.StringToHash("TargetRightVelocity");
+    public static int DeathTriggerHash = Animator.StringToHash("DeathTrigger");
+    public static int AttackTriggerHash = Animator.StringToHash("AttackTrigger");
+    public static int AttackIndexHash = Animator.StringToHash("AttackIndex");
 
     //Animator States
     public static int FreeLookMoveHash = Animator.StringToHash("Locomotion");

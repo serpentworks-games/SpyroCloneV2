@@ -52,11 +52,11 @@ namespace ScalePact.Combat
                 health.ApplyDamage(1);
             }
 
-            if (other.TryGetComponent<ForceReceiver>(out ForceReceiver forceReceiver))
-            {
-                Vector3 knockBackVector = other.transform.position - collider.transform.position;
-                forceReceiver.AddForce(knockBackVector * knockBackForce);
-            }
+            // if (other.TryGetComponent<ForceReceiver>(out ForceReceiver forceReceiver))
+            // {
+            //     Vector3 knockBackVector = other.transform.position - collider.transform.position;
+            //     forceReceiver.AddForce(knockBackVector * knockBackForce);
+            // }
         }
     }
 }

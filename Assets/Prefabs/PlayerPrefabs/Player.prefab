@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 1701600792824568678}
   - component: {fileID: 3652741422194457488}
   - component: {fileID: 7057174833017142102}
-  - component: {fileID: 8870856373619424720}
+  - component: {fileID: 477704634879389871}
   - component: {fileID: 133294932676202800}
   - component: {fileID: 3212216596492361962}
-  - component: {fileID: 2745965066297535732}
+  - component: {fileID: 3140659787214616435}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -113,7 +113,7 @@ CapsuleCollider:
   m_Height: 2.3265445
   m_Direction: 2
   m_Center: {x: 0.010075252, y: 1.0254825, z: 0.42111015}
---- !u!114 &8870856373619424720
+--- !u!114 &477704634879389871
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,43 +122,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 1897627774749870500}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a074b330b31e324a89d318c9dd4e052, type: 3}
+  m_Script: {fileID: 11500000, guid: 5d4508422fd2e964493ca1318e0ab695, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <BaseMoveSpeed>k__BackingField: 5
-  <BaseRotationSpeed>k__BackingField: 10
-  <TargettedMoveSpeed>k__BackingField: 4
-  <BaseCrossFadeDuration>k__BackingField: 0.1
-  <JumpForce>k__BackingField: 0
-  <MaxDodgeDuration>k__BackingField: 0.25
-  <DodgeCooldown>k__BackingField: 0.5
-  <MaxDodgeDistance>k__BackingField: 0.5
-  <MaxImpactDuration>k__BackingField: 0.35
-  <Attacks>k__BackingField:
-  - <AttackName>k__BackingField: 0
-    <TransitionDuration>k__BackingField: 0.1
-    <ComboStateIndex>k__BackingField: 1
-    <ComboBlendTime>k__BackingField: 0.8
-    <AttackForce>k__BackingField: 2
-    <AttackForceBlendTime>k__BackingField: 0.35
-    <DamageHandler>k__BackingField: {fileID: 513441427633781250}
-    <KnockBackForce>k__BackingField: 5
-  - <AttackName>k__BackingField: 1
-    <TransitionDuration>k__BackingField: 0.1
-    <ComboStateIndex>k__BackingField: 2
-    <ComboBlendTime>k__BackingField: 0.9
-    <AttackForce>k__BackingField: 2
-    <AttackForceBlendTime>k__BackingField: 0.35
-    <DamageHandler>k__BackingField: {fileID: 5980369180188055502}
-    <KnockBackForce>k__BackingField: 5
-  - <AttackName>k__BackingField: 2
-    <TransitionDuration>k__BackingField: 0.2
-    <ComboStateIndex>k__BackingField: -1
-    <ComboBlendTime>k__BackingField: 0
-    <AttackForce>k__BackingField: 8
-    <AttackForceBlendTime>k__BackingField: 0.35
-    <DamageHandler>k__BackingField: {fileID: 7459340440744602604}
-    <KnockBackForce>k__BackingField: 10
+  moveSpeed: 10
+  rotationSpeed: 20
+  jumpPower: 5
+  jumpFallOff: 2
+  lowJumpMulti: 1.5
+  glideSpeed: 7
+  movingGlideForce: 200
+  stationaryGlideForce: 100
+  slopeLimit: 45
+  slopeInfluence: 5
+  floorOffsetY: 0.05
+  floorRaycastLength: 1
+  raycastWidthX: 0.5
+  raycastWidthZ: 2
+  animatorDampTime: 0.1
 --- !u!114 &133294932676202800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,7 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 10
---- !u!114 &2745965066297535732
+--- !u!114 &3140659787214616435
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -193,17 +174,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1897627774749870500}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 228ad45cc4e584b40b449f3c58e16ebf, type: 3}
+  m_Script: {fileID: 11500000, guid: 3d5d1f131f4b09444b781bbb0ec40a49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Drag>k__BackingField: 0.3
-  <UsesRigidBody>k__BackingField: 1
-  <JumpFallOff>k__BackingField: 0
-  <LowJumpMultiplier>k__BackingField: 0
-  <FloorOffsetY>k__BackingField: 0.05
-  <FloorRaycastLength>k__BackingField: 1
-  <RaycastWidthX>k__BackingField: 0.5
-  <RaycastWidthZ>k__BackingField: 2
+  attackData:
+  - <AttackName>k__BackingField: 0
+    <TransitionDuration>k__BackingField: 0
+    <ComboStateIndex>k__BackingField: -1
+    <ComboBlendTime>k__BackingField: 0
+    <AttackForce>k__BackingField: 0
+    <AttackForceBlendTime>k__BackingField: 0
+    <DamageHandler>k__BackingField: {fileID: 513441427633781250}
+    <KnockBackForce>k__BackingField: 0
 --- !u!1 &2299013130233228657
 GameObject:
   m_ObjectHideFlags: 0
@@ -3687,17 +3669,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6819053045219510963, guid: a4066e883f78dc541a23a72d26d6e6c0, type: 3}
   m_PrefabInstance: {fileID: 6387574367914266569}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5980369180188055502 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 746387108803254279, guid: a4066e883f78dc541a23a72d26d6e6c0, type: 3}
-  m_PrefabInstance: {fileID: 6387574367914266569}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 670c24a9cfa449f4091fee89a1f5c5dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &7292205236779152123
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3768,14 +3739,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8540385363491367283, guid: 017593dfe3658e242ab2a1d1419ff643, type: 3}
   m_PrefabInstance: {fileID: 7292205236779152123}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7459340440744602604 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 195898452918360343, guid: 017593dfe3658e242ab2a1d1419ff643, type: 3}
-  m_PrefabInstance: {fileID: 7292205236779152123}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 670c24a9cfa449f4091fee89a1f5c5dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
