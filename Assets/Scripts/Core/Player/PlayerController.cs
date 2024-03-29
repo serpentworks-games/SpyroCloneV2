@@ -88,14 +88,6 @@ namespace ScalePact.Core.Player
                 CalculateForwardMovement();
             }
 
-            if (!IsGrounded() && inJump)
-            {
-                animator.SetTrigger(PlayerHashIDs.LandTriggerHash);
-                inJump = false;
-            }
-
-            Debug.Log("IsGrounded() = " + IsGrounded());
-
             UpdateAnimator();
         }
 
@@ -119,6 +111,11 @@ namespace ScalePact.Core.Player
             //Stick to the floor if on the ground
             if (floorMovement != rb.position && IsGrounded() && rb.velocity.y <= 0)
             {
+                if (inJump)
+                {
+                    animator.SetTrigger(PlayerHashIDs.LandTriggerHash);
+                    inJump = false;
+                }
                 rb.MovePosition(floorMovement);
                 gravity.y = 0;
             }
@@ -242,7 +239,6 @@ namespace ScalePact.Core.Player
             if (IsGrounded())
             {
                 animator.SetTrigger(PlayerHashIDs.JumpTriggerHash);
-                inJump = true;
             }
         }
 
@@ -250,6 +246,7 @@ namespace ScalePact.Core.Player
         void ApplyJump()
         {
             gravity.y = jumpPower;
+            inJump = true;
         }
     }
 }

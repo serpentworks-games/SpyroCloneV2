@@ -5,6 +5,7 @@ Last Updated: 3/28/24
 PlayerController:
     - Bug - If you have diagonal input, you get stuck in falling
             Appears to be an issue with the ground check
+    - [FIXED] Bug - Doesn't stay in the fall state while still in the air
 
 PlayerCombat:
     - Bug - Clicking too fast breaks the combos
