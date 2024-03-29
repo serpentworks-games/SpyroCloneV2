@@ -1,0 +1,10 @@
+Current Bugs, Issues, and Things To Be Fixed
+
+Last Updated: 3/28/24
+
+PlayerController:
+    - Bug - If you have diagonal input, you get stuck in falling
+            Appears to be an issue with the ground check
+
+PlayerCombat:
+    - Bug - Clicking too fast breaks the combos

@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace ScalePact.Core.Player
 {
-
     public class PlayerController : MonoBehaviour
     {
         [Header("Grounded Movement")]
@@ -49,6 +48,7 @@ namespace ScalePact.Core.Player
         Vector3 floorMovement;
         Vector3 gravity;
         Vector3 combinedFloorRaycast;
+        bool inJump;
 
 
         //Slopes
@@ -81,12 +81,20 @@ namespace ScalePact.Core.Player
             if (combat.IsAttacking)
             {
                 rb.velocity = Vector3.zero;
-                moveDir = Vector3.zero; 
+                moveDir = Vector3.zero;
             }
             else
             {
                 CalculateForwardMovement();
             }
+
+            if (!IsGrounded() && inJump)
+            {
+                animator.SetTrigger(PlayerHashIDs.LandTriggerHash);
+                inJump = false;
+            }
+
+            Debug.Log("IsGrounded() = " + IsGrounded());
 
             UpdateAnimator();
         }
@@ -193,7 +201,15 @@ namespace ScalePact.Core.Player
 
             if (Physics.Raycast(raycastFloorPos, -Vector3.up, out RaycastHit hit, raycastLength))
             {
-                return hit.point;
+                floorNormal = hit.normal;
+                if (Vector3.Angle(floorNormal, Vector3.up) < slopeLimit)
+                {
+                    return hit.point;
+                }
+                else
+                {
+                    return Vector3.zero;
+                }
             }
             else
             {
@@ -225,8 +241,15 @@ namespace ScalePact.Core.Player
         {
             if (IsGrounded())
             {
-                gravity.y = jumpPower;
+                animator.SetTrigger(PlayerHashIDs.JumpTriggerHash);
+                inJump = true;
             }
+        }
+
+        //Anim Events
+        void ApplyJump()
+        {
+            gravity.y = jumpPower;
         }
     }
 }

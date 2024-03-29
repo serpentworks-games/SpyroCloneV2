@@ -3,8 +3,6 @@ using ScalePact.Core.Input;
 using ScalePact.Utils;
 using UnityEngine;
 
-//TODO: Fix quick click combos breaking
-
 namespace ScalePact.Core.Player
 {
     public class PlayerCombat : MonoBehaviour
