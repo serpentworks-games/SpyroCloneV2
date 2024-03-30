@@ -17,22 +17,13 @@ namespace ScalePact.Utils
         public static int AttackIndexHash = Animator.StringToHash("AttackIndex");
         public static int ImpactTriggerHash = Animator.StringToHash("ImpactTrigger");
 
-        //Jumping
+        //Jumping/Gliding
         public static int JumpTriggerHash = Animator.StringToHash("JumpTrigger");
+        public static int GlideTriggerHash = Animator.StringToHash("GlideTrigger");
         public static int LandTriggerHash = Animator.StringToHash("LandTrigger");
 
         //Death
         public static int DeathTriggerHash = Animator.StringToHash("DeathTrigger");
-
-        //States
-        public static int FreeLookMoveHash = Animator.StringToHash("Locomotion");
-        public static int TargettingMoveHash = Animator.StringToHash("TargettingLocomotion");
-        public static int LightAttack1Hash = Animator.StringToHash("LightAttack1");
-        public static int LightAttack2Hash = Animator.StringToHash("LightAttack2");
-        public static int LightAttack3Hash = Animator.StringToHash("LightAttack3");
-        public static int JumpStartHash = Animator.StringToHash("JumpStart");
-        public static int JumpLandHash = Animator.StringToHash("JumpLand");
-        public static int GlideHash = Animator.StringToHash("Glide");
     }
 
     public class EnemyHashIDs

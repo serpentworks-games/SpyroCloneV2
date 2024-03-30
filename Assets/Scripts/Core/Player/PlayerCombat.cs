@@ -1,5 +1,6 @@
 using ScalePact.Combat;
 using ScalePact.Core.Input;
+using ScalePact.Forces;
 using ScalePact.Utils;
 using UnityEngine;
 
@@ -19,12 +20,14 @@ namespace ScalePact.Core.Player
         InputManager inputManager;
         Animator animator;
         TargetScanner targetScanner;
+        PlayerForceReceiver forceReceiver;
 
         private void Awake()
         {
             inputManager = GetComponent<InputManager>();
             animator = GetComponent<Animator>();
             targetScanner = GetComponent<TargetScanner>();
+            forceReceiver = GetComponent<PlayerForceReceiver>();
         }
 
         private void OnEnable()
@@ -48,7 +51,6 @@ namespace ScalePact.Core.Player
 
         private void OnAttackPressed()
         {
-            Debug.Log("Attack pressed!");
             lastClickTime = Time.time;
             numOfClicks++;
             IsAttacking = true;
@@ -57,19 +59,19 @@ namespace ScalePact.Core.Player
 
             if (numOfClicks == 1)
             {
-                SetAnimatorIndex(0);
+                SetIndexKnockBackAndForce(0);
             }
 
             numOfClicks = Mathf.Clamp(numOfClicks, 0, attackData.Length);
 
             if (numOfClicks >= 2 && GetNormalizedTime() > attackData[0].ComboBlendTime && CheckAnimStateName(attackData[0].AttackName.ToString()))
             {
-                SetAnimatorIndex(1);
+                SetIndexKnockBackAndForce(1);
             }
 
             if (numOfClicks >= 3 && GetNormalizedTime() > attackData[1].ComboBlendTime && CheckAnimStateName(attackData[1].AttackName.ToString()))
             {
-                SetAnimatorIndex(2);
+                SetIndexKnockBackAndForce(2);
             }
 
         }
@@ -84,9 +86,10 @@ namespace ScalePact.Core.Player
             return animator.GetCurrentAnimatorStateInfo(0).IsName(name);
         }
 
-        void SetAnimatorIndex(int index)
+        void SetIndexKnockBackAndForce(int index)
         {
             currentIndex = index;
+            attackData[index].DamageHandler.SetUpAttack(attackData[index].KnockBackForce);
             animator.SetInteger(PlayerHashIDs.AttackIndexHash, index);
         }
 

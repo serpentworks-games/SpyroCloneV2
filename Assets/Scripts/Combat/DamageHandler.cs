@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ScalePact.Forces;
 using UnityEngine;
 
 namespace ScalePact.Combat
@@ -44,16 +45,16 @@ namespace ScalePact.Combat
 
             alreadyCollidedWith.Add(other);
 
-            if (other.TryGetComponent<Health>(out Health health))
+            if (other.TryGetComponent(out Health health))
             {
                 health.ApplyDamage(1);
             }
 
-            // if (other.TryGetComponent<ForceReceiver>(out ForceReceiver forceReceiver))
-            // {
-            //     Vector3 knockBackVector = other.transform.position - collider.transform.position;
-            //     forceReceiver.AddForce(knockBackVector * knockBackForce);
-            // }
+            if (other.TryGetComponent(out ForceReceiver forceReceiver))
+            {
+                Vector3 knockBackVector = other.transform.position - collider.transform.position;
+                forceReceiver.AddForce(knockBackVector * knockBackForce);
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace ScalePact.Combat.Forces
+namespace ScalePact.Forces
 {
     public class EnemyForceReceiver : ForceReceiver
     {
@@ -25,7 +25,7 @@ namespace ScalePact.Combat.Forces
                 verticalVelocity += Physics.gravity.y * Time.deltaTime;
             }
 
-            impact = Vector3.SmoothDamp(impact, Vector3.zero, ref dampingVelocity, Drag);
+            impact = Vector3.SmoothDamp(impact, Vector3.zero, ref dampingVelocity, impactDrag);
 
             if (agent != null)
             {
@@ -36,7 +36,7 @@ namespace ScalePact.Combat.Forces
                 }
             }
 
-            
+
         }
 
         public bool IsGrounded()

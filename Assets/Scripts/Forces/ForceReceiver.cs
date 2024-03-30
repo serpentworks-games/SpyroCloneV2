@@ -1,12 +1,11 @@
 using UnityEngine;
 
-namespace ScalePact.Combat.Forces
+namespace ScalePact.Forces
 {
     public abstract class ForceReceiver : MonoBehaviour
     {
-        [field: Header("Baseline Variables")]
-        [field: SerializeField] public float Drag { get; private set; }
-        [field: SerializeField] public bool UsesRigidBody { get; private set; } = false;
+        [Header("Baseline Variables")]
+        [SerializeField]protected float impactDrag;
         //public properties
         public Vector3 Movement => impact + Vector3.up * verticalVelocity;
 
