@@ -15,6 +15,7 @@ namespace ScalePact.Core.Input
         public event Action InteractEvent;
         public event Action DodgeEvent;
         public event Action ToggleTargetEvent;
+        public event Action SwitchTargetEvent;
         public event Action LightAttackEvent;
 
         InputActions inputActions;

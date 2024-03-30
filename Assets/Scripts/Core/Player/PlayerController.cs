@@ -42,6 +42,7 @@ namespace ScalePact.Core.Player
 
         //Base movement
         Vector3 moveDir;
+        bool isTargetting;
 
         //Grounded/Jumping
         Vector3 raycastFloorPos;
@@ -69,11 +70,13 @@ namespace ScalePact.Core.Player
         private void OnEnable()
         {
             inputManager.JumpEvent += OnJumpPressed;
+            inputManager.ToggleTargetEvent += OnLockOnTarget;
         }
 
         private void OnDisable()
         {
             inputManager.JumpEvent -= OnJumpPressed;
+            inputManager.ToggleTargetEvent += OnLockOnTarget;
         }
 
         private void Update()
@@ -234,11 +237,35 @@ namespace ScalePact.Core.Player
         }
         #endregion
 
+        //Events
         void OnJumpPressed()
         {
             if (IsGrounded())
             {
                 animator.SetTrigger(PlayerHashIDs.JumpTriggerHash);
+            }
+        }
+
+        void OnLockOnTarget()
+        {
+            if(targetScanner.TargetColliders.Count < 0)
+            {
+                isTargetting = false;
+                //change control type
+                //set animation bool
+                return;
+            }
+            isTargetting = !isTargetting;
+
+            //set anim bool
+
+            if(isTargetting)
+            {
+                //change to locked on movement
+            }
+            else
+            {
+                //change to normal movement
             }
         }
 

@@ -18,11 +18,13 @@ namespace ScalePact.Core.Player
 
         InputManager inputManager;
         Animator animator;
+        TargetScanner targetScanner;
 
         private void Awake()
         {
             inputManager = GetComponent<InputManager>();
             animator = GetComponent<Animator>();
+            targetScanner = GetComponent<TargetScanner>();
         }
 
         private void OnEnable()

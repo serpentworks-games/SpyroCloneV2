@@ -1,85 +1,136 @@
 using System.Collections.Generic;
+using System.Linq;
 using Cinemachine;
+using ScalePact.Core.Input;
 using UnityEngine;
 
 namespace ScalePact.Combat
 {
     public class TargetScanner : MonoBehaviour
     {
-        [field: SerializeField] public float TargetRadius { get; private set; } = 10f;
-        [field: SerializeField] public CinemachineTargetGroup TargetGroup { get; private set; }
+        [SerializeField] float targettingRadius;
+        [SerializeField] LayerMask targettingLayer;
 
-        public Target CurrentTarget { get; private set; }
+        public Collider ActiveTarget { get; private set; }
+        public List<Collider> TargetColliders { get; private set; } = new();
 
-        Camera mainCamera;
+        Collider[] overlappedColliders;
+        
+        int targetIndex;
+        bool isLockedOn;
 
-        List<Target> targets = new();
+        GameObject targetFollow;
+        CinemachineTargetGroup targetGroup;
 
-        private void Start() {
-            mainCamera = Camera.main;
+        InputManager inputManager;
+
+        private void Awake()
+        {
+            inputManager = GetComponent<InputManager>();
+            targetGroup = FindObjectOfType<CinemachineStateDrivenCamera>().GetComponentInChildren<CinemachineTargetGroup>();
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnEnable()
         {
-            if (!other.TryGetComponent<Target>(out Target candidateTarget)) return;
-            targets.Add(candidateTarget);
-            candidateTarget.OnTargetDestroyed += RemoveTargetFromTargetGroup;
+            inputManager.ToggleTargetEvent += OnLockOnTarget;
+            inputManager.SwitchTargetEvent += OnSwitchTarget;
         }
 
-        private void OnTriggerExit(Collider other)
+        private void OnDisable()
         {
-            if (!other.TryGetComponent<Target>(out Target candidateTarget)) return;
-
-            targets.Remove(candidateTarget);
-            RemoveTargetFromTargetGroup(candidateTarget);
-            candidateTarget.OnTargetDestroyed -= RemoveTargetFromTargetGroup;
+            inputManager.ToggleTargetEvent -= OnLockOnTarget;
+            inputManager.SwitchTargetEvent -= OnSwitchTarget;
         }
 
-        public bool SelectTarget()
+        private void Start()
         {
-            if (targets.Count == 0) return false; //if no targets, don't try to find one
-
-            Target closestTarget = null;
-            float closestTargetDistanceToCenter = Mathf.Infinity;
-            
-            foreach (Target target in targets)
+            targetFollow = new()
             {
-                Vector2 viewPos = mainCamera.WorldToViewportPoint(target.transform.position);
-                if(viewPos.x < 0 || viewPos.x > 1 || viewPos.y < 0 || viewPos.y > 1)
-                {
-                    continue;
-                }
+                name = "TargetFollow"
+            };
 
-                Vector2 toCenter = viewPos - new Vector2(0.5f, 0.5f);
+            targetGroup.AddMember(targetFollow.transform, 1, 1);
+        }
 
-                if(toCenter.sqrMagnitude < closestTargetDistanceToCenter)
-                {
-                    closestTarget = target;
-                    closestTargetDistanceToCenter = toCenter.sqrMagnitude;
-                }
+        private void Update()
+        {
+            GetPotentialTargets();
+
+            if (isLockedOn)
+            {
+                targetFollow.transform.position = Vector3.Lerp(targetFollow.transform.position, ActiveTarget.bounds.center, Time.deltaTime * 4f); //HISS magic number
             }
 
-            if (closestTarget == null) return false;
-
-            CurrentTarget = closestTarget;
-            TargetGroup.AddMember(CurrentTarget.transform, 1f, 2f);
-            
-            return true;
         }
 
-        public void ClearCurrentTarget()
+        private void GetPotentialTargets()
         {
-            RemoveTargetFromTargetGroup(CurrentTarget);
-        }
+            overlappedColliders = Physics.OverlapSphere(transform.position, targettingRadius, targettingLayer, QueryTriggerInteraction.Ignore);
+            TargetColliders.Clear();
 
-        private void RemoveTargetFromTargetGroup(Target target)
-        {
-            if (CurrentTarget == target)
+            for (int i = 0; i < overlappedColliders.Length; i++)
             {
-                TargetGroup.RemoveMember(CurrentTarget.transform);
-                CurrentTarget = null;
+                if (overlappedColliders[i].TryGetComponent<Target>(out _))
+                {
+                    TargetColliders.Add(overlappedColliders[i]);
+                }
             }
-            target.OnTargetDestroyed -= RemoveTargetFromTargetGroup;
         }
+
+        void SortTargetList()
+        {
+            TargetColliders = TargetColliders.OrderBy(x => Camera.main.WorldToScreenPoint(x.transform.position).x).ToList();
+        }
+
+        Collider GetClosestTarget()
+        {
+            Collider bestTarget = null;
+            TargetColliders = TargetColliders.OrderBy(x => Vector3.Distance(transform.position, x.transform.position)).ToList();
+            bestTarget = TargetColliders[0];
+            return bestTarget;
+        }
+
+        bool CheckForTargets()
+        {
+            if (TargetColliders.Count > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        #region Events Callbacks
+        void OnLockOnTarget()
+        {
+            if (!CheckForTargets())
+            {
+                isLockedOn = false;
+                return;
+            }
+
+            isLockedOn = !isLockedOn;
+            if (isLockedOn)
+            {
+                ActiveTarget = GetClosestTarget();
+            }
+        }
+
+        void OnSwitchTarget()
+        {
+            if (isLockedOn)
+            {
+                SortTargetList();
+                if (targetIndex < (TargetColliders.Count - 1))
+                {
+                    targetIndex = targetIndex + 1;
+                }
+                else
+                {
+                    targetIndex = TargetColliders.Count - 1;
+                }
+                ActiveTarget = TargetColliders[targetIndex];
+            }
+        }
+        #endregion
     }
 }
