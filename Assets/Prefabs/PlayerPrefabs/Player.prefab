@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 133294932676202800}
   - component: {fileID: 3212216596492361962}
   - component: {fileID: 3140659787214616435}
+  - component: {fileID: 2377116733749134119}
+  - component: {fileID: 5927301835103781318}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -39,7 +41,7 @@ Transform:
   - {fileID: 9124399830720189938}
   - {fileID: 1986548813387492989}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1701600792824568678
 Animator:
@@ -88,7 +90,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!136 &7057174833017142102
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -96,7 +98,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1897627774749870500}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 870559f761eb90243ba09333475b5046, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -124,21 +126,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d4508422fd2e964493ca1318e0ab695, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 8
-  rotationSpeed: 20
-  jumpPower: 4
-  jumpFallOff: 2
-  lowJumpMulti: 1.5
-  glideSpeed: 7
-  movingGlideForce: 200
-  stationaryGlideForce: 100
-  slopeLimit: 45
-  slopeInfluence: 5
-  floorOffsetY: 0.05
-  floorRaycastLength: 1
-  raycastWidthX: 0.5
-  raycastWidthZ: 2
-  animatorDampTime: 0.1
 --- !u!114 &133294932676202800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,6 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 10
+  isImmortal: 1
 --- !u!114 &3140659787214616435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,22 +167,67 @@ MonoBehaviour:
   attackData:
   - <AttackName>k__BackingField: 0
     <ComboBlendTime>k__BackingField: 0.1
-    <AttackForce>k__BackingField: 0
+    <AttackForce>k__BackingField: 100
     <AttackForceBlendTime>k__BackingField: 0
     <DamageHandler>k__BackingField: {fileID: 513441427633781250}
-    <KnockBackForce>k__BackingField: 0
+    <KnockBackForce>k__BackingField: 5
   - <AttackName>k__BackingField: 1
     <ComboBlendTime>k__BackingField: 0.1
-    <AttackForce>k__BackingField: 0
+    <AttackForce>k__BackingField: 100
     <AttackForceBlendTime>k__BackingField: 0
     <DamageHandler>k__BackingField: {fileID: 5980369180188055502}
-    <KnockBackForce>k__BackingField: 0
+    <KnockBackForce>k__BackingField: 5
   - <AttackName>k__BackingField: 2
     <ComboBlendTime>k__BackingField: 0.1
-    <AttackForce>k__BackingField: 0
+    <AttackForce>k__BackingField: 100
     <AttackForceBlendTime>k__BackingField: 0
     <DamageHandler>k__BackingField: {fileID: 7459340440744602604}
-    <KnockBackForce>k__BackingField: 0
+    <KnockBackForce>k__BackingField: 20
+--- !u!114 &2377116733749134119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897627774749870500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15b34655bffe8e14195a89f563a47e87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targettingRadius: 5
+  targettingLayer:
+    serializedVersion: 2
+    m_Bits: 8388608
+--- !u!114 &5927301835103781318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897627774749870500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 228ad45cc4e584b40b449f3c58e16ebf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  impactDrag: 0.1
+  moveSpeed: 6
+  movementRotationSpeed: 20
+  faceTargetRotationSpeed: 30
+  jumpPower: 5
+  jumpFallOff: 2
+  lowJumpMulti: 1.5
+  glideSpeed: 7
+  movingGlideForce: 200
+  stationaryGlideForce: 100
+  glideFallOff: 0.5
+  slopeLimit: 45
+  slopeInfluence: 5
+  floorOffsetY: 0.05
+  floorRaycastLength: 1
+  raycastWidthX: 0.5
+  raycastWidthZ: 2
 --- !u!1 &2609485474277775451
 GameObject:
   m_ObjectHideFlags: 0
