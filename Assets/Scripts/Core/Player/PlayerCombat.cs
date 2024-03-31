@@ -55,6 +55,12 @@ namespace ScalePact.Core.Player
             numOfClicks++;
             IsAttacking = true;
 
+            Collider closestTarget = targetScanner.GetClosestTargetNoTargetting();
+            if (closestTarget != null)
+            {
+                forceReceiver.FaceTarget(closestTarget.transform);
+            }
+
             animator.SetTrigger(PlayerHashIDs.AttackTriggerHash);
 
             if (numOfClicks == 1)
@@ -90,6 +96,7 @@ namespace ScalePact.Core.Player
         {
             currentIndex = index;
             attackData[index].DamageHandler.SetUpAttack(attackData[index].KnockBackForce);
+            forceReceiver.AddForce(transform.forward * attackData[index].AttackForce);
             animator.SetInteger(PlayerHashIDs.AttackIndexHash, index);
         }
 

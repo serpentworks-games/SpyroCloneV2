@@ -15,7 +15,7 @@ namespace ScalePact.Combat
         public List<Collider> TargetColliders { get; private set; } = new();
 
         Collider[] overlappedColliders;
-        
+
         int targetIndex;
         bool isLockedOn;
 
@@ -63,6 +63,11 @@ namespace ScalePact.Combat
 
         }
 
+        public Collider GetClosestTargetNoTargetting()
+        {
+            return GetClosestTarget();
+        }
+
         private void GetPotentialTargets()
         {
             overlappedColliders = Physics.OverlapSphere(transform.position, targettingRadius, targettingLayer, QueryTriggerInteraction.Ignore);
@@ -84,9 +89,14 @@ namespace ScalePact.Combat
 
         Collider GetClosestTarget()
         {
+            if (TargetColliders.Count == 0) return null;
+
             Collider bestTarget = null;
             TargetColliders = TargetColliders.OrderBy(x => Vector3.Distance(transform.position, x.transform.position)).ToList();
-            bestTarget = TargetColliders[0];
+            if (TargetColliders[0] != null)
+            {
+                bestTarget = TargetColliders[0];
+            }
             return bestTarget;
         }
 
@@ -132,5 +142,13 @@ namespace ScalePact.Combat
             }
         }
         #endregion
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, targettingRadius);
+        }
+#endif
     }
 }

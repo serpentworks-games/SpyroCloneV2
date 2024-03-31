@@ -10,7 +10,8 @@ namespace ScalePact.Forces
     {
         [Header("Grounded Movement")]
         [SerializeField] float moveSpeed = 6f;
-        [SerializeField] float rotationSpeed = 10f;
+        [SerializeField] float movementRotationSpeed = 20f;
+        [SerializeField] float faceTargetRotationSpeed = 30f;
 
         [Header("Jump/Glide Movement")]
         [SerializeField] float jumpPower = 5f;
@@ -103,7 +104,7 @@ namespace ScalePact.Forces
         {
             CalculateGravity();
 
-            CalculateRotation();
+            CalculateRotation(moveDir, movementRotationSpeed);
 
             rb.velocity = CalculateVelocity() + gravity;
 
@@ -127,6 +128,11 @@ namespace ScalePact.Forces
         public override void AddForce(Vector3 forceToAdd)
         {
             impact += forceToAdd;
+        }
+
+        public void FaceTarget(Transform target)
+        {
+            CalculateRotation(target.position - transform.position, faceTargetRotationSpeed);
         }
 
         void AddGlideForce(Vector3 velocity)
@@ -156,7 +162,7 @@ namespace ScalePact.Forces
                 animator.ResetTrigger(PlayerHashIDs.ImpactTriggerHash);
             }
 
-            if (impact != Vector3.zero)
+            if (impact != Vector3.zero && combat.IsAttacking == false)
             {
                 animator.SetTrigger(PlayerHashIDs.ImpactTriggerHash);
             }
@@ -183,16 +189,16 @@ namespace ScalePact.Forces
             moveDir = new Vector3(combinedInput.normalized.x, 0, combinedInput.normalized.z);
         }
 
-        void CalculateRotation()
+        void CalculateRotation(Vector3 targetDirNormal, float rotationSpeed)
         {
-            Vector3 targetDirNormal = moveDir;
-            if (moveDir == Vector3.zero)
+            Vector3 targetForward = targetDirNormal;
+            if (targetDirNormal == Vector3.zero)
             {
-                targetDirNormal = transform.forward;
+                targetForward = transform.forward;
             }
-            targetDirNormal.y = 0;
+            targetForward.y = 0;
 
-            Quaternion rot = Quaternion.LookRotation(targetDirNormal);
+            Quaternion rot = Quaternion.LookRotation(targetForward);
             Quaternion targetRot = Quaternion.Slerp(transform.rotation, rot, Time.fixedDeltaTime * rotationSpeed);
             transform.rotation = targetRot;
         }
