@@ -14,6 +14,7 @@ namespace ScalePact.StateMachines
         [field: Header("Combat Variables")]
         [field: SerializeField] public DamageHandler Weapon { get; private set; }
         [field: SerializeField] public AttackData Attack { get; private set; }
+        [field: SerializeField] public float AttackSpeed { get; private set; } = 2f;
         [field: SerializeField] public float AttackRange { get; private set; } = 2f;
         [field: SerializeField] public float MaxImpactDuration { get; private set; } = 1f;
 
@@ -21,7 +22,7 @@ namespace ScalePact.StateMachines
         [field: SerializeField] public float BaseMovementSpeed { get; private set; } = 6f;
         [field: SerializeField] public float BaseCrossFadeDuration { get; private set; } = 0.1f;
 
-        public float PreviousAttackTime { get; private set; } = Mathf.NegativeInfinity;
+        public float TimeSinceLastAttack { get; private set; } = Mathf.Infinity;
 
         public Animator Animator { get; private set; }
         public EnemyForceReceiver ForceReceiver { get; private set; }
@@ -69,7 +70,7 @@ namespace ScalePact.StateMachines
 
         public void SetAttackTime(float time)
         {
-            PreviousAttackTime = time;
+            TimeSinceLastAttack = time;
         }
 
         public void EnableCollider()

@@ -21,7 +21,7 @@ namespace ScalePact.StateMachines.States
                 stateMachine.SwitchState(new EnemyIdleState(stateMachine));
                 return;
             }
-            else if(IsInAttackRange())
+            else if(IsInAttackRange() && CanAttack())
             {
                 stateMachine.SwitchState(new EnemyAttackState(stateMachine));
                 return;
@@ -53,6 +53,12 @@ namespace ScalePact.StateMachines.States
             if (stateMachine.PlayerRef.IsDead) return false;
             
             return Vector3.Distance(stateMachine.PlayerRef.transform.position, stateMachine.transform.position) <= stateMachine.AttackRange;
+        }
+
+        bool CanAttack()
+        {
+            
+            return true;
         }
     }
 }

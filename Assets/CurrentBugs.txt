@@ -1,6 +1,6 @@
 Current Bugs, Issues, and Things To Be Fixed
 
-Last Updated: 3/28/24
+Last Updated: 4/1/24
 
 == BUGS ==
 
@@ -14,4 +14,4 @@ PlayerCombat:
 
 == IMPROVEMENTS ==
 
-- First attack should always target the closest enemy
+- [DONE] First attack should always target the closest enemy
