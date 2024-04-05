@@ -30,6 +30,7 @@ namespace ScalePact.Utils
     {
         //Variables
         public static int SpeedHash = Animator.StringToHash("Speed");
+        public static int AttackTriggerHash = Animator.StringToHash("BasicAttackTrigger");
 
         //States
         public static int LocomotionHash = Animator.StringToHash("Locomotion");

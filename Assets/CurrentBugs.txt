@@ -11,6 +11,7 @@ PlayerController:
 
 PlayerCombat:
     - Bug - Clicking too fast breaks the combos
+    - Bug - No Attack speed currently
 
 == IMPROVEMENTS ==
 

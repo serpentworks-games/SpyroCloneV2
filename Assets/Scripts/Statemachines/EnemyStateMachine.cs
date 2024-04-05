@@ -18,9 +18,15 @@ namespace ScalePact.StateMachines
         [field: SerializeField] public float AttackRange { get; private set; } = 2f;
         [field: SerializeField] public float MaxImpactDuration { get; private set; } = 1f;
 
-        [field: Header("Other Variables")]
+        [field: Header("Base Variables")]
         [field: SerializeField] public float BaseMovementSpeed { get; private set; } = 6f;
         [field: SerializeField] public float BaseCrossFadeDuration { get; private set; } = 0.1f;
+
+        [field: Header("Patrol Variables")]
+        [field: SerializeField] public float PatrolMovementSpeed { get; private set; }
+        [field: SerializeField] public float PatrolSuspicionTime { get; private set; }
+        [field: SerializeField] public GameObject PatrolPath { get; private set; }
+        [field: SerializeField] public float WaypointDwellTime { get; private set; }
 
         public float TimeSinceLastAttack { get; private set; } = Mathf.Infinity;
 
