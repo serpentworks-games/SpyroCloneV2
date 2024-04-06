@@ -1,5 +1,9 @@
 using System;
+using ScalePact.Combat;
 using ScalePact.Core;
+using ScalePact.Forces;
+using ScalePact.StateMachines.States;
+using ScalePact.Utils;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,34 +12,61 @@ namespace ScalePact.Enemies
     public class EnemyController : MonoBehaviour
     {
         [SerializeField] float baseMoveSpeed = 4f;
+        [SerializeField] float maxImpactDuration = 1f;
 
         Animator animator;
         NavMeshAgent agent;
+        EnemyMovement movement;
+        EnemyCombat combat;
+        Health health;
+        Ragdoll ragdoll;
 
-        BehaviourStates currentState;
+        public BehaviourStates currentState;
+        float timeSinceLastImpact = Mathf.Infinity;
 
-        private void Awake() {
+        private void Awake()
+        {
             animator = GetComponent<Animator>();
             agent = GetComponent<NavMeshAgent>();
+            combat = GetComponent<EnemyCombat>();
+            movement = GetComponent<EnemyMovement>();
+            health = GetComponent<Health>();
+            ragdoll = GetComponent<Ragdoll>();
+
         }
 
-        private void Update() {
-            //update timers
+        private void OnEnable()
+        {
+            health.OnReceiveDamage += SwitchToImpact;
+            health.OnDeath += SwitchToDeath;
+        }
+
+        private void OnDisable()
+        {
+            health.OnReceiveDamage -= SwitchToImpact;
+            health.OnDeath -= SwitchToDeath;
+        }
+
+        private void Update()
+        {
+            UpdateTimers();
 
             switch (currentState)
             {
                 case BehaviourStates.DEATH_STATE:
-                    //be dead
+                    DeathState();
+                    break;
                 case BehaviourStates.IMPACT_STATE:
-                    //trigger impact
+                    ImpactState();
+                    break;
                 case BehaviourStates.ATTACK_STATE:
-                    //AttackBehaviour();
+                //AttackBehaviour();
                 case BehaviourStates.CHASE_STATE:
-                    //ChaseBehaviour();
+                //ChaseBehaviour();
                 case BehaviourStates.SUSPICION_STATE:
-                    //SuspicionBehaviour();
+                //SuspicionBehaviour();
                 case BehaviourStates.PATROL_STATE:
-                    //PatrolBehaviour();
+                    PatrolBehaviour();
                     return;
             }
             // if dead, do nothing
@@ -49,9 +80,48 @@ namespace ScalePact.Enemies
             UpdateAnimator();
         }
 
+        void UpdateTimers()
+        {
+            timeSinceLastImpact += Time.deltaTime;
+        }
+
         private void UpdateAnimator()
         {
-            
+
+        }
+
+        void SwitchToImpact()
+        {
+            currentState = BehaviourStates.IMPACT_STATE;
+        }
+
+        void SwitchToDeath()
+        {
+            currentState = BehaviourStates.DEATH_STATE;
+        }
+
+        void PatrolBehaviour()
+        {
+
+        }
+
+        void ImpactState()
+        {
+            animator.SetTrigger(EnemyHashIDs.ImpactTriggerHash);
+
+            if (timeSinceLastImpact > maxImpactDuration)
+            {
+                currentState = BehaviourStates.PATROL_STATE;
+                timeSinceLastImpact = 0;
+            }
+        }
+
+        void DeathState()
+        {
+            //ragdoll.ToggleRagdoll(true);
+            animator.SetTrigger(EnemyHashIDs.DeathTriggerHash);
+            agent.isStopped = true;
+            currentState = BehaviourStates.NO_STATE;
         }
     }
 }

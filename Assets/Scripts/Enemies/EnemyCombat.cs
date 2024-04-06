@@ -28,6 +28,7 @@ namespace ScalePact.Enemies
             UpdateTimers();
 
             if (currentTarget == null) return;
+
             if (!GetIsInRange())
             {
 

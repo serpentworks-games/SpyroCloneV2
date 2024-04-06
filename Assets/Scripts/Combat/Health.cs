@@ -20,19 +20,14 @@ namespace ScalePact.Combat
             currentHealth = maxHealth;
         }
 
-        private void Update()
-        {
-
-        }
-
         public void ApplyDamage(int damage)
-        {
-            
+        {   
             if (currentHealth == 0) return;
 
             OnReceiveDamage?.Invoke();
             
             if (isImmortal) return;
+
             currentHealth = Mathf.Max(currentHealth - damage, 0);
             
             if (currentHealth == 0)

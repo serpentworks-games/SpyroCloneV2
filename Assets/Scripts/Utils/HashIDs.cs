@@ -31,6 +31,8 @@ namespace ScalePact.Utils
         //Variables
         public static int SpeedHash = Animator.StringToHash("Speed");
         public static int AttackTriggerHash = Animator.StringToHash("BasicAttackTrigger");
+        public static int ImpactTriggerHash = Animator.StringToHash("ImpactTrigger");
+        public static int DeathTriggerHash = Animator.StringToHash("DeathTrigger");
 
         //States
         public static int LocomotionHash = Animator.StringToHash("Locomotion");
