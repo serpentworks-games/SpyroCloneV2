@@ -1,8 +1,6 @@
-using System;
 using ScalePact.Combat;
 using ScalePact.Core;
 using ScalePact.Forces;
-using ScalePact.StateMachines.States;
 using ScalePact.Utils;
 using UnityEngine;
 using UnityEngine.AI;
@@ -102,11 +100,12 @@ namespace ScalePact.Enemies
 
         void PatrolBehaviour()
         {
-
+            Debug.Log($"Entering Patrol State!");
         }
 
         void ImpactState()
         {
+            Debug.Log($"Entering Impact State!");
             animator.SetTrigger(EnemyHashIDs.ImpactTriggerHash);
 
             if (timeSinceLastImpact > maxImpactDuration)
@@ -118,9 +117,10 @@ namespace ScalePact.Enemies
 
         void DeathState()
         {
-            //ragdoll.ToggleRagdoll(true);
+            Debug.Log($"Entering Death State!");
+            ragdoll.ToggleRagdoll(true);
             animator.SetTrigger(EnemyHashIDs.DeathTriggerHash);
-            agent.isStopped = true;
+            //agent.isStopped = true;
             currentState = BehaviourStates.NO_STATE;
         }
     }
