@@ -30,5 +30,7 @@ namespace ScalePact.Enemies
         {
             agent.isStopped = true;
         }
+
+        
     }
 }

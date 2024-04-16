@@ -3,7 +3,7 @@ using ScalePact.Core.Input;
 using ScalePact.Utils;
 using UnityEngine;
 
-namespace ScalePact.Core.Player
+namespace ScalePact.Player
 {
     public class PlayerController : MonoBehaviour
     {

@@ -10,17 +10,21 @@ namespace ScalePact.Enemies
     {
         [SerializeField] float attackRange = 2f;
         [SerializeField] float attackSpeed = 1f;
+        [SerializeField] float weaponDamage = 1f;
+        [SerializeField] DamageHandler weapon = null;
 
         Health currentTarget;
         float timeSinceLastAttack = Mathf.Infinity;
 
         ActionScheduler actionScheduler;
         Animator animator;
+        EnemyMovement enemyMovement;
 
         private void Awake()
         {
             actionScheduler = GetComponent<ActionScheduler>();
             animator = GetComponent<Animator>();
+            enemyMovement = GetComponent<EnemyMovement>();
         }
 
         private void Update()
@@ -28,16 +32,23 @@ namespace ScalePact.Enemies
             UpdateTimers();
 
             if (currentTarget == null) return;
+            if (currentTarget.IsDead) return;
 
-            if (!GetIsInRange())
+            if (!IsInAttackRange())
             {
-
+                enemyMovement.StartMoveAction(currentTarget.transform.position);
             }
             else
             {
                 actionScheduler.StartAction(this);
                 AttackState();
             }
+        }
+
+        public bool CanAttack(Health target)
+        {
+            if (target == null) return false;
+            return target != null && !target.IsDead;
         }
 
         public void Attack(Health target)
@@ -52,7 +63,8 @@ namespace ScalePact.Enemies
 
         void AttackState()
         {
-            if(timeSinceLastAttack > attackSpeed)
+            transform.LookAt(currentTarget.transform);
+            if (timeSinceLastAttack > attackSpeed)
             {
                 animator.SetTrigger(EnemyHashIDs.AttackTriggerHash);
                 timeSinceLastAttack = 0;
@@ -64,7 +76,7 @@ namespace ScalePact.Enemies
             timeSinceLastAttack += Time.deltaTime;
         }
 
-        private bool GetIsInRange()
+        private bool IsInAttackRange()
         {
             return Vector3.Distance(transform.position, currentTarget.transform.position) < attackRange;
         }
@@ -72,13 +84,21 @@ namespace ScalePact.Enemies
         //Anim Events
         void EnableCollider()
         {
-
+            weapon.EnableCollider();
         }
 
         void DisableCollider()
         {
-
+            weapon.DisableCollider();
         }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, attackRange);
+        }
+#endif
 
     }
 }

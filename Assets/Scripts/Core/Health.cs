@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace ScalePact.Combat
+namespace ScalePact.Core
 {
     public class Health : MonoBehaviour
     {
@@ -15,9 +15,12 @@ namespace ScalePact.Combat
         public event Action OnReceiveDamage;
         public event Action OnDeath;
 
+        ActionScheduler actionScheduler;
+
         private void Awake()
         {
             currentHealth = maxHealth;
+            actionScheduler = GetComponent<ActionScheduler>();
         }
 
         public void ApplyDamage(int damage)
@@ -32,10 +35,20 @@ namespace ScalePact.Combat
             
             if (currentHealth == 0)
             {
-                OnDeath?.Invoke();
+                InvokeDeath();
             }
 
             Debug.Log($"{this.name}'s Health: {currentHealth} / {maxHealth}");
+        }
+
+        private void InvokeDeath()
+        {
+            OnDeath?.Invoke();
+
+            if (actionScheduler != null)
+            {
+                actionScheduler.CancelCurrentAction();
+            }
         }
     }
 }

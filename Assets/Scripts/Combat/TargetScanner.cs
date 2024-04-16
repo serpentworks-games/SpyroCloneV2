@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
+using ScalePact.Core;
 using ScalePact.Core.Input;
 using UnityEngine;
 

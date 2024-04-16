@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace ScalePact.Core
@@ -14,6 +15,11 @@ namespace ScalePact.Core
                 currentAction.CancelAction();
             }
             currentAction = action;
+        }
+
+        public void CancelCurrentAction()
+        {
+            StartAction(null);
         }
     }
 }

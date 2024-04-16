@@ -11,6 +11,7 @@ namespace ScalePact.Enemies
     {
         [SerializeField] float baseMoveSpeed = 4f;
         [SerializeField] float maxImpactDuration = 1f;
+        [SerializeField] float chaseDistance = 5f;
 
         Animator animator;
         NavMeshAgent agent;
@@ -18,6 +19,8 @@ namespace ScalePact.Enemies
         EnemyCombat combat;
         Health health;
         Ragdoll ragdoll;
+
+        Health player;
 
         public BehaviourStates currentState;
         float timeSinceLastImpact = Mathf.Infinity;
@@ -33,47 +36,37 @@ namespace ScalePact.Enemies
 
         }
 
+        private void Start()
+        {
+            player = GameObject.FindWithTag("Player").GetComponent<Health>();
+        }
+
         private void OnEnable()
         {
-            health.OnReceiveDamage += SwitchToImpact;
-            health.OnDeath += SwitchToDeath;
+            health.OnReceiveDamage += ImpactState;
+            health.OnDeath += DeathState;
         }
 
         private void OnDisable()
         {
-            health.OnReceiveDamage -= SwitchToImpact;
-            health.OnDeath -= SwitchToDeath;
+            health.OnReceiveDamage -= ImpactState;
+            health.OnDeath -= DeathState;
         }
 
         private void Update()
         {
             UpdateTimers();
 
-            switch (currentState)
+            if (health.IsDead) return;
+
+            if (IsInAttackRange() && combat.CanAttack(player))
             {
-                case BehaviourStates.DEATH_STATE:
-                    DeathState();
-                    break;
-                case BehaviourStates.IMPACT_STATE:
-                    ImpactState();
-                    break;
-                case BehaviourStates.ATTACK_STATE:
-                //AttackBehaviour();
-                case BehaviourStates.CHASE_STATE:
-                //ChaseBehaviour();
-                case BehaviourStates.SUSPICION_STATE:
-                //SuspicionBehaviour();
-                case BehaviourStates.PATROL_STATE:
-                    PatrolBehaviour();
-                    return;
+                combat.Attack(player);
             }
-            // if dead, do nothing
-            // if impacted, impact state
-            // if attacking, attack state
-            // if suspicious, suspicion state
-            // if chasing, chase state
-            // if patrolling, patrol state
-            // if nothing, do nothing
+            else
+            {
+                combat.CancelAction();
+            }
 
             UpdateAnimator();
         }
@@ -85,19 +78,19 @@ namespace ScalePact.Enemies
 
         private void UpdateAnimator()
         {
-
+            Vector3 velocity = agent.velocity;
+            Vector3 localVelocity = transform.InverseTransformDirection(velocity);
+            float speed = localVelocity.z;
+            animator.SetFloat(EnemyHashIDs.SpeedHash, speed);
         }
 
-        void SwitchToImpact()
+        bool IsInAttackRange()
         {
-            currentState = BehaviourStates.IMPACT_STATE;
+            return Vector3.Distance(player.transform.position, transform.position) < chaseDistance;
         }
 
-        void SwitchToDeath()
-        {
-            currentState = BehaviourStates.DEATH_STATE;
-        }
 
+        #region States
         void PatrolBehaviour()
         {
             Debug.Log($"Entering Patrol State!");
@@ -123,5 +116,28 @@ namespace ScalePact.Enemies
             //agent.isStopped = true;
             currentState = BehaviourStates.NO_STATE;
         }
+        #endregion
+
+        #region Event Handlers
+        void SwitchToImpact()
+        {
+            currentState = BehaviourStates.IMPACT_STATE;
+            ImpactState();
+        }
+
+        void SwitchToDeath()
+        {
+            currentState = BehaviourStates.DEATH_STATE;
+            DeathState();
+        }
+        #endregion
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, chaseDistance);
+        }
+#endif
     }
 }

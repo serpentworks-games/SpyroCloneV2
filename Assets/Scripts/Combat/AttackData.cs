@@ -1,3 +1,4 @@
+using ScalePact.Core;
 using UnityEngine;
 
 namespace ScalePact.Combat

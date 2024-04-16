@@ -1,8 +1,9 @@
 using System;
 using UnityEngine;
 
-namespace ScalePact.Combat
+namespace ScalePact.Core
 {
+    [RequireComponent(typeof(Health))]
     public class Target : MonoBehaviour
     {
         public event Action<Target> OnTargetDestroyed;

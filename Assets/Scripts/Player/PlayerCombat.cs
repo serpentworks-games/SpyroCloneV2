@@ -1,10 +1,11 @@
 using ScalePact.Combat;
+using ScalePact.Core;
 using ScalePact.Core.Input;
 using ScalePact.Forces;
 using ScalePact.Utils;
 using UnityEngine;
 
-namespace ScalePact.Core.Player
+namespace ScalePact.Player
 {
     public class PlayerCombat : MonoBehaviour
     {
@@ -21,6 +22,7 @@ namespace ScalePact.Core.Player
         Animator animator;
         TargetScanner targetScanner;
         PlayerForceReceiver forceReceiver;
+        Health health;
 
         private void Awake()
         {
@@ -28,6 +30,7 @@ namespace ScalePact.Core.Player
             animator = GetComponent<Animator>();
             targetScanner = GetComponent<TargetScanner>();
             forceReceiver = GetComponent<PlayerForceReceiver>();
+            health = GetComponent<Health>();
         }
 
         private void OnEnable()
@@ -51,6 +54,8 @@ namespace ScalePact.Core.Player
 
         private void OnAttackPressed()
         {
+            if (health.IsDead) return;
+
             lastClickTime = Time.time;
             numOfClicks++;
             IsAttacking = true;
@@ -108,7 +113,10 @@ namespace ScalePact.Core.Player
 
         void DisableCollider()
         {
-            attackData[currentIndex].DamageHandler.DisableCollider();
+            foreach (AttackData attack in attackData)
+            {
+                attack.DamageHandler.DisableCollider();
+            }            
         }
     }
 }

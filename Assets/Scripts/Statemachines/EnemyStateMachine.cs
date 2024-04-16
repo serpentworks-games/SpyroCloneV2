@@ -1,4 +1,5 @@
 using ScalePact.Combat;
+using ScalePact.Core;
 using ScalePact.Forces;
 using ScalePact.StateMachines.States;
 using UnityEngine;

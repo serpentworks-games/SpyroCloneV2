@@ -1,6 +1,7 @@
 using ScalePact.Combat;
+using ScalePact.Core;
 using ScalePact.Core.Input;
-using ScalePact.Core.Player;
+using ScalePact.Player;
 using ScalePact.Utils;
 using UnityEngine;
 
@@ -38,6 +39,7 @@ namespace ScalePact.Forces
         InputManager inputManager;
         PlayerCombat combat;
         TargetScanner targetScanner;
+        Health health;
 
         Vector3 moveDir;
         Vector3 raycastFloorPos;
@@ -59,6 +61,7 @@ namespace ScalePact.Forces
             inputManager = GetComponent<InputManager>();
             combat = GetComponent<PlayerCombat>();
             targetScanner = GetComponent<TargetScanner>();
+            health = GetComponent<Health>();
 
             mainCamera = Camera.main;
         }
@@ -68,6 +71,9 @@ namespace ScalePact.Forces
             inputManager.JumpEvent += OnJumpPressed;
             inputManager.JumpEvent += OnGlidePressed;
             inputManager.ToggleTargetEvent += OnLockOnTarget;
+
+            health.OnReceiveDamage += OnImpactReceived;
+            health.OnDeath += OnDeathTriggered;
         }
 
         private void OnDisable()
@@ -75,10 +81,15 @@ namespace ScalePact.Forces
             inputManager.JumpEvent -= OnJumpPressed;
             inputManager.JumpEvent -= OnGlidePressed;
             inputManager.ToggleTargetEvent -= OnLockOnTarget;
+
+            health.OnReceiveDamage -= OnImpactReceived;
+            health.OnDeath -= OnDeathTriggered;
         }
 
         private void Update()
         {
+            if (health.IsDead) return;
+
             if (combat.IsAttacking)
             {
                 rb.velocity = Vector3.zero;
@@ -341,6 +352,16 @@ namespace ScalePact.Forces
             {
                 //change to normal movement
             }
+        }
+
+        void OnImpactReceived()
+        {
+            ApplyImpact();
+        }
+
+        void OnDeathTriggered()
+        {
+            animator.SetTrigger(PlayerHashIDs.DeathTriggerHash);
         }
         #endregion
 

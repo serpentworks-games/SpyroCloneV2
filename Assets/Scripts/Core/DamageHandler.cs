@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using ScalePact.Forces;
 using UnityEngine;
 
-namespace ScalePact.Combat
+namespace ScalePact.Core
 {
     public class DamageHandler : MonoBehaviour
     {

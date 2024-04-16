@@ -39,9 +39,8 @@ Transform:
   m_Children:
   - {fileID: 4492331262284031073}
   - {fileID: 9124399830720189938}
-  - {fileID: 1986548813387492989}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1701600792824568678
 Animator:
@@ -228,61 +227,6 @@ MonoBehaviour:
   floorRaycastLength: 1
   raycastWidthX: 0.5
   raycastWidthZ: 2
---- !u!1 &2609485474277775451
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1986548813387492989}
-  - component: {fileID: 8608997755064791824}
-  m_Layer: 9
-  m_Name: Collider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1986548813387492989
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2609485474277775451}
-  m_LocalRotation: {x: -0.10726188, y: -0, z: -0, w: 0.99423087}
-  m_LocalPosition: {x: 0, y: 0.853, z: 0.59}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5377251879675290520}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: -12.315, y: 0, z: 0}
---- !u!136 &8608997755064791824
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2609485474277775451}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.4276868
-  m_Height: 2.3466942
-  m_Direction: 2
-  m_Center: {x: 0, y: 0.04815388, z: -0.17334712}
 --- !u!1 &7790928851440892564
 GameObject:
   m_ObjectHideFlags: 0
@@ -3475,7 +3419,7 @@ PrefabInstance:
     - target: {fileID: 5190830978969415932, guid: de9337379dd77284d83224f600090b6e, type: 3}
       propertyPath: rootCollider
       value: 
-      objectReference: {fileID: 8608997755064791824}
+      objectReference: {fileID: 7057174833017142102}
     - target: {fileID: 5909296532087101104, guid: de9337379dd77284d83224f600090b6e, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -3560,7 +3504,7 @@ PrefabInstance:
     - target: {fileID: 746387108803254279, guid: a4066e883f78dc541a23a72d26d6e6c0, type: 3}
       propertyPath: rootCollider
       value: 
-      objectReference: {fileID: 8608997755064791824}
+      objectReference: {fileID: 7057174833017142102}
     - target: {fileID: 1042332348774829329, guid: a4066e883f78dc541a23a72d26d6e6c0, type: 3}
       propertyPath: m_Name
       value: PawWeapon
@@ -3645,7 +3589,7 @@ PrefabInstance:
     - target: {fileID: 195898452918360343, guid: 017593dfe3658e242ab2a1d1419ff643, type: 3}
       propertyPath: rootCollider
       value: 
-      objectReference: {fileID: 8608997755064791824}
+      objectReference: {fileID: 7057174833017142102}
     - target: {fileID: 6281452724874188957, guid: 017593dfe3658e242ab2a1d1419ff643, type: 3}
       propertyPath: m_Name
       value: TailWeapon
