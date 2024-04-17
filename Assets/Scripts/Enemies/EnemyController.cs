@@ -1,3 +1,4 @@
+using ScalePact.AI;
 using ScalePact.Combat;
 using ScalePact.Core;
 using ScalePact.Forces;
@@ -9,21 +10,28 @@ namespace ScalePact.Enemies
 {
     public class EnemyController : MonoBehaviour
     {
+        [Header("Base Variables")]
         [SerializeField] float baseMoveSpeed = 4f;
         [SerializeField] float maxImpactDuration = 1f;
-        [SerializeField] float chaseDistance = 5f;
 
+        [Header("Patrolling and Chasing")]
+        [SerializeField] float chaseDistance = 5f;
+        [SerializeField] float suspicionStateTime = 2f;
+        [SerializeField] PatrolPath patrolPath = null;
+
+        //References
         Animator animator;
         NavMeshAgent agent;
         EnemyMovement movement;
         EnemyCombat combat;
         Health health;
         Ragdoll ragdoll;
-
         Health player;
 
-        public BehaviourStates currentState;
+        //State
         float timeSinceLastImpact = Mathf.Infinity;
+        float timeSinceLastSawPlayer = Mathf.Infinity;
+        Vector3 guardPosition;
 
         private void Awake()
         {
@@ -39,6 +47,7 @@ namespace ScalePact.Enemies
         private void Start()
         {
             player = GameObject.FindWithTag("Player").GetComponent<Health>();
+            guardPosition = transform.position;
         }
 
         private void OnEnable()
@@ -61,11 +70,16 @@ namespace ScalePact.Enemies
 
             if (IsInAttackRange() && combat.CanAttack(player))
             {
-                combat.Attack(player);
+                timeSinceLastSawPlayer = 0;
+                AttackState();
+            }
+            else if(timeSinceLastSawPlayer < suspicionStateTime)
+            {
+                SuspicionState();
             }
             else
             {
-                combat.CancelAction();
+                GuardState();
             }
 
             UpdateAnimator();
@@ -74,6 +88,7 @@ namespace ScalePact.Enemies
         void UpdateTimers()
         {
             timeSinceLastImpact += Time.deltaTime;
+            timeSinceLastSawPlayer += Time.deltaTime;
         }
 
         private void UpdateAnimator()
@@ -91,9 +106,25 @@ namespace ScalePact.Enemies
 
 
         #region States
-        void PatrolBehaviour()
+        void GuardState()
+        {
+            movement.StartMoveAction(guardPosition, baseMoveSpeed);
+        }
+        void PatrolState()
         {
             Debug.Log($"Entering Patrol State!");
+        }
+
+        void SuspicionState()
+        {
+            GetComponent<ActionScheduler>().CancelCurrentAction();
+            //Suspicion anim!
+            Debug.Log("Now where did you go...");
+        }
+
+        void AttackState()
+        {
+            combat.Attack(player);
         }
 
         void ImpactState()
@@ -103,7 +134,6 @@ namespace ScalePact.Enemies
 
             if (timeSinceLastImpact > maxImpactDuration)
             {
-                currentState = BehaviourStates.PATROL_STATE;
                 timeSinceLastImpact = 0;
             }
         }
@@ -114,20 +144,17 @@ namespace ScalePact.Enemies
             ragdoll.ToggleRagdoll(true);
             animator.SetTrigger(EnemyHashIDs.DeathTriggerHash);
             //agent.isStopped = true;
-            currentState = BehaviourStates.NO_STATE;
         }
         #endregion
 
         #region Event Handlers
         void SwitchToImpact()
         {
-            currentState = BehaviourStates.IMPACT_STATE;
             ImpactState();
         }
 
         void SwitchToDeath()
         {
-            currentState = BehaviourStates.DEATH_STATE;
             DeathState();
         }
         #endregion

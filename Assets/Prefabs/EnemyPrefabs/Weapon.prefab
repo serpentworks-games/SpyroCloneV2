@@ -32,7 +32,7 @@ Transform:
   m_Children:
   - {fileID: 4954448856751918633}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &426938422659368443
 CapsuleCollider:
@@ -70,6 +70,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rootCollider: {fileID: 0}
+  collidableLayers:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1001 &4954448856752289475
 PrefabInstance:
   m_ObjectHideFlags: 0

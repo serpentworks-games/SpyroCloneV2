@@ -10,6 +10,7 @@ namespace ScalePact.Enemies
     {
         [SerializeField] float attackRange = 2f;
         [SerializeField] float attackSpeed = 1f;
+        [SerializeField] float attackMoveSpeed = 4f;
         [SerializeField] float weaponDamage = 1f;
         [SerializeField] DamageHandler weapon = null;
 
@@ -36,7 +37,7 @@ namespace ScalePact.Enemies
 
             if (!IsInAttackRange())
             {
-                enemyMovement.StartMoveAction(currentTarget.transform.position);
+                enemyMovement.StartMoveAction(currentTarget.transform.position, attackMoveSpeed);
             }
             else
             {

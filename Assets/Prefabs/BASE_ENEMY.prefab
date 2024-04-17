@@ -3826,6 +3826,10 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 0.4
       objectReference: {fileID: 0}
+    - target: {fileID: 8072968787201066691, guid: dc6fdca5305717b409284d09a06b252f, type: 3}
+      propertyPath: m_AngularSpeed
+      value: 1200
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -3880,7 +3884,7 @@ MonoBehaviour:
   baseMoveSpeed: 4
   maxImpactDuration: 1
   chaseDistance: 5
-  currentState: 3
+  suspicionStateTime: 2
 --- !u!114 &8493234678012741363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3895,6 +3899,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackRange: 2
   attackSpeed: 2
+  attackMoveSpeed: 4
   weaponDamage: 1
   weapon: {fileID: 8862422961083311959}
 --- !u!114 &1797413686511936064

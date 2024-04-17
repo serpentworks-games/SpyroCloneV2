@@ -29,10 +29,12 @@ namespace ScalePact.Player
         {
             if (!combat.IsAttacking)
             {
+                //If we are not attacking, we should be able to move
                 animator.SetFloat(PlayerHashIDs.BaseVelocityHash, inputManager.MovementVector.magnitude, animatorDampTime, Time.deltaTime);
             }
             else
             {
+                //If we are attacking, don't move
                 animator.SetFloat(PlayerHashIDs.BaseVelocityHash, 0f, animatorDampTime, Time.deltaTime);
             }
         }

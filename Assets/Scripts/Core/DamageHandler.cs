@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ScalePact.Forces;
+using ScalePact.Utils;
 using UnityEngine;
 
 namespace ScalePact.Core
@@ -7,6 +8,7 @@ namespace ScalePact.Core
     public class DamageHandler : MonoBehaviour
     {
         [SerializeField] Collider rootCollider;
+        [SerializeField] LayerMask collidableLayers;
 
         List<Collider> alreadyCollidedWith = new();
 
@@ -39,17 +41,25 @@ namespace ScalePact.Core
 
         private void OnTriggerEnter(Collider other)
         {
+            //If the collider is us, ignore it
             if (other == rootCollider) return;
 
+            //If we've already collided with the collider, ignore it
             if (alreadyCollidedWith.Contains(other)) return;
 
+            //If the collider is not on the collidable layers, ignore it
+            if (!LayerMaskExtensions.Contains(collidableLayers, other.gameObject)) return;
+
+            //Add the collider to the already collided with list
             alreadyCollidedWith.Add(other);
 
+            //Try to apply damage
             if (other.TryGetComponent(out Health health))
             {
                 health.ApplyDamage(1);
             }
 
+            //Try to apply force
             if (other.TryGetComponent(out ForceReceiver forceReceiver))
             {
                 Vector3 knockBackVector = other.transform.position - collider.transform.position;

@@ -14,16 +14,17 @@ namespace ScalePact.Enemies
             actionScheduler = GetComponent<ActionScheduler>();
         }
 
-        public void StartMoveAction(Vector3 destination)
+        public void StartMoveAction(Vector3 destination, float moveSpeed)
         {
             actionScheduler.StartAction(this);
-            MoveToLocation(destination);
+            MoveToLocation(destination, moveSpeed);
         }
 
-        public void MoveToLocation(Vector3 destination)
+        public void MoveToLocation(Vector3 destination, float moveSpeed)
         {
             agent.isStopped = false;
             agent.destination = destination;
+            agent.speed = moveSpeed;
         }
 
         public void CancelAction()

@@ -69,3 +69,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rootCollider: {fileID: 0}
+  collidableLayers:
+    serializedVersion: 2
+    m_Bits: 8388608
