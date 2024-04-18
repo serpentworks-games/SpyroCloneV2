@@ -1,3 +1,4 @@
+using System;
 using ScalePact.AI;
 using ScalePact.Combat;
 using ScalePact.Core;
@@ -18,6 +19,9 @@ namespace ScalePact.Enemies
         [SerializeField] float chaseDistance = 5f;
         [SerializeField] float suspicionStateTime = 2f;
         [SerializeField] PatrolPath patrolPath = null;
+        [SerializeField] PatrolArea patrolArea = null;
+        [SerializeField] float patrolPointDwellTime = 3f;
+        [SerializeField] float patrolPointTolerance = 1f;
 
         //References
         Animator animator;
@@ -28,10 +32,14 @@ namespace ScalePact.Enemies
         Ragdoll ragdoll;
         Health player;
 
-        //State
+        //Timers
         float timeSinceLastImpact = Mathf.Infinity;
         float timeSinceLastSawPlayer = Mathf.Infinity;
+        float timeSinceArrivedAtPatrolPoint = Mathf.Infinity;
+
+        //Local state
         Vector3 guardPosition;
+        int currentWaypointIndex = 0;
 
         private void Awake()
         {
@@ -73,9 +81,13 @@ namespace ScalePact.Enemies
                 timeSinceLastSawPlayer = 0;
                 AttackState();
             }
-            else if(timeSinceLastSawPlayer < suspicionStateTime)
+            else if (timeSinceLastSawPlayer < suspicionStateTime)
             {
                 SuspicionState();
+            }
+            else if (patrolPath != null || patrolArea != null)
+            {
+                PatrolState();
             }
             else
             {
@@ -89,6 +101,7 @@ namespace ScalePact.Enemies
         {
             timeSinceLastImpact += Time.deltaTime;
             timeSinceLastSawPlayer += Time.deltaTime;
+            timeSinceArrivedAtPatrolPoint += Time.deltaTime;
         }
 
         private void UpdateAnimator()
@@ -110,9 +123,21 @@ namespace ScalePact.Enemies
         {
             movement.StartMoveAction(guardPosition, baseMoveSpeed);
         }
+
         void PatrolState()
         {
-            Debug.Log($"Entering Patrol State!");
+            Vector3 nextPos;
+
+            if (patrolArea != null)
+            {
+                nextPos = GetNextPointViaArea();
+            }
+            else
+            {
+                nextPos = GetNextPointViaWaypoint();
+            }
+
+            movement.StartMoveAction(nextPos, baseMoveSpeed);
         }
 
         void SuspicionState()
@@ -144,6 +169,60 @@ namespace ScalePact.Enemies
             ragdoll.ToggleRagdoll(true);
             animator.SetTrigger(EnemyHashIDs.DeathTriggerHash);
             //agent.isStopped = true;
+        }
+        #endregion
+
+        #region Patrol Areas
+        private Vector3 GetNextPointViaArea()
+        {
+            if (AtRandomPoint())
+            {
+                GetNewRandomPoint();
+            }
+            return GetCurrentRandomPoint();
+        }
+
+        private bool AtRandomPoint()
+        {
+            float distanceToPoint = Vector3.Distance(transform.position, GetCurrentRandomPoint());
+            return distanceToPoint < patrolPointTolerance;
+        }
+
+        private void GetNewRandomPoint()
+        {
+            patrolArea.GenerateRandomPoint();
+        }
+
+        private Vector3 GetCurrentRandomPoint()
+        {
+            return patrolArea.GetGeneratedPoint();
+        }
+        #endregion
+
+        #region Patrol Paths
+        private Vector3 GetNextPointViaWaypoint()
+        {
+            if (AtWaypoint())
+            {
+                GetNextWaypoint();
+            }
+            return GetCurrentWayPoint();
+        }
+
+        private bool AtWaypoint()
+        {
+            float distanceToPoint = Vector3.Distance(transform.position, GetCurrentWayPoint());
+            return distanceToPoint < patrolPointTolerance;
+        }
+
+        private void GetNextWaypoint()
+        {
+            currentWaypointIndex = patrolPath.GetNextIndex(currentWaypointIndex);
+        }
+
+        private Vector3 GetCurrentWayPoint()
+        {
+            return patrolPath.GetWaypoint(currentWaypointIndex);
         }
         #endregion
 

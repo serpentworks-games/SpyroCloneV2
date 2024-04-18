@@ -20,8 +20,9 @@ namespace ScalePact.AI
 
 
 #if UNITY_EDITOR
-        Color selectedColor = new Color(1, 1, 1, 1);
-        Color deselectedColor = new Color(1, 1, 1, 0.25f);
+        [Header("Editor Gizmo Colors")]
+        [SerializeField] Color selectedColor = new Color(1, 1, 1, 1);
+        [SerializeField] Color deselectedColor = new Color(1, 1, 1, 0.25f);
 
         const float kWaypointGizmoRadius = 0.5f;
 
@@ -50,7 +51,7 @@ namespace ScalePact.AI
             Gizmos.DrawSphere(GetWaypoint(i), kWaypointGizmoRadius);
 
             //If there's only one, return early
-            if(transform.childCount == 1) { return; }
+            if (transform.childCount == 1) { return; }
 
             //Otherwise, draw the lines between
             int j = GetNextIndex(i);
