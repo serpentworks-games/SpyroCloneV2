@@ -17,15 +17,15 @@ namespace ScalePact.Enemies
         Health currentTarget;
         float timeSinceLastAttack = Mathf.Infinity;
 
-        ActionScheduler actionScheduler;
         Animator animator;
         EnemyMovement enemyMovement;
+        ActionScheduler actionScheduler;
 
         private void Awake()
         {
-            actionScheduler = GetComponent<ActionScheduler>();
             animator = GetComponent<Animator>();
             enemyMovement = GetComponent<EnemyMovement>();
+            actionScheduler = GetComponent<ActionScheduler>();
         }
 
         private void Update()
@@ -37,11 +37,11 @@ namespace ScalePact.Enemies
 
             if (!IsInAttackRange())
             {
-                enemyMovement.StartMoveAction(currentTarget.transform.position, attackMoveSpeed);
+                enemyMovement.MoveToLocation(currentTarget.transform.position, attackMoveSpeed);
             }
             else
             {
-                actionScheduler.StartAction(this);
+                enemyMovement.CancelAction();
                 AttackState();
             }
         }
@@ -54,6 +54,7 @@ namespace ScalePact.Enemies
 
         public void Attack(Health target)
         {
+            actionScheduler.StartAction(this);
             currentTarget = target;
         }
 

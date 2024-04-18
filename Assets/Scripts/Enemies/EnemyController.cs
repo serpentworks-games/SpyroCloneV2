@@ -17,7 +17,7 @@ namespace ScalePact.Enemies
 
         [Header("Patrolling and Chasing")]
         [SerializeField] float chaseDistance = 5f;
-        [SerializeField] float suspicionStateTime = 2f;
+        [SerializeField] float suspicionStateTime = 10f;
         [SerializeField] PatrolPath patrolPath = null;
         [SerializeField] PatrolArea patrolArea = null;
         [SerializeField] float patrolPointDwellTime = 3f;
@@ -72,29 +72,24 @@ namespace ScalePact.Enemies
 
         private void Update()
         {
-            UpdateTimers();
-
             if (health.IsDead) return;
 
-            if (IsInAttackRange() && combat.CanAttack(player))
+            Debug.Log($"Is In Chase Range: {IsInChaseRange()} and Can Attack: {combat.CanAttack(player)}");
+
+            if (IsInChaseRange() && combat.CanAttack(player))
             {
-                timeSinceLastSawPlayer = 0;
-                AttackState();
+                ChaseState();
             }
             else if (timeSinceLastSawPlayer < suspicionStateTime)
             {
                 SuspicionState();
             }
-            else if (patrolPath != null || patrolArea != null)
+            else
             {
                 PatrolState();
             }
-            else
-            {
-                GuardState();
-            }
 
-            UpdateAnimator();
+            UpdateTimers();
         }
 
         void UpdateTimers()
@@ -104,51 +99,42 @@ namespace ScalePact.Enemies
             timeSinceArrivedAtPatrolPoint += Time.deltaTime;
         }
 
-        private void UpdateAnimator()
-        {
-            Vector3 velocity = agent.velocity;
-            Vector3 localVelocity = transform.InverseTransformDirection(velocity);
-            float speed = localVelocity.z;
-            animator.SetFloat(EnemyHashIDs.SpeedHash, speed);
-        }
-
-        bool IsInAttackRange()
+        bool IsInChaseRange()
         {
             return Vector3.Distance(player.transform.position, transform.position) < chaseDistance;
         }
 
-
         #region States
-        void GuardState()
-        {
-            movement.StartMoveAction(guardPosition, baseMoveSpeed);
-        }
 
         void PatrolState()
         {
-            Vector3 nextPos;
+            Vector3 nextPos = guardPosition;
 
             if (patrolArea != null)
             {
                 nextPos = GetNextPointViaArea();
             }
-            else
+            
+            if(patrolPath != null)
             {
                 nextPos = GetNextPointViaWaypoint();
             }
 
-            movement.StartMoveAction(nextPos, baseMoveSpeed);
+            if (timeSinceArrivedAtPatrolPoint > patrolPointDwellTime)
+            {
+                movement.StartMoveAction(nextPos, baseMoveSpeed);
+            }
         }
 
         void SuspicionState()
         {
             GetComponent<ActionScheduler>().CancelCurrentAction();
             //Suspicion anim!
-            Debug.Log("Now where did you go...");
         }
 
-        void AttackState()
+        void ChaseState()
         {
+            timeSinceLastSawPlayer = 0;
             combat.Attack(player);
         }
 
@@ -177,6 +163,7 @@ namespace ScalePact.Enemies
         {
             if (AtRandomPoint())
             {
+                timeSinceArrivedAtPatrolPoint = 0;
                 GetNewRandomPoint();
             }
             return GetCurrentRandomPoint();
@@ -204,6 +191,7 @@ namespace ScalePact.Enemies
         {
             if (AtWaypoint())
             {
+                timeSinceArrivedAtPatrolPoint = 0;
                 GetNextWaypoint();
             }
             return GetCurrentWayPoint();

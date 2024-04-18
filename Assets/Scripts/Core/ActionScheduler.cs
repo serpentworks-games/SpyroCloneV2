@@ -9,11 +9,9 @@ namespace ScalePact.Core
 
         public void StartAction(IAction action)
         {
-            if(currentAction == action) return;
-            if(currentAction != null)
-            {
-                currentAction.CancelAction();
-            }
+            if (currentAction == action) return;
+            
+            currentAction?.CancelAction();
             currentAction = action;
         }
 
