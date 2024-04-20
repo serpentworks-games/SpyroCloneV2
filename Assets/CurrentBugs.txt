@@ -1,8 +1,11 @@
 Current Bugs, Issues, and Things To Be Fixed
 
-Last Updated: 4/1/24
+Last Updated: 4/19/24
 
 == BUGS ==
+
+PlayerForceReceiver:
+    - Bug - 4/19/2024 - Character does not align to the slope currently
 
 PlayerController:
     - Bug - If you have diagonal input, you get stuck in falling
@@ -10,7 +13,7 @@ PlayerController:
     - [FIXED] Bug - Doesn't stay in the fall state while still in the air
 
 PlayerCombat:
-    - Bug - Clicking too fast breaks the combos
+    - [FIXED] Bug - Clicking too fast breaks the combos
     - Bug - No Attack speed currently
 
 == IMPROVEMENTS ==

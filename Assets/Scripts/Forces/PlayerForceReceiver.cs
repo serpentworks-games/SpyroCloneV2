@@ -122,6 +122,7 @@ namespace ScalePact.Forces
             AddGlideForce(CalculateVelocity());
 
             floorMovement = new Vector3(rb.position.x, FindFloor().y + floorOffsetY, rb.position.z);
+            
 
             if (floorMovement != rb.position && IsGrounded() && rb.velocity.y <= 0)
             {
@@ -261,6 +262,16 @@ namespace ScalePact.Forces
             }
 
             return false;
+        }
+
+        Vector3 AlignToGround()
+        {
+            Physics.Raycast(transform.position + new Vector3(raycastWidthX, 0, raycastWidthZ), -transform.up, out RaycastHit hit1, 1f);
+            Physics.Raycast(transform.position + new Vector3(-raycastWidthX, 0, raycastWidthZ), -transform.up, out RaycastHit hit2, 1f);
+            Physics.Raycast(transform.position + new Vector3(raycastWidthX, 0, -raycastWidthZ), -transform.up, out RaycastHit hit3, 1f);
+            Physics.Raycast(transform.position + new Vector3(-raycastWidthX, 0, -raycastWidthZ), -transform.up, out RaycastHit hit4, 1f);
+
+            return (hit1.normal + hit2.normal + hit3.normal + hit4.normal).normalized;
         }
 
         Vector3 FindFloor()
