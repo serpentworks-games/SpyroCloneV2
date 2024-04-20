@@ -14,7 +14,7 @@ namespace ScalePact.Enemies
         [SerializeField] float maxImpactDuration = 1f;
 
         [Header("Speed Modifiers")]
-        [Range(0,1)][SerializeField] float patrollingSpeedModifier = 0.2f;
+        [Range(0, 1)][SerializeField] float patrollingSpeedModifier = 0.2f;
 
         [Header("Patrolling and Chasing")]
         [SerializeField] float chaseDistance = 5f;
@@ -23,8 +23,6 @@ namespace ScalePact.Enemies
         [SerializeField] PatrolArea patrolArea = null;
         [SerializeField] float patrolPointDwellTime = 3f;
         [SerializeField] float patrolPointTolerance = 1f;
-
-        public EnemyBehaviorState currentState;
 
         //References
         Animator animator;
@@ -50,9 +48,6 @@ namespace ScalePact.Enemies
             movement = GetComponent<EnemyMovement>();
             health = GetComponent<Health>();
             ragdoll = GetComponent<Ragdoll>();
-
-            currentState = EnemyBehaviorState.IdleState;
-
         }
 
         private void Start()
@@ -155,7 +150,6 @@ namespace ScalePact.Enemies
             Debug.Log($"Entering Death State!");
             ragdoll.ToggleRagdoll(true);
             animator.SetTrigger(EnemyHashIDs.DeathTriggerHash);
-            //agent.isStopped = true;
         }
         #endregion
 
