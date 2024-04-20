@@ -1,5 +1,4 @@
 using System;
-using ScalePact.Combat;
 using ScalePact.Core;
 using ScalePact.Utils;
 using UnityEngine;
@@ -10,7 +9,7 @@ namespace ScalePact.Enemies
     {
         [SerializeField] float attackRange = 2f;
         [SerializeField] float attackSpeed = 1f;
-        [SerializeField] float attackMoveSpeed = 4f;
+        [Range(0,1)][SerializeField] float attackMoveSpeedModifier = 0.3f;
         [SerializeField] float weaponDamage = 1f;
         [SerializeField] DamageHandler weapon = null;
 
@@ -37,7 +36,7 @@ namespace ScalePact.Enemies
 
             if (!IsInAttackRange())
             {
-                enemyMovement.MoveToLocation(currentTarget.transform.position, attackMoveSpeed);
+                enemyMovement.MoveToLocation(currentTarget.transform.position, attackMoveSpeedModifier);
             }
             else
             {

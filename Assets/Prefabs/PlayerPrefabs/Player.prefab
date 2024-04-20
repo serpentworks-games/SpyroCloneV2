@@ -165,13 +165,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackData:
   - <AttackName>k__BackingField: 0
-    <ComboBlendTime>k__BackingField: 0.1
+    <ComboBlendTime>k__BackingField: 0.5
     <AttackForce>k__BackingField: 100
     <AttackForceBlendTime>k__BackingField: 0
     <DamageHandler>k__BackingField: {fileID: 513441427633781250}
     <KnockBackForce>k__BackingField: 5
   - <AttackName>k__BackingField: 1
-    <ComboBlendTime>k__BackingField: 0.1
+    <ComboBlendTime>k__BackingField: 0.5
     <AttackForce>k__BackingField: 100
     <AttackForceBlendTime>k__BackingField: 0
     <DamageHandler>k__BackingField: {fileID: 5980369180188055502}
@@ -182,6 +182,7 @@ MonoBehaviour:
     <AttackForceBlendTime>k__BackingField: 0
     <DamageHandler>k__BackingField: {fileID: 7459340440744602604}
     <KnockBackForce>k__BackingField: 20
+  maxComboDelay: 0.8
 --- !u!114 &2377116733749134119
 MonoBehaviour:
   m_ObjectHideFlags: 0

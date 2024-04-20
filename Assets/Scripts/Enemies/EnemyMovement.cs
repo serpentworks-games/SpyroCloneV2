@@ -7,6 +7,8 @@ namespace ScalePact.Enemies
 {
     public class EnemyMovement : MonoBehaviour, IAction
     {
+        [SerializeField] float maxMoveSpeed = 4f;
+
         Health health;
         Animator animator;
         NavMeshAgent agent;
@@ -26,17 +28,17 @@ namespace ScalePact.Enemies
             UpdateAnimator();
         }
 
-        public void StartMoveAction(Vector3 destination, float moveSpeed)
+        public void StartMoveAction(Vector3 destination, float speedModifier)
         {
             actionScheduler.StartAction(this);
-            MoveToLocation(destination, moveSpeed);
+            MoveToLocation(destination, speedModifier);
         }
 
-        public void MoveToLocation(Vector3 destination, float moveSpeed)
+        public void MoveToLocation(Vector3 destination, float speedModifier)
         {
             agent.isStopped = false;
             agent.destination = destination;
-            agent.speed = moveSpeed;
+            agent.speed = maxMoveSpeed * speedModifier;
         }
 
         public void CancelAction()

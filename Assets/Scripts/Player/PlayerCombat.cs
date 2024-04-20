@@ -1,3 +1,4 @@
+using System.Collections;
 using ScalePact.Combat;
 using ScalePact.Core;
 using ScalePact.Core.Input;
@@ -13,10 +14,10 @@ namespace ScalePact.Player
 
         public bool IsAttacking { get; private set; } = false;
 
-        int currentIndex = 0;
-        int numOfClicks = 0;
-        float lastClickTime = 0;
-        float maxComboDelay = 1f;
+        float comboMinDelay = 0.1f;
+        int comboMaxIndex = 2;
+        int comboIndex;
+        Coroutine comboAttackResetCoroutine;
 
         InputManager inputManager;
         Animator animator;
@@ -31,33 +32,30 @@ namespace ScalePact.Player
             targetScanner = GetComponent<TargetScanner>();
             forceReceiver = GetComponent<PlayerForceReceiver>();
             health = GetComponent<Health>();
+
+            comboIndex = -1;
+            comboAttackResetCoroutine = null;
         }
 
         private void OnEnable()
         {
-            inputManager.LightAttackEvent += OnAttackPressed;
+            inputManager.LightAttackEvent += OnLightAttackPressed;
         }
 
         private void OnDisable()
         {
-            inputManager.LightAttackEvent -= OnAttackPressed;
+            inputManager.LightAttackEvent -= OnLightAttackPressed;
         }
 
         private void Update()
         {
-            if (Time.time - lastClickTime > maxComboDelay)
-            {
-                IsAttacking = false;
-                numOfClicks = 0;
-            }
+
         }
 
-        private void OnAttackPressed()
+        private void OnLightAttackPressed()
         {
             if (health.IsDead) return;
 
-            lastClickTime = Time.time;
-            numOfClicks++;
             IsAttacking = true;
 
             Collider closestTarget = targetScanner.GetClosestTargetNoTargetting();
@@ -66,25 +64,32 @@ namespace ScalePact.Player
                 forceReceiver.FaceTarget(closestTarget.transform);
             }
 
-            animator.SetTrigger(PlayerHashIDs.AttackTriggerHash);
+            if(comboIndex == comboMaxIndex) return;
 
-            if (numOfClicks == 1)
+            float normalizedTime = GetNormalizedTime();
+
+            if(comboIndex == -1 || (normalizedTime > 0.1f && normalizedTime <= 0.8f))
             {
-                SetIndexKnockBackAndForce(0);
+                if(comboAttackResetCoroutine != null)
+                {
+                    StopCoroutine(comboAttackResetCoroutine);
+                }
+
+                comboIndex++;
+                SetIndexKnockBackAndForce(comboIndex);
+                comboAttackResetCoroutine = StartCoroutine(ResetAttackCombo());
             }
+        }
 
-            numOfClicks = Mathf.Clamp(numOfClicks, 0, attackData.Length);
-
-            if (numOfClicks >= 2 && GetNormalizedTime() > attackData[0].ComboBlendTime && CheckAnimStateName(attackData[0].AttackName.ToString()))
-            {
-                SetIndexKnockBackAndForce(1);
-            }
-
-            if (numOfClicks >= 3 && GetNormalizedTime() > attackData[1].ComboBlendTime && CheckAnimStateName(attackData[1].AttackName.ToString()))
-            {
-                SetIndexKnockBackAndForce(2);
-            }
-
+        IEnumerator ResetAttackCombo()
+        {
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(animator.GetAnimatorTransitionInfo(0).duration);
+            yield return new WaitForEndOfFrame();
+            yield return new WaitUntil(() => GetNormalizedTime() >= 0.95f);
+            comboIndex = -1;
+            animator.SetInteger(PlayerHashIDs.AttackIndexHash, comboIndex);
+            IsAttacking = false;
         }
 
         float GetNormalizedTime()
@@ -92,14 +97,8 @@ namespace ScalePact.Player
             return animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
         }
 
-        bool CheckAnimStateName(string name)
-        {
-            return animator.GetCurrentAnimatorStateInfo(0).IsName(name);
-        }
-
         void SetIndexKnockBackAndForce(int index)
         {
-            currentIndex = index;
             attackData[index].DamageHandler.SetUpAttack(attackData[index].KnockBackForce);
             forceReceiver.AddForce(transform.forward * attackData[index].AttackForce);
             animator.SetInteger(PlayerHashIDs.AttackIndexHash, index);
@@ -108,7 +107,8 @@ namespace ScalePact.Player
         //Anim Events
         void EnableCollider()
         {
-            attackData[currentIndex].DamageHandler.EnableCollider();
+            if(comboIndex == -1) return;
+            attackData[comboIndex].DamageHandler.EnableCollider();
         }
 
         void DisableCollider()
@@ -116,7 +116,7 @@ namespace ScalePact.Player
             foreach (AttackData attack in attackData)
             {
                 attack.DamageHandler.DisableCollider();
-            }            
+            }
         }
     }
 }

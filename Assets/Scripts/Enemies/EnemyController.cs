@@ -1,6 +1,5 @@
 using System;
 using ScalePact.AI;
-using ScalePact.Combat;
 using ScalePact.Core;
 using ScalePact.Forces;
 using ScalePact.Utils;
@@ -12,8 +11,10 @@ namespace ScalePact.Enemies
     public class EnemyController : MonoBehaviour
     {
         [Header("Base Variables")]
-        [SerializeField] float baseMoveSpeed = 4f;
         [SerializeField] float maxImpactDuration = 1f;
+
+        [Header("Speed Modifiers")]
+        [Range(0,1)][SerializeField] float patrollingSpeedModifier = 0.2f;
 
         [Header("Patrolling and Chasing")]
         [SerializeField] float chaseDistance = 5f;
@@ -23,9 +24,10 @@ namespace ScalePact.Enemies
         [SerializeField] float patrolPointDwellTime = 3f;
         [SerializeField] float patrolPointTolerance = 1f;
 
+        public EnemyBehaviorState currentState;
+
         //References
         Animator animator;
-        NavMeshAgent agent;
         EnemyMovement movement;
         EnemyCombat combat;
         Health health;
@@ -44,11 +46,12 @@ namespace ScalePact.Enemies
         private void Awake()
         {
             animator = GetComponent<Animator>();
-            agent = GetComponent<NavMeshAgent>();
             combat = GetComponent<EnemyCombat>();
             movement = GetComponent<EnemyMovement>();
             health = GetComponent<Health>();
             ragdoll = GetComponent<Ragdoll>();
+
+            currentState = EnemyBehaviorState.IdleState;
 
         }
 
@@ -73,8 +76,6 @@ namespace ScalePact.Enemies
         private void Update()
         {
             if (health.IsDead) return;
-
-            Debug.Log($"Is In Chase Range: {IsInChaseRange()} and Can Attack: {combat.CanAttack(player)}");
 
             if (IsInChaseRange() && combat.CanAttack(player))
             {
@@ -114,15 +115,15 @@ namespace ScalePact.Enemies
             {
                 nextPos = GetNextPointViaArea();
             }
-            
-            if(patrolPath != null)
+
+            if (patrolPath != null)
             {
                 nextPos = GetNextPointViaWaypoint();
             }
 
             if (timeSinceArrivedAtPatrolPoint > patrolPointDwellTime)
             {
-                movement.StartMoveAction(nextPos, baseMoveSpeed);
+                movement.StartMoveAction(nextPos, patrollingSpeedModifier);
             }
         }
 
