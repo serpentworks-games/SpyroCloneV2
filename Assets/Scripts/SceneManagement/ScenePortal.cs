@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using ScalePact.SceneManagement.Editors;
+using ScalePact.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -33,15 +34,25 @@ namespace ScalePact.SceneManagement
 
         private IEnumerator SceneTransition()
         {
-            if(sceneName.)
+            if(sceneName.Length < 0)
             {
-
+                Debug.LogError($"No scenes to load! Check build settings!");
+                yield break;
             }
+
+            
             DontDestroyOnLoad(gameObject);
+
+            ScreenFader fader = FindObjectOfType<ScreenFader>();
+
+            yield return fader.FadeScreenOut();
             yield return SceneManager.LoadSceneAsync(sceneName);
 
             ScenePortal destinationPortal = GetOtherScenePortal();
             UpdatePlayerLocation(destinationPortal);
+
+            yield return fader.FadeWait();
+            yield return fader.FadeScreenIn();
 
             Destroy(gameObject);
         }
