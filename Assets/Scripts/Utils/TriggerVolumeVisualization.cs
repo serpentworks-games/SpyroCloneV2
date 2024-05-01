@@ -11,6 +11,7 @@ namespace ScalePact.Utils
     public class TriggerVolumeVisualization : MonoBehaviour
     {
         [SerializeField] Color volumeColor = Color.white;
+        [SerializeField] bool useWireFrame = false;
 
         private void OnDrawGizmos()
         {
@@ -23,12 +24,26 @@ namespace ScalePact.Utils
             if (GetComponent<BoxCollider>())
             {
                 BoxCollider collider = GetComponent<BoxCollider>();
-                Gizmos.DrawCube(collider.center, collider.size);
+                if (useWireFrame)
+                {
+                    Gizmos.DrawWireCube(collider.center, collider.size);
+                }
+                else
+                {
+                    Gizmos.DrawCube(collider.center, collider.size);
+                }
             }
             else if (GetComponent<SphereCollider>())
             {
                 SphereCollider collider = GetComponent<SphereCollider>();
-                Gizmos.DrawSphere(collider.center, collider.radius);
+                if (useWireFrame)
+                {
+                    Gizmos.DrawWireSphere(collider.center, collider.radius);
+                }
+                else
+                {
+                    Gizmos.DrawSphere(collider.center, collider.radius);
+                }
             }
             else
             {

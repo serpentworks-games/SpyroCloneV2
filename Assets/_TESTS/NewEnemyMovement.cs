@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class NewEnemyMovement : MonoBehaviour
 {
     [SerializeField] Transform target;
-    [SerializeField] float destinationUpdateSpeed = 0.1f;
+    [HideInInspector] public float destinationUpdateSpeed = 0.1f;
 
     NavMeshAgent agent;
 
@@ -16,6 +16,11 @@ public class NewEnemyMovement : MonoBehaviour
     }
     
     private void Start() {
+        StartMovement();
+    }
+
+    public void StartMovement()
+    {
         StartCoroutine(FollowTarget());
     }
 
