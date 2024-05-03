@@ -1,19 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class RangedAttackRadius : AttackRadius
 {
     [SerializeField] Projectile projectilePrefab;
-    [SerializeField] Vector3 spawnOffset = new Vector3(0, 1, 0);
+    [SerializeField] Vector3 projectileSpawnOffset = new Vector3(0, 1, 0);
     [SerializeField] LayerMask lineOfSightMask;
     [SerializeField] float sphereCastRadius = 0.1f;
 
     ObjectPool projectilePool;
     RaycastHit hit;
     IDamageable target;
+    Projectile projectile;
     
     NavMeshAgent agent;
 
@@ -43,13 +45,41 @@ public class RangedAttackRadius : AttackRadius
                     break;
                 }
             }
+
+            if(target != null)
+            {
+                PoolableObject obj = projectilePool.GetObject();
+                if(obj != null)
+                {
+                    projectile = obj.GetComponent<Projectile>();
+
+                    projectile.transform.position = transform.position + projectileSpawnOffset;
+                    projectile.transform.rotation = agent.transform.rotation;
+                    projectile.rigidbody.AddForce(agent.transform.position * projectilePrefab.GetMoveSpeed(), ForceMode.VelocityChange);
+                }
+            } else
+            {
+                //No target in sight, keep moving
+                agent.enabled = true;
+            }
+
+            yield return waitTime;
+
+            if(target == null || !HasLineOfSightToTarget(target.GetDamageableTransform()))
+            {
+                agent.enabled = true;
+            }
+            damageables.RemoveAll(RemoveDisabled);
         }
+
+        agent.enabled = true;
+        AttackCoroutine = null;
     }
 
     private bool HasLineOfSightToTarget(Transform target)
     {
-        Vector3 raycastOrigin = transform.position + spawnOffset;
-        Vector3 raycastDirection = ((target.position + spawnOffset) - (transform.position + spawnOffset)).normalized;
+        Vector3 raycastOrigin = transform.position + projectileSpawnOffset;
+        Vector3 raycastDirection = ((target.position + projectileSpawnOffset) - (transform.position + projectileSpawnOffset)).normalized;
         if (Physics.SphereCast(raycastOrigin, sphereCastRadius, raycastDirection, out hit, collider.radius, lineOfSightMask))
         {
             return hit.collider.GetComponent<IDamageable>() != null;

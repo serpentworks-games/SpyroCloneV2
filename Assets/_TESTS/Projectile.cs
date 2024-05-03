@@ -43,4 +43,9 @@ public class Projectile : PoolableObject
         rigidbody.velocity = Vector3.zero;
         gameObject.SetActive(false);
     }
+
+    public float GetMoveSpeed()
+    {
+        return projectileMoveSpeed;
+    }
 }
