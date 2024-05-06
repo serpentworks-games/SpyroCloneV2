@@ -3881,10 +3881,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 171dd81bae6f2ae439e94d90a26f681e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseMoveSpeed: 4
   maxImpactDuration: 1
+  defaultState: 0
+  patrollingSpeedModifier: 1
   chaseDistance: 5
-  suspicionStateTime: 2
+  suspicionStateTime: 5
+  patrolPath: {fileID: 0}
+  patrolArea: {fileID: 0}
+  patrolPointDwellTime: 3
+  patrolPointTolerance: 1
 --- !u!114 &8493234678012741363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3899,7 +3904,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackRange: 2
   attackSpeed: 2
-  attackMoveSpeed: 4
+  attackMoveSpeedModifier: 1
   weaponDamage: 1
   weapon: {fileID: 8862422961083311959}
 --- !u!114 &1797413686511936064
@@ -3914,6 +3919,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b814691473c023d46b551be52dd3d81f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxMoveSpeed: 4
 --- !u!114 &7715867462093887503
 MonoBehaviour:
   m_ObjectHideFlags: 0

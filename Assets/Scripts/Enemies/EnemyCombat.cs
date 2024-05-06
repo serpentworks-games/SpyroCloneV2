@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using ScalePact.Core;
 using ScalePact.Utils;
 using UnityEngine;
@@ -7,6 +8,7 @@ namespace ScalePact.Enemies
 {
     public class EnemyCombat : MonoBehaviour, IAction
     {
+        
         [SerializeField] float attackRange = 2f;
         [SerializeField] float attackSpeed = 1f;
         [Range(0,1)][SerializeField] float attackMoveSpeedModifier = 0.3f;
@@ -15,16 +17,34 @@ namespace ScalePact.Enemies
 
         Health currentTarget;
         float timeSinceLastAttack = Mathf.Infinity;
+        EnemyBehaviorState defaultState = EnemyBehaviorState.NoState;
 
         Animator animator;
         EnemyMovement enemyMovement;
         ActionScheduler actionScheduler;
+
+        Coroutine combatCo;
+        EnemyBehaviorState currentState;
+        public EnemyBehaviorState State
+        {
+            get => currentState;
+            set
+            {
+                OnStateChange?.Invoke(currentState, value);
+                currentState = value;
+            }
+        }
+
+        public delegate void StateChangeEvent(EnemyBehaviorState oldState, EnemyBehaviorState newState);
+        public StateChangeEvent OnStateChange;
 
         private void Awake()
         {
             animator = GetComponent<Animator>();
             enemyMovement = GetComponent<EnemyMovement>();
             actionScheduler = GetComponent<ActionScheduler>();
+
+            OnStateChange += HandleStateChange;
         }
 
         private void Update()
@@ -36,12 +56,33 @@ namespace ScalePact.Enemies
 
             if (!IsInAttackRange())
             {
-                enemyMovement.MoveToLocation(currentTarget.transform.position, attackMoveSpeedModifier);
+                State = EnemyBehaviorState.AttackIdleState;
             }
             else
             {
                 enemyMovement.CancelAction();
-                AttackState();
+                State = EnemyBehaviorState.AttackState;
+            }
+        }
+
+        void HandleStateChange(EnemyBehaviorState oldState, EnemyBehaviorState newState)
+        {
+            if (oldState != newState)
+            {
+                if (combatCo != null)
+                {
+                    StopCoroutine(combatCo);
+                }
+
+                switch (newState)
+                {
+                    case EnemyBehaviorState.AttackState:
+                        combatCo = StartCoroutine(AttackState());
+                        break;
+                    case EnemyBehaviorState.AttackIdleState:
+                        combatCo = StartCoroutine(CloseDistance());
+                        break;
+                }
             }
         }
 
@@ -62,22 +103,42 @@ namespace ScalePact.Enemies
             currentTarget = null;
         }
 
-        void AttackState()
+        IEnumerator CloseDistance()
         {
-            transform.LookAt(currentTarget.transform);
-            if (timeSinceLastAttack > attackSpeed)
+            while(currentTarget != null)
             {
-                animator.SetTrigger(EnemyHashIDs.AttackTriggerHash);
-                timeSinceLastAttack = 0;
+                enemyMovement.MoveToLocation(currentTarget.transform.position, attackMoveSpeedModifier);
+                yield return null;
             }
         }
+
+        IEnumerator AttackState()
+        {
+            while(true)
+            {
+                transform.LookAt(currentTarget.transform);
+                
+                animator.SetTrigger(EnemyHashIDs.AttackTriggerHash);
+                yield return new WaitForSeconds(attackSpeed);
+            }
+        }
+
+        // public void AttackState()
+        // {
+        //     transform.LookAt(currentTarget.transform);
+        //     if (timeSinceLastAttack > attackSpeed)
+        //     {
+        //         animator.SetTrigger(EnemyHashIDs.AttackTriggerHash);
+        //         timeSinceLastAttack = 0;
+        //     }
+        // }
 
         private void UpdateTimers()
         {
             timeSinceLastAttack += Time.deltaTime;
         }
 
-        private bool IsInAttackRange()
+        public bool IsInAttackRange()
         {
             return Vector3.Distance(transform.position, currentTarget.transform.position) < attackRange;
         }

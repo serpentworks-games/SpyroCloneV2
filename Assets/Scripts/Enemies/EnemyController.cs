@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using ScalePact.AI;
 using ScalePact.Core;
 using ScalePact.Forces;
@@ -12,13 +13,16 @@ namespace ScalePact.Enemies
     {
         [Header("Base Variables")]
         [SerializeField] float maxImpactDuration = 1f;
+        [SerializeField] EnemyBehaviorState defaultState = EnemyBehaviorState.NoState;
 
         [Header("Speed Modifiers")]
         [Range(0, 1)][SerializeField] float patrollingSpeedModifier = 0.2f;
 
-        [Header("Patrolling and Chasing")]
+        [Header("Chasing Varriables")]
         [SerializeField] float chaseDistance = 5f;
         [SerializeField] float suspicionStateTime = 10f;
+
+        [Header("Patrol Variables")]
         [SerializeField] PatrolPath patrolPath = null;
         [SerializeField] PatrolArea patrolArea = null;
         [SerializeField] float patrolPointDwellTime = 3f;
@@ -40,6 +44,21 @@ namespace ScalePact.Enemies
         //Local state
         Vector3 guardPosition;
         int currentWaypointIndex = 0;
+        Coroutine movementCo;
+        EnemyBehaviorState currentState;
+        public EnemyBehaviorState State
+        {
+            get => currentState;
+            set
+            {
+                OnStateChange?.Invoke(currentState, value);
+                currentState = value;
+            }
+        }
+
+        //Events
+        public delegate void StateChangeEvent(EnemyBehaviorState oldState, EnemyBehaviorState newState);
+        public StateChangeEvent OnStateChange;
 
         private void Awake()
         {
@@ -48,6 +67,8 @@ namespace ScalePact.Enemies
             movement = GetComponent<EnemyMovement>();
             health = GetComponent<Health>();
             ragdoll = GetComponent<Ragdoll>();
+
+            OnStateChange += HandleStateChange;
         }
 
         private void Start()
@@ -58,31 +79,35 @@ namespace ScalePact.Enemies
 
         private void OnEnable()
         {
-            health.OnReceiveDamage += ImpactState;
-            health.OnDeath += DeathState;
+            health.OnReceiveDamage += SwitchToImpact;
+            health.OnDeath += SwitchToDeath;
         }
 
         private void OnDisable()
         {
-            health.OnReceiveDamage -= ImpactState;
-            health.OnDeath -= DeathState;
+            health.OnReceiveDamage -= SwitchToImpact;
+            health.OnDeath -= SwitchToDeath;
         }
 
         private void Update()
         {
             if (health.IsDead) return;
+            if(!combat.CanAttack(player)) return;
 
-            if (IsInChaseRange() && combat.CanAttack(player))
+            if (IsInChaseRange())
             {
-                ChaseState();
+                //ChaseState();
+                State = EnemyBehaviorState.ChaseState;
             }
             else if (timeSinceLastSawPlayer < suspicionStateTime)
             {
-                SuspicionState();
+                //SuspicionState();
+                State = EnemyBehaviorState.SuspicionState;
             }
             else
             {
-                PatrolState();
+                //PatrolState();
+                State = EnemyBehaviorState.PatrolState;
             }
 
             UpdateTimers();
@@ -102,37 +127,117 @@ namespace ScalePact.Enemies
 
         #region States
 
-        void PatrolState()
+        void HandleStateChange(EnemyBehaviorState oldState, EnemyBehaviorState newState)
+        {
+            if (oldState != newState)
+            {
+                if (movementCo != null)
+                {
+                    StopCoroutine(movementCo);
+                }
+
+                switch (newState)
+                {
+                    case EnemyBehaviorState.NoState:
+                        break;
+                    case EnemyBehaviorState.PatrolState:
+                        movementCo = StartCoroutine(PatrolState());
+                        break;
+                    case EnemyBehaviorState.SuspicionState:
+                        movementCo = StartCoroutine(SuspicionState());
+                        break;
+                    case EnemyBehaviorState.ChaseState:
+                        movementCo = StartCoroutine(ChaseState());
+                        break;
+                    case EnemyBehaviorState.ImpactState:
+                        ImpactState();
+                        break;
+                    case EnemyBehaviorState.DeathState:
+                        DeathState();
+                        break;
+                }
+            }
+        }
+
+        IEnumerator PatrolState()
         {
             Vector3 nextPos = guardPosition;
 
-            if (patrolArea != null)
+            while (true)
             {
-                nextPos = GetNextPointViaArea();
-            }
+                if (patrolArea != null)
+                {
+                    nextPos = GetNextPointViaArea();
+                }
 
-            if (patrolPath != null)
-            {
-                nextPos = GetNextPointViaWaypoint();
-            }
+                else if (patrolPath != null)
+                {
+                    nextPos = GetNextPointViaWaypoint();
+                }
 
-            if (timeSinceArrivedAtPatrolPoint > patrolPointDwellTime)
-            {
                 movement.StartMoveAction(nextPos, patrollingSpeedModifier);
+
+                yield return new WaitForSeconds(patrolPointDwellTime);
             }
         }
 
-        void SuspicionState()
+        IEnumerator SuspicionState()
         {
-            GetComponent<ActionScheduler>().CancelCurrentAction();
-            //Suspicion anim!
+            while (true)
+            {
+                GetComponent<ActionScheduler>().CancelCurrentAction();
+
+                yield return new WaitForSeconds(suspicionStateTime);
+                
+                State = EnemyBehaviorState.PatrolState;
+            }
+
+            
         }
 
-        void ChaseState()
+        IEnumerator ChaseState()
         {
-            timeSinceLastSawPlayer = 0;
             combat.Attack(player);
+
+            while (true)
+            {
+                timeSinceLastSawPlayer = 0;
+                yield return null;
+            }
+
         }
+
+        // void PatrolState()
+        // {
+        //     Vector3 nextPos = guardPosition;
+
+        //     if (patrolArea != null)
+        //     {
+        //         nextPos = GetNextPointViaArea();
+        //     }
+
+        //     if (patrolPath != null)
+        //     {
+        //         nextPos = GetNextPointViaWaypoint();
+        //     }
+
+        //     if (timeSinceArrivedAtPatrolPoint > patrolPointDwellTime)
+        //     {
+        //         movement.StartMoveAction(nextPos, patrollingSpeedModifier);
+        //     }
+        // }
+
+        // void SuspicionState()
+        // {
+        //     GetComponent<ActionScheduler>().CancelCurrentAction();
+        //     //Suspicion anim!
+        // }
+
+        // void ChaseState()
+        // {
+        //     timeSinceLastSawPlayer = 0;
+        //     combat.Attack(player);
+        // }
 
         void ImpactState()
         {
@@ -212,12 +317,12 @@ namespace ScalePact.Enemies
         #region Event Handlers
         void SwitchToImpact()
         {
-            ImpactState();
+            State = EnemyBehaviorState.ImpactState;
         }
 
         void SwitchToDeath()
         {
-            DeathState();
+            State = EnemyBehaviorState.DeathState;
         }
         #endregion
 

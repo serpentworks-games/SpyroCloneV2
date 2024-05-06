@@ -2,13 +2,14 @@ namespace ScalePact.Enemies
 {
     public enum EnemyBehaviorState
     {
-        IdleState,
-        MoveToState,
-        ReturnToGuardState,
+        NoState,
+        PatrolState,
+        SuspicionState,
+        ChaseState,
         AttackState,
         AttackIdleState,
         ImpactState,
         DeathState,
-        
+
     }
 }
