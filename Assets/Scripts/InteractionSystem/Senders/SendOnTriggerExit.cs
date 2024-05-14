@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace ScalePact.InteractionSystem.Senders
 {
-    public class SendOnTriggerEnter : TriggerInteraction
+    public class SendOnTriggerExit : TriggerInteraction
     {
         [SerializeField] LayerMask triggerableLayer;
 
-        private void OnTriggerEnter(Collider other)
+        private void OnTriggerExit(Collider other)
         {
             if (triggerableLayer.Contains(other.gameObject))
             {
