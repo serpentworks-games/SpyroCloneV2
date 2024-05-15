@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using ScalePact.Combat;
 using ScalePact.Core;
 using ScalePact.Utils;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace ScalePact.Enemies
         [Range(0,1)][SerializeField] float attackMoveSpeedModifier = 0.3f;
         [SerializeField] float weaponDamage = 1f;
         [SerializeField] DamageHandler weapon = null;
+        [SerializeField] TargetDistributor.TargetFollower followerData;
 
         Health currentTarget;
         float timeSinceLastAttack = Mathf.Infinity;
