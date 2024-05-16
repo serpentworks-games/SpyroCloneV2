@@ -38,7 +38,7 @@ namespace ScalePact.Forces
         Animator animator;
         InputManager inputManager;
         PlayerCombat combat;
-        TargetScanner targetScanner;
+        PlayerTargetScanner targetScanner;
         Health health;
 
         Vector3 moveDir;
@@ -60,7 +60,7 @@ namespace ScalePact.Forces
             animator = GetComponent<Animator>();
             inputManager = GetComponent<InputManager>();
             combat = GetComponent<PlayerCombat>();
-            targetScanner = GetComponent<TargetScanner>();
+            targetScanner = GetComponent<PlayerTargetScanner>();
             health = GetComponent<Health>();
 
             mainCamera = Camera.main;
@@ -122,7 +122,7 @@ namespace ScalePact.Forces
             AddGlideForce(CalculateVelocity());
 
             floorMovement = new Vector3(rb.position.x, FindFloor().y + floorOffsetY, rb.position.z);
-            
+
 
             if (floorMovement != rb.position && IsGrounded() && rb.velocity.y <= 0)
             {

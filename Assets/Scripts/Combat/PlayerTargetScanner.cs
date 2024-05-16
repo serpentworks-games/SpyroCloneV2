@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ScalePact.Combat
 {
-    public class TargetScanner : MonoBehaviour
+    public class PlayerTargetScanner : MonoBehaviour
     {
         [SerializeField] float targettingRadius;
         [SerializeField] LayerMask targettingLayer;

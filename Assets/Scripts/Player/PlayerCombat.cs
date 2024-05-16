@@ -21,7 +21,7 @@ namespace ScalePact.Player
 
         InputManager inputManager;
         Animator animator;
-        TargetScanner targetScanner;
+        PlayerTargetScanner targetScanner;
         PlayerForceReceiver forceReceiver;
         Health health;
 
@@ -29,7 +29,7 @@ namespace ScalePact.Player
         {
             inputManager = GetComponent<InputManager>();
             animator = GetComponent<Animator>();
-            targetScanner = GetComponent<TargetScanner>();
+            targetScanner = GetComponent<PlayerTargetScanner>();
             forceReceiver = GetComponent<PlayerForceReceiver>();
             health = GetComponent<Health>();
 
@@ -64,13 +64,13 @@ namespace ScalePact.Player
                 forceReceiver.FaceTarget(closestTarget.transform);
             }
 
-            if(comboIndex == comboMaxIndex) return;
+            if (comboIndex == comboMaxIndex) return;
 
             float normalizedTime = GetNormalizedTime();
 
-            if(comboIndex == -1 || (normalizedTime > 0.1f && normalizedTime <= 0.8f))
+            if (comboIndex == -1 || (normalizedTime > 0.1f && normalizedTime <= 0.8f))
             {
-                if(comboAttackResetCoroutine != null)
+                if (comboAttackResetCoroutine != null)
                 {
                     StopCoroutine(comboAttackResetCoroutine);
                 }
@@ -107,7 +107,7 @@ namespace ScalePact.Player
         //Anim Events
         void EnableCollider()
         {
-            if(comboIndex == -1) return;
+            if (comboIndex == -1) return;
             attackData[comboIndex].DamageHandler.EnableCollider();
         }
 

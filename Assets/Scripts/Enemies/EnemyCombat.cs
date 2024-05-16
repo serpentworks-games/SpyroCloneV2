@@ -9,17 +9,18 @@ namespace ScalePact.Enemies
 {
     public class EnemyCombat : MonoBehaviour, IAction
     {
-        
+        [SerializeField] EnemyTargetScanner attackRangeScanner;
         [SerializeField] float attackRange = 2f;
         [SerializeField] float attackSpeed = 1f;
-        [Range(0,1)][SerializeField] float attackMoveSpeedModifier = 0.3f;
+        [Range(0, 1)][SerializeField] float attackMoveSpeedModifier = 0.3f;
         [SerializeField] float weaponDamage = 1f;
         [SerializeField] DamageHandler weapon = null;
         [SerializeField] TargetDistributor.TargetFollower followerData;
 
         Health currentTarget;
+        Health player;
         float timeSinceLastAttack = Mathf.Infinity;
-        EnemyBehaviorState defaultState = EnemyBehaviorState.NoState;
+        EnemyBehaviorState defaultState = EnemyBehaviorState.AttackIdleState;
 
         Animator animator;
         EnemyMovement enemyMovement;
@@ -45,6 +46,8 @@ namespace ScalePact.Enemies
             animator = GetComponent<Animator>();
             enemyMovement = GetComponent<EnemyMovement>();
             actionScheduler = GetComponent<ActionScheduler>();
+
+            player = GameObject.FindWithTag("Player").GetComponent<Health>();
 
             OnStateChange += HandleStateChange;
         }
@@ -107,7 +110,7 @@ namespace ScalePact.Enemies
 
         IEnumerator CloseDistance()
         {
-            while(currentTarget != null)
+            while (currentTarget != null)
             {
                 enemyMovement.MoveToLocation(currentTarget.transform.position, attackMoveSpeedModifier);
                 yield return null;
@@ -116,24 +119,14 @@ namespace ScalePact.Enemies
 
         IEnumerator AttackState()
         {
-            while(true)
+            while (true)
             {
                 transform.LookAt(currentTarget.transform);
-                
+
                 animator.SetTrigger(EnemyHashIDs.AttackTriggerHash);
                 yield return new WaitForSeconds(attackSpeed);
             }
         }
-
-        // public void AttackState()
-        // {
-        //     transform.LookAt(currentTarget.transform);
-        //     if (timeSinceLastAttack > attackSpeed)
-        //     {
-        //         animator.SetTrigger(EnemyHashIDs.AttackTriggerHash);
-        //         timeSinceLastAttack = 0;
-        //     }
-        // }
 
         private void UpdateTimers()
         {
@@ -142,7 +135,13 @@ namespace ScalePact.Enemies
 
         public bool IsInAttackRange()
         {
-            return Vector3.Distance(transform.position, currentTarget.transform.position) < attackRange;
+            return attackRangeScanner.Detect(transform, player) != null;    
+        }
+
+        void GetTarget()
+        {
+            Health target = attackRangeScanner.Detect(transform, player, currentTarget == null);
+            if(target != null) currentTarget = target;
         }
 
         //Anim Events
@@ -161,6 +160,7 @@ namespace ScalePact.Enemies
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, attackRange);
+            attackRangeScanner.EditorGizmo(transform);
         }
 #endif
 

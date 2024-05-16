@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using ScalePact.AI;
+using ScalePact.Combat;
 using ScalePact.Core;
 using ScalePact.Forces;
 using ScalePact.Utils;
@@ -19,6 +20,7 @@ namespace ScalePact.Enemies
         [Range(0, 1)][SerializeField] float patrollingSpeedModifier = 0.2f;
 
         [Header("Chasing Varriables")]
+        [SerializeField] EnemyTargetScanner chaseRangeScanner;
         [SerializeField] float chaseDistance = 5f;
         [SerializeField] float suspicionStateTime = 10f;
 
@@ -122,7 +124,7 @@ namespace ScalePact.Enemies
 
         bool IsInChaseRange()
         {
-            return Vector3.Distance(player.transform.position, transform.position) < chaseDistance;
+            return chaseRangeScanner.Detect(transform, player, player == null);
         }
 
         #region States
@@ -331,6 +333,7 @@ namespace ScalePact.Enemies
         {
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, chaseDistance);
+            chaseRangeScanner.EditorGizmo(transform);
         }
 #endif
     }
