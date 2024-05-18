@@ -124,7 +124,7 @@ namespace ScalePact.Enemies
 
         bool IsInChaseRange()
         {
-            return chaseRangeScanner.Detect(transform, player, player == null);
+            return chaseRangeScanner.Detect(transform, player == null);
         }
 
         #region States
@@ -192,9 +192,7 @@ namespace ScalePact.Enemies
                 yield return new WaitForSeconds(suspicionStateTime);
                 
                 State = EnemyBehaviorState.PatrolState;
-            }
-
-            
+            }           
         }
 
         IEnumerator ChaseState()
@@ -206,7 +204,6 @@ namespace ScalePact.Enemies
                 timeSinceLastSawPlayer = 0;
                 yield return null;
             }
-
         }
 
         // void PatrolState()
@@ -331,8 +328,6 @@ namespace ScalePact.Enemies
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(transform.position, chaseDistance);
             chaseRangeScanner.EditorGizmo(transform);
         }
 #endif
