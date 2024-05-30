@@ -14,11 +14,16 @@ namespace ScalePact.Combat
         [SerializeField] LayerMask viewBlockingLayers;
         [SerializeField] Color editorGizmoColor = new Color(0, 0, 0.7f, 0.4f);
 
-        public Health Detect(Transform detector, Health player, bool useHeightDif = true)
-        {
-            //If player is dead, don't target them
-            if (player.GetComponent<Core.Health>().IsDead) return null;
+        Health player;
 
+        public float DetectionRadius { get => detectionRadius; }
+
+        public void GetPlayerRef() {
+            player = GameObject.FindWithTag("Player").GetComponent<Health>();
+        }
+
+        public Health Detect(Transform detector, bool useHeightDif = true)
+        {
             Vector3 eyePos = detector.position + Vector3.up * heightOffset;
             Vector3 toPlayer = player.transform.position - eyePos;
             Vector3 toPlayerTop = player.transform.position + Vector3.up * 1.5f - eyePos; // HISS

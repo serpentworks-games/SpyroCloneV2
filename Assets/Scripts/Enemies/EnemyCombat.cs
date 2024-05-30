@@ -140,7 +140,7 @@ namespace ScalePact.Enemies
 
         void GetTarget()
         {
-            Health target = attackRangeScanner.Detect(transform, player, currentTarget == null);
+            Health target = attackRangeScanner.Detect(transform, currentTarget == null);
             if(target != null) currentTarget = target;
         }
 
