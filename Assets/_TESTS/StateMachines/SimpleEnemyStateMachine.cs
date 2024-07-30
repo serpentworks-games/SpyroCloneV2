@@ -26,6 +26,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     Vector3 originalPosition;
     Health currentTarget = null;
     TargetDistributor.TargetFollower followerInstance = null;
+    float cachedDetectionRadius;
 
     Animator animator;
     EnemyMovementNEW movement;
@@ -33,6 +34,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     private void OnEnable()
     {
         playerScanner.FindPlayer();
+        cachedDetectionRadius = playerScanner.DetectionRadius;
 
         movement = GetComponent<EnemyMovementNEW>();
         animator = GetComponent<Animator>();
@@ -121,6 +123,16 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
         movement.SetTarget(originalPosition);
     }
 
+    public void UpdateDetectionAngle(float newAngle)
+    {
+        playerScanner.SetDetectionAngle(newAngle);
+    }
+
+    public void ResetDetectionRadius()
+    {
+        UpdateDetectionAngle(cachedDetectionRadius);
+    }
+
     #region SwitchTo State Functions
     public void SwitchToIdleState()
     {
@@ -151,6 +163,8 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
         {
             followerInstance.requireAttackSlot = false;
         }
+
+        ResetDetectionRadius();
 
         SwitchState(new SimpleEnemySuspicionState(this));
     }
