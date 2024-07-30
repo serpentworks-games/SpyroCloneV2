@@ -18,8 +18,14 @@ namespace ScalePact.Combat
 
         public float DetectionRadius { get => detectionRadius; }
 
-        public void GetPlayerRef() {
+        public void FindPlayer()
+        {
             player = GameObject.FindWithTag("Player").GetComponent<Health>();
+        }
+
+        public Health GetPlayerRef()
+        {
+            return player;
         }
 
         public Health Detect(Transform detector, bool useHeightDif = true)

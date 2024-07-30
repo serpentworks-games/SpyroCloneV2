@@ -36,6 +36,10 @@ namespace ScalePact.Combat
 
         System.Action schedule;
 
+        private void Awake() {
+            ResetDamage();
+        }
+
         private void Update()
         {
             if (isInvunerable)
@@ -54,7 +58,7 @@ namespace ScalePact.Combat
         {
             currentHealth = maxHealth;
             isInvunerable = false;
-            timeSinceLastHit = Mathf.Infinity;
+            timeSinceLastHit = 0.0f;
             OnResetDamage?.Invoke();
         }
 

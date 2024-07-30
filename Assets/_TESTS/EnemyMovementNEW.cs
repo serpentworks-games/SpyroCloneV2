@@ -108,9 +108,8 @@ public class EnemyMovementNEW : MonoBehaviour
 
     private void CheckIfGrounded()
     {
-        RaycastHit hit;
-        Ray ray = new Ray(transform.position + Vector3.up * kGroundedRayDistance * 0.5f, -Vector3.up);
-        isGrounded = Physics.Raycast(ray, out hit, kGroundedRayDistance, Physics.AllLayers, QueryTriggerInteraction.Ignore);
+        Ray ray = new Ray(transform.position + 0.5f * kGroundedRayDistance * Vector3.up, -Vector3.up);
+        isGrounded = Physics.Raycast(ray, out RaycastHit hit, kGroundedRayDistance, Physics.AllLayers, QueryTriggerInteraction.Ignore);
     }
 
     private void ForceMovement()
@@ -120,10 +119,9 @@ public class EnemyMovementNEW : MonoBehaviour
             externalForce += Physics.gravity * Time.deltaTime;
         }
 
-        RaycastHit hit;
         Vector3 movement = externalForce * Time.deltaTime;
 
-        if(!rigidbody.SweepTest(movement.normalized, out hit, movement.sqrMagnitude))
+        if (!rigidbody.SweepTest(movement.normalized, out RaycastHit hit, movement.sqrMagnitude))
         {
             rigidbody.MovePosition(rigidbody.position + movement);
         }

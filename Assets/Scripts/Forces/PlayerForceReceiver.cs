@@ -33,6 +33,8 @@ namespace ScalePact.Forces
         [SerializeField] float raycastWidthX = 0.5f;
         [SerializeField] float raycastWidthZ = 2f;
 
+        [SerializeField] GameObject mesh;
+
         Camera mainCamera;
         Rigidbody rb;
         Animator animator;
@@ -109,11 +111,14 @@ namespace ScalePact.Forces
 
             ApplyImpact();
 
+
         }
 
         private void FixedUpdate()
         {
             CalculateGravity();
+
+            mesh.transform.up = Vector3.Lerp(mesh.transform.up, AlignToGround(), Time.fixedDeltaTime * movementRotationSpeed);
 
             CalculateRotation(moveDir, movementRotationSpeed);
 
@@ -208,11 +213,14 @@ namespace ScalePact.Forces
             {
                 targetForward = transform.forward;
             }
+
             targetForward.y = 0;
 
             Quaternion rot = Quaternion.LookRotation(targetForward);
             Quaternion targetRot = Quaternion.Slerp(transform.rotation, rot, Time.fixedDeltaTime * rotationSpeed);
             transform.rotation = targetRot;
+
+            mesh.transform.RotateAround(mesh.transform.position, mesh.transform.up, transform.localEulerAngles.y);
         }
 
         private Vector3 CalculateVelocity()

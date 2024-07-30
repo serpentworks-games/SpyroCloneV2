@@ -8,6 +8,9 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     [SerializeField] EnemyTargetScanner playerScanner;
     [SerializeField] float suspicionStateTime = 4f;
     [SerializeField] float attackRange = 2f;
+    [SerializeField] float impactDuraction = 0.5f;
+    [SerializeField] float forceMultiplierOnHit = 5.5f;
+    [SerializeField] float forceMultiplierOnDeath = 7f;
 
     public float testWaitTimeForAttack = 1f;
 
@@ -17,6 +20,8 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     public float AttackRange { get => attackRange; }
     public EnemyMovementNEW Movement { get => movement; }
     public TargetDistributor.TargetFollower FollowerData { get => followerInstance; }
+    public Animator Animator { get => animator; }
+    public float ImpactDuration { get => impactDuraction; }
 
     Vector3 originalPosition;
     Health currentTarget = null;
@@ -27,7 +32,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
 
     private void OnEnable()
     {
-        playerScanner.GetPlayerRef();
+        playerScanner.FindPlayer();
 
         movement = GetComponent<EnemyMovementNEW>();
         animator = GetComponent<Animator>();
@@ -152,31 +157,16 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
 
     public void SwitchToDeathState(Damageable.DamageMessage msg)
     {
-        Vector3 pushForce = transform.position - msg.damageSource;
-
-        pushForce.y = 0;
-
-        transform.forward = -pushForce.normalized;
-
-        movement.AddForce(pushForce.normalized * 7.0f - Physics.gravity * 0.6f);
-
-        //SwitchState(new SimpleEnemyDeathState(this));
+        SwitchState(new SimpleEnemyDeathState(this));
     }
 
     public void SwitchToImpactState(Damageable.DamageMessage msg)
     {
-        float vertDot = Vector3.Dot(Vector3.up, msg.damageFromDirection);
-        float horizonDot = Vector3.Dot(transform.right, msg.damageFromDirection);
-
-        Vector3 pushForce = transform.position - msg.damageSource;
-
-        pushForce.y = 0;
-
-        transform.forward = -pushForce.normalized;
-        movement.AddForce(pushForce.normalized * 5.5f, false);
-
-        //SwitchState(new SimpleEnemyImpactState(this));
+        animator.CrossFadeInFixedTime("Impact", 0.1f);
+        SwitchState(new SimpleEnemyHitState(this));
     }
+
+
     #endregion
 
 
@@ -192,6 +182,16 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
                 break;
 
         }
+    }
+
+    private void ApplyForces(Damageable.DamageMessage msg, float multiplier)
+    {
+        Vector3 pushForce = transform.position - msg.damageSource;
+
+        pushForce.y = 0;
+
+        transform.forward = -pushForce.normalized;
+        movement.AddForce(pushForce.normalized * multiplier, false);
     }
 
     private void OnDrawGizmos()
