@@ -17,6 +17,9 @@ namespace ScalePact.Combat
         Health player;
 
         public float DetectionRadius { get => detectionRadius; }
+        public float DetectionAngle { get => detectionAngle; }
+
+        public void SetDetectionRadius(float newRadius) { detectionRadius = newRadius; }
         public void SetDetectionAngle(float newAngle) { detectionAngle = newAngle; }
 
         public void FindPlayer()

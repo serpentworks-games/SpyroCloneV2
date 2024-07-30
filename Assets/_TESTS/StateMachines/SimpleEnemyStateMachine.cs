@@ -26,6 +26,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     Vector3 originalPosition;
     Health currentTarget = null;
     TargetDistributor.TargetFollower followerInstance = null;
+    float cachedDetectionAngle;
     float cachedDetectionRadius;
 
     Animator animator;
@@ -34,6 +35,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     private void OnEnable()
     {
         playerScanner.FindPlayer();
+        cachedDetectionAngle = playerScanner.DetectionAngle;
         cachedDetectionRadius = playerScanner.DetectionRadius;
 
         movement = GetComponent<EnemyMovementNEW>();
@@ -48,6 +50,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     {
         base.Update();
 
+        //HISS should make a const here!!
         animator.SetFloat("Velocity", movement.GetAgentVelocity(), 0.1f, Time.deltaTime);
     }
 
@@ -60,9 +63,8 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
             if (newTarget != null)
             {
                 currentTarget = newTarget;
-                TargetDistributor distributor = Target.GetComponent<TargetDistributor>();
-
-                if (distributor != null)
+                
+                if (Target.TryGetComponent<TargetDistributor>(out var distributor))
                 {
                     followerInstance = distributor.RegisterNewFollower();
                 }
@@ -75,10 +77,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
                 Vector3 toTarget = currentTarget.transform.position - transform.position;
                 if (toTarget.sqrMagnitude > playerScanner.DetectionRadius * playerScanner.DetectionRadius)
                 {
-                    if (followerInstance != null)
-                    {
-                        followerInstance.distributor.UnregisterFollower(followerInstance);
-                    }
+                    followerInstance?.distributor.UnregisterFollower(followerInstance);
 
                     currentTarget = null;
                 }
@@ -87,15 +86,11 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
             {
                 if (newTarget != currentTarget)
                 {
-                    if (followerInstance != null)
-                    {
-                        followerInstance.distributor.UnregisterFollower(followerInstance);
-                    }
+                    followerInstance?.distributor.UnregisterFollower(followerInstance);
 
                     currentTarget = newTarget;
 
-                    TargetDistributor distributor = Target.GetComponent<TargetDistributor>();
-                    if (distributor != null)
+                    if (Target.TryGetComponent<TargetDistributor>(out var distributor))
                     {
                         followerInstance = distributor.RegisterNewFollower();
                     }
@@ -109,15 +104,13 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
         Vector3 fromTarget = transform.position - currentTarget.transform.position;
         fromTarget.y = 0;
 
-        followerInstance.requiredPosition = currentTarget.transform.position + fromTarget.normalized * attackRange * 0.9f;
+        //HISS magic number!!
+        followerInstance.requiredPosition = currentTarget.transform.position + 0.9f * attackRange * fromTarget.normalized;
     }
 
     public void ReturnToOriginalPosition()
     {
-        if (followerInstance != null)
-        {
-            followerInstance.distributor.UnregisterFollower(followerInstance);
-        }
+        followerInstance?.distributor.UnregisterFollower(followerInstance);
 
         currentTarget = null;
         movement.SetTarget(originalPosition);
@@ -128,9 +121,19 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
         playerScanner.SetDetectionAngle(newAngle);
     }
 
+    public void ResetDetectionAngle()
+    {
+        UpdateDetectionAngle(cachedDetectionAngle);
+    }
+
+    public void UpdateDetectionRadius(float newRadius)
+    {
+        playerScanner.SetDetectionRadius(newRadius);
+    }
+    
     public void ResetDetectionRadius()
     {
-        UpdateDetectionAngle(cachedDetectionRadius);
+        UpdateDetectionRadius(cachedDetectionRadius);
     }
 
     #region SwitchTo State Functions
@@ -164,7 +167,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
             followerInstance.requireAttackSlot = false;
         }
 
-        ResetDetectionRadius();
+        ResetDetectionAngle();
 
         SwitchState(new SimpleEnemySuspicionState(this));
     }
