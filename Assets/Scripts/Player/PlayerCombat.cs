@@ -10,7 +10,7 @@ namespace ScalePact.Player
 {
     public class PlayerCombat : MonoBehaviour
     {
-        [SerializeField] AttackData[] attackData;
+        [SerializeField] MeleeWeapon[] meleeWeaponCombo;
 
         public bool IsAttacking { get; private set; } = false;
 
@@ -99,23 +99,37 @@ namespace ScalePact.Player
 
         void SetIndexKnockBackAndForce(int index)
         {
-            attackData[index].DamageHandler.SetUpAttack(attackData[index].KnockBackForce);
-            forceReceiver.AddForce(transform.forward * attackData[index].AttackForce);
+            //attackData[index].DamageHandler.SetUpAttack(attackData[index].KnockBackForce);
+            //forceReceiver.AddForce(transform.forward * attackData[index].AttackForce);
             animator.SetInteger(PlayerHashIDs.AttackIndexHash, index);
         }
 
         //Anim Events
         void EnableCollider()
         {
-            if (comboIndex == -1) return;
-            attackData[comboIndex].DamageHandler.EnableCollider();
+            // if (comboIndex == -1) return;
+            // attackData[comboIndex].DamageHandler.EnableCollider();
         }
 
         void DisableCollider()
         {
-            foreach (AttackData attack in attackData)
+            // foreach (AttackData attack in attackData)
+            // {
+            //     attack.DamageHandler.DisableCollider();
+            // }
+        }
+
+        void Hit()
+        {
+            if (comboIndex == -1) return;
+            meleeWeaponCombo[comboIndex].BeginAttack();
+        }
+
+        void HitEnd()
+        {
+            foreach (MeleeWeapon item in meleeWeaponCombo)
             {
-                attack.DamageHandler.DisableCollider();
+                item.EndAttack();
             }
         }
     }
