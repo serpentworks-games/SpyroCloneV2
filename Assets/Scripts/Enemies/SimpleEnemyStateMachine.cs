@@ -1,11 +1,12 @@
 using ScalePact.Combat;
 using ScalePact.Core;
 using ScalePact.Utils;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
 {
-    [SerializeField] EnemyTargetScanner playerScanner;
+    [SerializeField] TargetScanner playerScanner;
     [SerializeField] float suspicionStateTime = 4f;
     [SerializeField] float attackRange = 2f;
     [SerializeField] float impactDuraction = 0.5f;
@@ -15,22 +16,23 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     public float testWaitTimeForAttack = 1f;
 
     public bool IsGrounded { get; set; }
-    public Health Target { get => currentTarget; }
+    public Damageable Target { get => currentTarget; }
     public float SuspicionStateTime { get => suspicionStateTime; }
     public float AttackRange { get => attackRange; }
-    public EnemyMovementNEW Movement { get => movement; }
+    public EnemyMovement Movement { get => movement; }
     public TargetDistributor.TargetFollower FollowerData { get => followerInstance; }
     public Animator Animator { get => animator; }
     public float ImpactDuration { get => impactDuraction; }
 
     Vector3 originalPosition;
-    Health currentTarget = null;
+    Damageable currentTarget = null;
     TargetDistributor.TargetFollower followerInstance = null;
+
     float cachedDetectionAngle;
     float cachedDetectionRadius;
 
     Animator animator;
-    EnemyMovementNEW movement;
+    EnemyMovement movement;
 
     private void OnEnable()
     {
@@ -38,7 +40,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
         cachedDetectionAngle = playerScanner.DetectionAngle;
         cachedDetectionRadius = playerScanner.DetectionRadius;
 
-        movement = GetComponent<EnemyMovementNEW>();
+        movement = GetComponent<EnemyMovement>();
         animator = GetComponent<Animator>();
 
         originalPosition = transform.position;
@@ -56,15 +58,15 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
 
     public void FindTarget()
     {
-        Health newTarget = playerScanner.Detect(transform, currentTarget == null);
+        Damageable newTarget = playerScanner.Detect(transform, currentTarget == null);
 
         if (currentTarget == null)
         {
             if (newTarget != null)
             {
                 currentTarget = newTarget;
-                
-                if (Target.TryGetComponent<TargetDistributor>(out var distributor))
+                TargetDistributor distributor = newTarget.GetComponentInParent<TargetDistributor>();
+                if (distributor != null)
                 {
                     followerInstance = distributor.RegisterNewFollower();
                 }
@@ -90,7 +92,8 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
 
                     currentTarget = newTarget;
 
-                    if (Target.TryGetComponent<TargetDistributor>(out var distributor))
+                    TargetDistributor distributor = newTarget.GetComponentInParent<TargetDistributor>();
+                    if (distributor != null)
                     {
                         followerInstance = distributor.RegisterNewFollower();
                     }
@@ -130,7 +133,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     {
         playerScanner.SetDetectionRadius(newRadius);
     }
-    
+
     public void ResetDetectionRadius()
     {
         UpdateDetectionRadius(cachedDetectionRadius);

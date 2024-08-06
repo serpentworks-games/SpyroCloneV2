@@ -4,7 +4,7 @@ using ScalePact.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace ScalePact.Combat
+namespace ScalePact.Core
 {
     public class Damageable : MonoBehaviour
     {
@@ -29,7 +29,10 @@ namespace ScalePact.Combat
 
         [EnforceType(typeof(IMessageReceiver))][SerializeField] List<MonoBehaviour> OnDamageMessageReceivers;
 
+        public bool IsDead { get => isDead; } 
+
         bool isInvunerable;
+        bool isDead;
         int currentHealth;
 
         float timeSinceLastHit = Mathf.Infinity;
@@ -58,12 +61,14 @@ namespace ScalePact.Combat
         {
             currentHealth = maxHealth;
             isInvunerable = false;
+            isDead = false;
             timeSinceLastHit = 0.0f;
             OnResetDamage?.Invoke();
         }
 
         public void ApplyDamage(DamageMessage data)
         {
+            if (isDead) return;
             if (currentHealth <= 0) return;
 
             if (isInvunerable)
@@ -87,7 +92,11 @@ namespace ScalePact.Combat
 
             //If current hp is now zero or lower, schedule the death event
             //This avoids a race condition if objects kill each other at the same time
-            if (currentHealth <= 0) schedule += OnDeath.Invoke;
+            if (currentHealth <= 0) 
+            {
+                isDead = true;
+                schedule += OnDeath.Invoke;
+            }
             else OnReceiveDamage?.Invoke();
 
             //Determine if the message should be passed as DEAD or DAMAGED depending on current hp

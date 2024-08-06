@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ScalePact.Forces
 {
-    public class PlayerForceReceiver : ForceReceiver
+    public class PlayerForceReceiver : ForceReceiver, IMessageReceiver
     {
         [Header("Grounded Movement")]
         [SerializeField] float moveSpeed = 6f;
@@ -40,8 +40,7 @@ namespace ScalePact.Forces
         Animator animator;
         InputManager inputManager;
         PlayerCombat combat;
-        PlayerTargetScanner targetScanner;
-        Health health;
+        Damageable damageable;
 
         Vector3 moveDir;
         Vector3 raycastFloorPos;
@@ -62,8 +61,7 @@ namespace ScalePact.Forces
             animator = GetComponent<Animator>();
             inputManager = GetComponent<InputManager>();
             combat = GetComponent<PlayerCombat>();
-            targetScanner = GetComponent<PlayerTargetScanner>();
-            health = GetComponent<Health>();
+            damageable = GetComponentInChildren<Damageable>();
 
             mainCamera = Camera.main;
         }
@@ -73,9 +71,6 @@ namespace ScalePact.Forces
             inputManager.JumpEvent += OnJumpPressed;
             inputManager.JumpEvent += OnGlidePressed;
             inputManager.ToggleTargetEvent += OnLockOnTarget;
-
-            health.OnReceiveDamage += OnImpactReceived;
-            health.OnDeath += OnDeathTriggered;
         }
 
         private void OnDisable()
@@ -83,14 +78,11 @@ namespace ScalePact.Forces
             inputManager.JumpEvent -= OnJumpPressed;
             inputManager.JumpEvent -= OnGlidePressed;
             inputManager.ToggleTargetEvent -= OnLockOnTarget;
-
-            health.OnReceiveDamage -= OnImpactReceived;
-            health.OnDeath -= OnDeathTriggered;
         }
 
         private void Update()
         {
-            if (health.IsDead) return;
+            if (damageable.IsDead) return;
 
             if (combat.IsAttacking)
             {
@@ -352,7 +344,7 @@ namespace ScalePact.Forces
 
         void OnLockOnTarget()
         {
-            if (targetScanner.TargetColliders.Count < 0)
+            if (combat.TargetColliders.Count < 0)
             {
                 isTargetting = false;
                 //change control type
@@ -372,13 +364,30 @@ namespace ScalePact.Forces
                 //change to normal movement
             }
         }
+        #endregion
 
-        void OnImpactReceived()
+        #region Damage System
+
+        public void OnReceiveMessage(MessageType type, object sender, object msg)
+        {
+            Damageable.DamageMessage data = (Damageable.DamageMessage)msg;
+            switch (type)
+            {
+                case MessageType.DAMAGED:
+                    Damaged(data);
+                    break;
+                case MessageType.DEAD:
+                    Death(data);
+                    break;
+            }
+        }
+
+        void Damaged(Damageable.DamageMessage msg)
         {
             ApplyImpact();
         }
 
-        void OnDeathTriggered()
+        void Death(Damageable.DamageMessage msg)
         {
             animator.SetTrigger(PlayerHashIDs.DeathTriggerHash);
         }

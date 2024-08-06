@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ScalePact.Combat
 {
     [System.Serializable]
-    public class EnemyTargetScanner
+    public class TargetScanner
     {
         [SerializeField] float heightOffset = 0.0f;
         [SerializeField] float detectionRadius = 5f;
@@ -14,7 +14,7 @@ namespace ScalePact.Combat
         [SerializeField] LayerMask viewBlockingLayers;
         [SerializeField] Color editorGizmoColor = new Color(0, 0, 0.7f, 0.4f);
 
-        Health player;
+        Damageable player;
 
         public float DetectionRadius { get => detectionRadius; }
         public float DetectionAngle { get => detectionAngle; }
@@ -24,16 +24,18 @@ namespace ScalePact.Combat
 
         public void FindPlayer()
         {
-            player = GameObject.FindWithTag("Player").GetComponent<Health>();
+            player = GameObject.FindWithTag("Player").GetComponentInChildren<Damageable>();
         }
 
-        public Health GetPlayerRef()
+        public Damageable GetPlayerRef()
         {
             return player;
         }
 
-        public Health Detect(Transform detector, bool useHeightDif = true)
+        public Damageable Detect(Transform detector, bool useHeightDif = true)
         {
+            if (player == null) return null;
+
             Vector3 eyePos = detector.position + Vector3.up * heightOffset;
             Vector3 toPlayer = player.transform.position - eyePos;
             Vector3 toPlayerTop = player.transform.position + Vector3.up * 1.5f - eyePos; // HISS

@@ -14,9 +14,7 @@ GameObject:
   - component: {fileID: 7057174833017142102}
   - component: {fileID: 477704634879389871}
   - component: {fileID: 133294932676202800}
-  - component: {fileID: 3212216596492361962}
   - component: {fileID: 3140659787214616435}
-  - component: {fileID: 2377116733749134119}
   - component: {fileID: 5927301835103781318}
   - component: {fileID: 1644581018960988918}
   m_Layer: 9
@@ -40,8 +38,9 @@ Transform:
   m_Children:
   - {fileID: 4492331262284031073}
   - {fileID: 9124399830720189938}
+  - {fileID: 7815659806765462504}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1701600792824568678
 Animator:
@@ -138,20 +137,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab786dd3f50c6c84bb3412ee464c73b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3212216596492361962
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1897627774749870500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe98267b11abbaa4da2372a2f86dd05c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 10
-  isImmortal: 1
 --- !u!114 &3140659787214616435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,26 +149,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d5d1f131f4b09444b781bbb0ec40a49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meleeWeaponCombo:
-  - {fileID: 5526580730812494674}
-  - {fileID: 5392645425562298844}
-  - {fileID: 5497773899298015673}
---- !u!114 &2377116733749134119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1897627774749870500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15b34655bffe8e14195a89f563a47e87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   targettingRadius: 5
   targettingLayer:
     serializedVersion: 2
     m_Bits: 8388608
+  meleeWeaponCombo:
+  - {fileID: 5526580730812494674}
+  - {fileID: 5392645425562298844}
+  - {fileID: 5497773899298015673}
 --- !u!114 &5927301835103781318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,6 +200,72 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arcsCount: 5
+--- !u!1 &7251489040829584187
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7815659806765462504}
+  - component: {fileID: 5149537420769236225}
+  m_Layer: 9
+  m_Name: DamageablePart
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7815659806765462504
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7251489040829584187}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5377251879675290520}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5149537420769236225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7251489040829584187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f57ba2d1d1dda0d41a8675fb9bc62a4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 3
+  isImmortal: 0
+  maxInvulnerabilityTime: 0.5
+  hitAngle: 360
+  hitForwardRotation: 360
+  OnReceiveDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHitWhileInvulnerable:
+    m_PersistentCalls:
+      m_Calls: []
+  OnBecomeVulnerable:
+    m_PersistentCalls:
+      m_Calls: []
+  OnResetDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDamageMessageReceivers:
+  - {fileID: 477704634879389871}
 --- !u!1 &7790928851440892564
 GameObject:
   m_ObjectHideFlags: 0
