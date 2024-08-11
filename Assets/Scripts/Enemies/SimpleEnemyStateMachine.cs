@@ -178,18 +178,20 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     public void SwitchToDeathState(Damageable.DamageMessage msg)
     {
         SwitchState(new SimpleEnemyDeathState(this));
+        ApplyForces(msg, forceMultiplierOnDeath);
     }
 
     public void SwitchToImpactState(Damageable.DamageMessage msg)
     {
         animator.CrossFadeInFixedTime("Impact", 0.1f);
         SwitchState(new SimpleEnemyHitState(this));
+        ApplyForces(msg, forceMultiplierOnHit);
     }
 
 
     #endregion
 
-
+    #region  Damageable System
     public void OnReceiveMessage(MessageType type, object sender, object msg)
     {
         switch (type)
@@ -213,9 +215,12 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
         transform.forward = -pushForce.normalized;
         movement.AddForce(pushForce.normalized * multiplier, false);
     }
+    #endregion
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         playerScanner.EditorGizmo(transform);
     }
+#endif
 }

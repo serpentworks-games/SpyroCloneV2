@@ -137,6 +137,7 @@ namespace ScalePact.Player
         {
             //attackData[index].DamageHandler.SetUpAttack(attackData[index].KnockBackForce);
             //forceReceiver.AddForce(transform.forward * attackData[index].AttackForce);
+            
             animator.SetInteger(PlayerHashIDs.AttackIndexHash, index);
         }
         #endregion
