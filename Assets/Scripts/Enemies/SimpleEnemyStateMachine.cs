@@ -10,13 +10,13 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     [SerializeField] TargetScanner playerScanner;
     [SerializeField] float suspicionStateTime = 4f;
     [SerializeField] float impactDuraction = 0.5f;
-    [SerializeField] float forceMultiplierOnHit = 5.5f;
-    [SerializeField] float forceMultiplierOnDeath = 7f;
+    [SerializeField] float deathForceMultiplier = 7f;
     [SerializeField] float timeBeforeDestroy = 2f;
 
     [Header("Combat Behaviour Settings")]
     public float testWaitTimeForAttack = 1f;
     [SerializeField] float attackRange = 2f;
+    [SerializeField] MeleeWeapon weapon;
 
     public Damageable Target { get => currentTarget; }
     public float SuspicionStateTime { get => suspicionStateTime; }
@@ -26,6 +26,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     public Animator Animator { get => animator; }
     public float ImpactDuration { get => impactDuraction; }
     public Rigidbody Rigidbody { get => rb; }
+    public MeleeWeapon Weapon { get => weapon; }
 
     Vector3 originalPosition;
     Damageable currentTarget = null;
@@ -61,6 +62,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
         animator.SetFloat("Velocity", movement.GetAgentVelocity(), 0.1f, Time.deltaTime);
     }
 
+    #region Chasing/Patrolling
     public void FindTarget()
     {
         Damageable newTarget = playerScanner.Detect(transform, currentTarget == null);
@@ -123,7 +125,8 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
         currentTarget = null;
         movement.SetTarget(originalPosition);
     }
-
+    #endregion
+    #region Detection Updaters
     public void UpdateDetectionAngle(float newAngle)
     {
         playerScanner.SetDetectionAngle(newAngle);
@@ -143,6 +146,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     {
         UpdateDetectionRadius(cachedDetectionRadius);
     }
+    #endregion
 
     public void DestroyAfterTime()
     {
@@ -188,14 +192,14 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     public void SwitchToDeathState(Damageable.DamageMessage msg)
     {
         SwitchState(new SimpleEnemyDeathState(this));
-        ApplyForces(msg, forceMultiplierOnDeath, true);
+        ApplyForces(msg, msg.knockBackForce + deathForceMultiplier, true);
     }
 
     public void SwitchToImpactState(Damageable.DamageMessage msg)
     {
         animator.CrossFadeInFixedTime("Impact", 0.1f);
         SwitchState(new SimpleEnemyHitState(this));
-        ApplyForces(msg, forceMultiplierOnHit, false);
+        ApplyForces(msg, msg.knockBackForce, false);
     }
 
 
@@ -223,7 +227,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
         pushForce.y = 0;
 
         transform.forward = -pushForce.normalized;
-        if(useGravity)
+        if (useGravity)
         {
             movement.AddForce(pushForce.normalized * multiplier - Physics.gravity * 0.6f);
         }
@@ -233,6 +237,18 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
         }
     }
     #endregion
+
+#region Anim Events
+    void StartHit()
+    {
+        weapon.BeginAttack();
+    }
+
+    void EndHit()
+    {
+        weapon.EndAttack();
+    }
+#endregion
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()

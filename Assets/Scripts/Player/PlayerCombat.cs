@@ -36,14 +36,14 @@ namespace ScalePact.Player
         Coroutine comboAttackResetCoroutine;
         InputManager inputManager;
         Animator animator;
-        PlayerMovement forceReceiver;
+        PlayerMovement movement;
         Damageable damageable;
 
         private void Awake()
         {
             inputManager = GetComponent<InputManager>();
             animator = GetComponent<Animator>();
-            forceReceiver = GetComponent<PlayerMovement>();
+            movement = GetComponent<PlayerMovement>();
             damageable = GetComponentInChildren<Damageable>();
             targetGroup = FindObjectOfType<CinemachineStateDrivenCamera>().GetComponentInChildren<CinemachineTargetGroup>();
 
@@ -95,7 +95,7 @@ namespace ScalePact.Player
             Collider closestTarget = GetClosestTargetNoTargetting();
             if (closestTarget != null)
             {
-                forceReceiver.FaceTarget(closestTarget.transform);
+                movement.FaceTarget(closestTarget.transform);
             }
 
             if (comboIndex == comboMaxIndex) return;
@@ -133,8 +133,7 @@ namespace ScalePact.Player
 
         void SetIndexKnockBackAndForce(int index)
         {
-            //attackData[index].DamageHandler.SetUpAttack(attackData[index].KnockBackForce);
-            //forceReceiver.AddForce(transform.forward * attackData[index].AttackForce);
+            //movement.AddForce(transform.forward * meleeWeaponCombo[index].AttackForce);
 
             animator.SetInteger(PlayerHashIDs.AttackIndexHash, index);
         }
@@ -252,6 +251,7 @@ namespace ScalePact.Player
         {
             if (comboIndex == -1) return;
             meleeWeaponCombo[comboIndex].BeginAttack();
+
         }
 
         void HitEnd()

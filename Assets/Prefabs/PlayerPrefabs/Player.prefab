@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5377251879675290520}
   - component: {fileID: 1701600792824568678}
   - component: {fileID: 3652741422194457488}
-  - component: {fileID: 7057174833017142102}
   - component: {fileID: 477704634879389871}
   - component: {fileID: 133294932676202800}
   - component: {fileID: 3140659787214616435}
@@ -90,29 +89,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 2
---- !u!136 &7057174833017142102
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1897627774749870500}
-  m_Material: {fileID: 13400000, guid: 870559f761eb90243ba09333475b5046, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.3873844
-  m_Height: 2.3265445
-  m_Direction: 2
-  m_Center: {x: 0.010075252, y: 1.0254825, z: 0.42111015}
 --- !u!114 &477704634879389871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,6 +146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   impactDrag: 0.1
+  knockbackForce: 50
   moveSpeed: 6
   movementRotationSpeed: 20
   faceTargetRotationSpeed: 30
@@ -209,6 +186,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7815659806765462504}
+  - component: {fileID: 3477827525978096284}
   - component: {fileID: 5149537420769236225}
   m_Layer: 9
   m_Name: DamageablePart
@@ -232,6 +210,29 @@ Transform:
   m_Father: {fileID: 5377251879675290520}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &3477827525978096284
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7251489040829584187}
+  m_Material: {fileID: 13400000, guid: 870559f761eb90243ba09333475b5046, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.3873844
+  m_Height: 2.3265445
+  m_Direction: 2
+  m_Center: {x: 0.010075252, y: 1.0254825, z: 0.42111015}
 --- !u!114 &5149537420769236225
 MonoBehaviour:
   m_ObjectHideFlags: 0

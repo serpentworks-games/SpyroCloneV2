@@ -1,17 +1,16 @@
 using ScalePact.Combat;
-using ScalePact.Core;
 using ScalePact.Core.Input;
-using ScalePact.Player;
 using ScalePact.Utils;
 using UnityEngine;
 
 namespace ScalePact.Player
 {
-    public class PlayerMovement : MonoBehaviour, IMessageReceiver
+    public class PlayerMovement : MonoBehaviour
     {
         [Header("Baseline Variables")]
         [SerializeField] float impactDrag;
-        
+        [SerializeField] float knockbackForce = 100;
+
         [Header("Grounded Movement")]
         [SerializeField] float moveSpeed = 6f;
         [SerializeField] float movementRotationSpeed = 20f;
@@ -118,7 +117,7 @@ namespace ScalePact.Player
         {
             CalculateGravity();
 
-            mesh.transform.up = Vector3.Lerp(mesh.transform.up, AlignToGround(), Time.fixedDeltaTime * movementRotationSpeed);
+            mesh.transform.up = Vector3.Slerp(mesh.transform.up, AlignToGround(), Time.fixedDeltaTime * movementRotationSpeed);
 
             CalculateRotation(moveDir, movementRotationSpeed);
 
@@ -127,7 +126,6 @@ namespace ScalePact.Player
             AddGlideForce(CalculateVelocity());
 
             floorMovement = new Vector3(rb.position.x, FindFloor().y + floorOffsetY, rb.position.z);
-
 
             if (floorMovement != rb.position && IsGrounded() && rb.velocity.y <= 0)
             {
@@ -140,16 +138,26 @@ namespace ScalePact.Player
                 rb.MovePosition(floorMovement);
                 gravity.y = 0;
             }
+
         }
 
-        public void AddForce(Vector3 forceToAdd)
+        public void AddForce(Vector3 forceToAdd, bool isKnockBack = false)
         {
-            impact += forceToAdd;
+            if (isKnockBack)
+            {
+                impact += forceToAdd * knockbackForce;
+                return;
+            }
+            else
+            {
+                impact += forceToAdd;
+            }
         }
 
         public void FaceTarget(Transform target)
         {
             CalculateRotation(target.position - transform.position, faceTargetRotationSpeed);
+            mesh.transform.up = Vector3.Slerp(target.position - mesh.transform.position, AlignToGround(), Time.fixedDeltaTime * faceTargetRotationSpeed);
         }
 
         void AddGlideForce(Vector3 velocity)
@@ -371,33 +379,6 @@ namespace ScalePact.Player
             {
                 //change to normal movement
             }
-        }
-        #endregion
-
-        #region Damage System
-
-        public void OnReceiveMessage(MessageType type, object sender, object msg)
-        {
-            Damageable.DamageMessage data = (Damageable.DamageMessage)msg;
-            switch (type)
-            {
-                case MessageType.DAMAGED:
-                    Damaged(data);
-                    break;
-                case MessageType.DEAD:
-                    Death(data);
-                    break;
-            }
-        }
-
-        void Damaged(Damageable.DamageMessage msg)
-        {
-            ApplyImpact();
-        }
-
-        void Death(Damageable.DamageMessage msg)
-        {
-            animator.SetTrigger(PlayerHashIDs.DeathTriggerHash);
         }
         #endregion
 

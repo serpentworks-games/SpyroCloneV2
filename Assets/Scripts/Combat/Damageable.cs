@@ -12,7 +12,7 @@ namespace ScalePact.Combat
         {
             public MonoBehaviour damager;
             public int damageAmount;
-            public Vector3 damageFromDirection;
+            public float knockBackForce;
             public Vector3 damageSource;
             public bool throwing;
 
@@ -29,7 +29,7 @@ namespace ScalePact.Combat
 
         [EnforceType(typeof(IMessageReceiver))][SerializeField] List<MonoBehaviour> OnDamageMessageReceivers;
 
-        public bool IsDead { get => isDead; } 
+        public bool IsDead { get => isDead; }
 
         bool isInvunerable;
         bool isDead;
@@ -39,7 +39,8 @@ namespace ScalePact.Combat
 
         System.Action schedule;
 
-        private void Awake() {
+        private void Awake()
+        {
             ResetDamage();
         }
 
@@ -92,7 +93,7 @@ namespace ScalePact.Combat
 
             //If current hp is now zero or lower, schedule the death event
             //This avoids a race condition if objects kill each other at the same time
-            if (currentHealth <= 0) 
+            if (currentHealth <= 0)
             {
                 isDead = true;
                 schedule += OnDeath.Invoke;
@@ -105,7 +106,7 @@ namespace ScalePact.Combat
             //Loop through the list of receivers, sending the message and data along for each
             for (int i = 0; i < OnDamageMessageReceivers.Count; i++)
             {
-                IMessageReceiver receiver = OnDamageMessageReceivers[i] as IMessageReceiver;
+                if (OnDamageMessageReceivers[i] is not IMessageReceiver receiver) continue;
                 receiver.OnReceiveMessage(messageType, this, data);
             }
         }

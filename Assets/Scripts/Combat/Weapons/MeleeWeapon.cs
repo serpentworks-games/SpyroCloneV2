@@ -8,12 +8,17 @@ namespace ScalePact.Combat
 {
     public class MeleeWeapon : MonoBehaviour
     {
-        public int damage = 1;
-        public LayerMask targetLayers;
-        public AttackPoint[] attackpoints = new AttackPoint[0];
-        public GameObject owner;
+        [SerializeField] int damage = 1;
+        [SerializeField] float attackForce = 2f;
+        [SerializeField] float attackKnockBackForce = 4f;
+        [SerializeField] LayerMask targetLayers;
+        [SerializeField] AttackPoint[] attackpoints = new AttackPoint[0];
+        [SerializeField] GameObject owner;
 
-        [System.Serializable]
+        public float AttackForce { get => attackForce; }
+        public float AttackKnockBackForce { get => attackKnockBackForce; }
+
+        [Serializable]
         public class AttackPoint
         {
             public float radius;
@@ -22,7 +27,6 @@ namespace ScalePact.Combat
         }
 
         Vector3[] prevPos = null;
-        Vector3 direction;
         bool isInAttack = false;
 
         static RaycastHit[] hitCache = new RaycastHit[32];
@@ -85,10 +89,7 @@ namespace ScalePact.Combat
 
         private void TryApplyDamage(Collider other, AttackPoint point)
         {
-
-            Damageable d = other.GetComponent<Damageable>();
-
-            if (d == null) return;
+            if (!other.TryGetComponent(out Damageable d)) return;
 
             if (d.gameObject == owner) return;
             if (!targetLayers.Contains(other.gameObject)) return;
@@ -97,7 +98,7 @@ namespace ScalePact.Combat
 
             data.damageAmount = damage;
             data.damager = this;
-            data.damageFromDirection = direction.normalized;
+            data.knockBackForce = attackKnockBackForce;
             data.damageSource = owner.transform.position;
             data.throwing = false;
             data.shouldStopCamera = false;

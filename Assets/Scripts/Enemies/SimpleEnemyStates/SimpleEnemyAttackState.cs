@@ -4,7 +4,7 @@ class SimpleEnemyAttackState : SimpleEnemyBaseState
 {
     Vector3 attackPos;
     float timer = 0;
-    public SimpleEnemyAttackState(SimpleEnemyStateMachine stateMachine) : base(stateMachine) {}
+    public SimpleEnemyAttackState(SimpleEnemyStateMachine stateMachine) : base(stateMachine) { }
 
     public override void Enter()
     {
@@ -17,15 +17,19 @@ class SimpleEnemyAttackState : SimpleEnemyBaseState
 
         stateMachine.transform.forward = toTarget.normalized;
         stateMachine.Movement.SetForward(stateMachine.transform.forward);
+        
     }
 
     public override void Tick(float deltaTime)
     {
         timer += deltaTime;
 
-        if(timer >= stateMachine.testWaitTimeForAttack)
+        if (timer >= stateMachine.testWaitTimeForAttack)
         {
-            stateMachine.SwitchToIdleState();
+            if (GetNormalizedAnimTime(stateMachine.Animator, "Attack") >=1 )
+            {
+                stateMachine.SwitchToIdleState();
+            }
         }
         base.Tick(deltaTime);
     }
@@ -37,8 +41,9 @@ class SimpleEnemyAttackState : SimpleEnemyBaseState
 
     public override void Exit()
     {
-        base.Exit();
+        
         stateMachine.Movement.SetShouldFollowAgent(true);
+        base.Exit();
     }
 
 }

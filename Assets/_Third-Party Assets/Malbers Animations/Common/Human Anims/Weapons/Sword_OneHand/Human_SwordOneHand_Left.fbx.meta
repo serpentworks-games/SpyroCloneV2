@@ -68,14 +68,14 @@ ModelImporter:
       curves: []
       events:
       - time: 0.31442177
-        functionName: EnableCollider
+        functionName: StartHit
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.44811028
-        functionName: DisableCollider
+        functionName: EndHit
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0

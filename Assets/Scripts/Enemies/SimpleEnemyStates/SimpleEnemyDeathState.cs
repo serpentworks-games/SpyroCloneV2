@@ -13,7 +13,7 @@ public class SimpleEnemyDeathState : SimpleEnemyBaseState
 
     public override void PhysicsTick(float deltaTime)
     {
-        if (GetNormalizedAnimTime(stateMachine.Animator, "Death") < 0.1)
+        if (GetNormalizedAnimTime(stateMachine.Animator, "Death") >= 1)
         {
             stateMachine.Movement.ClearForce();
             stateMachine.Movement.SetShouldFollowAgent(false);
