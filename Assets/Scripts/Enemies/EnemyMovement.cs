@@ -7,10 +7,10 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] float moveSpeed = 4;
 
     public bool IsGrounded { get => isGrounded; }
-    public bool Rigidbody { get => rigidbody; }
+    public bool Rigidbody { get => rb; }
 
     NavMeshAgent agent;
-    Rigidbody rigidbody;
+    Rigidbody rb;
 
     bool shouldFollowAgent;
     bool isGrounded;
@@ -25,10 +25,10 @@ public class EnemyMovement : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.updatePosition = false;
 
-        rigidbody = GetComponent<Rigidbody>();
-        rigidbody.isKinematic = true;
-        rigidbody.useGravity = false;
-        rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+        rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true;
+        rb.useGravity = false;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
 
         shouldFollowAgent = true;
     }
@@ -95,9 +95,9 @@ public class EnemyMovement : MonoBehaviour
 
     public void SetDeathRBSettings()
     {
-        rigidbody.useGravity = true;
-        rigidbody.isKinematic = false;
-        rigidbody.interpolation = RigidbodyInterpolation.None;
+        rb.useGravity = true;
+        rb.isKinematic = false;
+        rb.interpolation = RigidbodyInterpolation.None;
     }
 
     public void SetForward(Vector3 forward)
@@ -132,11 +132,11 @@ public class EnemyMovement : MonoBehaviour
 
         Vector3 movement = externalForce * Time.deltaTime;
 
-        if (!rigidbody.SweepTest(movement.normalized, out RaycastHit hit, movement.sqrMagnitude))
+        if (!rb.SweepTest(movement.normalized, out RaycastHit hit, movement.sqrMagnitude))
         {
-            rigidbody.MovePosition(rigidbody.position + movement);
+            rb.MovePosition(rb.position + movement);
         }
 
-        agent.Warp(rigidbody.position);
+        agent.Warp(rb.position);
     }
 }

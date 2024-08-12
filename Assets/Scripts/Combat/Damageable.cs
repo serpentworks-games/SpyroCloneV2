@@ -4,7 +4,7 @@ using ScalePact.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace ScalePact.Core
+namespace ScalePact.Combat
 {
     public class Damageable : MonoBehaviour
     {

@@ -1,30 +1,23 @@
+using ScalePact.Combat;
 using ScalePact.Core;
+using ScalePact.Utils;
 using UnityEngine;
 
 namespace ScalePact.InteractionSystem.Senders
 {
-    [RequireComponent(typeof(Health))]
-    public class SendOnDamaged : SendInteraction
+    [RequireComponent(typeof(Damageable))]
+    public class SendOnDamaged : SendInteraction, IMessageReceiver
     {
-        Health objHealth;
-
-        private void Awake()
+        public void OnReceiveMessage(MessageType type, object sender, object msg)
         {
-            objHealth = GetComponent<Health>();
+            switch (type)
+            {
+                case MessageType.DAMAGED:
+                    Send();
+                    break;
+                case MessageType.DEAD:
+                    break;
+            }
         }
-
-        private void OnEnable() {
-            objHealth.OnDeath += SendWhenDeathTriggered;
-        }
-
-        private void OnDisable() {
-            objHealth.OnDeath -= SendWhenDeathTriggered;
-        }
-
-        void SendWhenDeathTriggered()
-        {
-            Send();
-        }
-
     }
 }

@@ -1,4 +1,3 @@
-using ScalePact.Core;
 using ScalePact.Player;
 using UnityEngine;
 

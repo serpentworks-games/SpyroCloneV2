@@ -5,7 +5,7 @@ using ScalePact.Player;
 using ScalePact.Utils;
 using UnityEngine;
 
-namespace ScalePact.Forces
+namespace ScalePact.Player
 {
     public class PlayerMovement : MonoBehaviour, IMessageReceiver
     {
