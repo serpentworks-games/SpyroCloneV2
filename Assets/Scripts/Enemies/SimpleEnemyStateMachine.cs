@@ -1,3 +1,4 @@
+using System.Collections;
 using ScalePact.Combat;
 using ScalePact.Core;
 using ScalePact.Utils;
@@ -5,14 +6,17 @@ using UnityEngine;
 
 public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
 {
+    [Header("Movement Behaviour Settings")]
     [SerializeField] TargetScanner playerScanner;
     [SerializeField] float suspicionStateTime = 4f;
-    [SerializeField] float attackRange = 2f;
     [SerializeField] float impactDuraction = 0.5f;
     [SerializeField] float forceMultiplierOnHit = 5.5f;
     [SerializeField] float forceMultiplierOnDeath = 7f;
+    [SerializeField] float timeBeforeDestroy = 2f;
 
+    [Header("Combat Behaviour Settings")]
     public float testWaitTimeForAttack = 1f;
+    [SerializeField] float attackRange = 2f;
 
     public Damageable Target { get => currentTarget; }
     public float SuspicionStateTime { get => suspicionStateTime; }
@@ -138,6 +142,11 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     public void ResetDetectionRadius()
     {
         UpdateDetectionRadius(cachedDetectionRadius);
+    }
+
+    public void DestroyAfterTime()
+    {
+        Destroy(gameObject, timeBeforeDestroy);
     }
 
     #region SwitchTo State Functions

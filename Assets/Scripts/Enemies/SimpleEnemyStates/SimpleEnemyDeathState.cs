@@ -18,6 +18,7 @@ public class SimpleEnemyDeathState : SimpleEnemyBaseState
             stateMachine.Movement.ClearForce();
             stateMachine.Movement.SetShouldFollowAgent(false);
             stateMachine.Animator.enabled = false;
+            stateMachine.DestroyAfterTime();
             return;
         }
     }
