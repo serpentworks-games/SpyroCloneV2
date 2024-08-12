@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,6 +5,9 @@ public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] bool shouldInterpolateRotation = false;
     [SerializeField] float moveSpeed = 4;
+
+    public bool IsGrounded { get => isGrounded; }
+    public bool Rigidbody { get => rigidbody; }
 
     NavMeshAgent agent;
     Rigidbody rigidbody;
@@ -88,6 +90,14 @@ public class EnemyMovement : MonoBehaviour
     {
         isUnderExternalForces = false;
         agent.enabled = true;
+        externalForce = Vector3.zero;
+    }
+
+    public void SetDeathRBSettings()
+    {
+        rigidbody.useGravity = true;
+        rigidbody.isKinematic = false;
+        rigidbody.interpolation = RigidbodyInterpolation.None;
     }
 
     public void SetForward(Vector3 forward)

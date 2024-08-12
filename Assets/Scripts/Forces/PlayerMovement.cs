@@ -7,8 +7,11 @@ using UnityEngine;
 
 namespace ScalePact.Forces
 {
-    public class PlayerForceReceiver : ForceReceiver, IMessageReceiver
+    public class PlayerMovement : MonoBehaviour, IMessageReceiver
     {
+        [Header("Baseline Variables")]
+        [SerializeField] float impactDrag;
+        
         [Header("Grounded Movement")]
         [SerializeField] float moveSpeed = 6f;
         [SerializeField] float movementRotationSpeed = 20f;
@@ -47,13 +50,18 @@ namespace ScalePact.Forces
         Vector3 floorMovement;
         Vector3 gravity;
         Vector3 combinedFloorRaycast;
+        Vector3 impact;
+        Vector3 floorNormal;
+        Vector3 dampingVelocity;
 
         float slopeAmount;
-        Vector3 floorNormal;
+        float verticalVelocity;
 
         bool isTargetting;
         bool isInGlide;
         bool isInJump;
+
+        public Vector3 Movement => impact + Vector3.up * verticalVelocity;
 
         private void Awake()
         {
@@ -134,7 +142,7 @@ namespace ScalePact.Forces
             }
         }
 
-        public override void AddForce(Vector3 forceToAdd)
+        public void AddForce(Vector3 forceToAdd)
         {
             impact += forceToAdd;
         }

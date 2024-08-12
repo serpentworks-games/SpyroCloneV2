@@ -2,17 +2,24 @@ using UnityEngine;
 
 public class SimpleEnemyDeathState : SimpleEnemyBaseState
 {
-    public SimpleEnemyDeathState(SimpleEnemyStateMachine stateMachine) : base(stateMachine) {}
+    public SimpleEnemyDeathState(SimpleEnemyStateMachine stateMachine) : base(stateMachine) { }
 
     public override void Enter()
     {
         stateMachine.Animator.CrossFadeInFixedTime("Death", 0.1f);
-        stateMachine.Movement.SetShouldFollowAgent(false);
+        stateMachine.Movement.SetDeathRBSettings();
+
     }
 
     public override void PhysicsTick(float deltaTime)
     {
-
+        if (GetNormalizedAnimTime(stateMachine.Animator, "Death") < 0.1)
+        {
+            stateMachine.Movement.ClearForce();
+            stateMachine.Movement.SetShouldFollowAgent(false);
+            stateMachine.Animator.enabled = false;
+            return;
+        }
     }
 
     public override void Tick(float deltaTime)

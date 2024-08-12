@@ -5,7 +5,6 @@ namespace ScalePact.Forces
     public class Ragdoll : MonoBehaviour
     {
         Animator animator;
-        CharacterController controller;
 
         Collider[] ragdollColliders;
         Rigidbody[] ragdollRigidBodies;
@@ -13,7 +12,6 @@ namespace ScalePact.Forces
         private void Awake()
         {
             animator = GetComponent<Animator>();
-            controller = GetComponent<CharacterController>();
         }
 
         void Start()
@@ -43,7 +41,6 @@ namespace ScalePact.Forces
                 }
             }
 
-            controller.enabled = !isRagdoll;
             animator.enabled = !isRagdoll;
         }
     }

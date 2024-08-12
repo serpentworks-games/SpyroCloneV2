@@ -839,7 +839,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 4300044, guid: c9a34c70f1c0d00409f41fcfbb2a6871, type: 3}
   m_Bones:
@@ -3814,7 +3814,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f57ba2d1d1dda0d41a8675fb9bc62a4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 3
+  maxHealth: 1
   isImmortal: 0
   maxInvulnerabilityTime: 0.5
   hitAngle: 360
@@ -3835,7 +3835,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnDamageMessageReceivers:
-  - {fileID: 1749275660809770570}
+  - {fileID: 3249648451631901651}
 --- !u!1 &6946998727072825336
 GameObject:
   m_ObjectHideFlags: 0
@@ -3850,8 +3850,6 @@ GameObject:
   - component: {fileID: 7808148078386548809}
   - component: {fileID: 3249648451631901651}
   - component: {fileID: 6037859531084670551}
-  - component: {fileID: 1749275660809770570}
-  - component: {fileID: 8784328914095754168}
   m_Layer: 23
   m_Name: Enemy_BASE
   m_TagString: Untagged
@@ -3875,7 +3873,7 @@ Transform:
   - {fileID: 4362425207393675034}
   - {fileID: 8912692036581448217}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &2337248368088759804
 Animator:
@@ -3887,9 +3885,9 @@ Animator:
   m_GameObject: {fileID: 6946998727072825336}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: c9a34c70f1c0d00409f41fcfbb2a6871, type: 3}
-  m_Controller: {fileID: 9100000, guid: ab44f6d2477b6d54e87266d7521470a7, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
+  m_Controller: {fileID: 9100000, guid: 609af51adb4d80f408949fb9e0e16741, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 1
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -3945,7 +3943,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &3249648451631901651
 MonoBehaviour:
@@ -3971,8 +3969,8 @@ MonoBehaviour:
   suspicionStateTime: 4
   attackRange: 2
   impactDuraction: 0.5
-  forceMultiplierOnHit: 5.5
-  forceMultiplierOnDeath: 7
+  forceMultiplierOnHit: 1
+  forceMultiplierOnDeath: 2
   testWaitTimeForAttack: 1
 --- !u!114 &6037859531084670551
 MonoBehaviour:
@@ -3986,33 +3984,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98290a97557daef41a34389ba606856b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shouldInterpolateRotation: 0
+  shouldInterpolateRotation: 1
   moveSpeed: 4
---- !u!114 &1749275660809770570
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6946998727072825336}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d7d49b87053574fba910531fac48a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  impactDrag: 0
---- !u!114 &8784328914095754168
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6946998727072825336}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c5f5167efb86ec43b9165906bb99cbf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &3533664532182816880
 PrefabInstance:
   m_ObjectHideFlags: 0

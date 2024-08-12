@@ -38,14 +38,14 @@ namespace ScalePact.Player
         Coroutine comboAttackResetCoroutine;
         InputManager inputManager;
         Animator animator;
-        PlayerForceReceiver forceReceiver;
+        PlayerMovement forceReceiver;
         Damageable damageable;
 
         private void Awake()
         {
             inputManager = GetComponent<InputManager>();
             animator = GetComponent<Animator>();
-            forceReceiver = GetComponent<PlayerForceReceiver>();
+            forceReceiver = GetComponent<PlayerMovement>();
             damageable = GetComponentInChildren<Damageable>();
             targetGroup = FindObjectOfType<CinemachineStateDrivenCamera>().GetComponentInChildren<CinemachineTargetGroup>();
 
@@ -137,7 +137,7 @@ namespace ScalePact.Player
         {
             //attackData[index].DamageHandler.SetUpAttack(attackData[index].KnockBackForce);
             //forceReceiver.AddForce(transform.forward * attackData[index].AttackForce);
-            
+
             animator.SetInteger(PlayerHashIDs.AttackIndexHash, index);
         }
         #endregion
@@ -155,14 +155,14 @@ namespace ScalePact.Player
         private void GetPotentialTargets()
         {
             overlappedColliders = Physics.OverlapSphere(
-                transform.position, targettingRadius, 
+                transform.position, targettingRadius,
                 targettingLayer, QueryTriggerInteraction.Ignore);
 
             TargetColliders.Clear();
 
             for (int i = 0; i < overlappedColliders.Length; i++)
             {
-                var overlapped = 
+                var overlapped =
                     overlappedColliders[i].GetComponentInChildren<Damageable>();
                 if (overlapped != null)
                 {

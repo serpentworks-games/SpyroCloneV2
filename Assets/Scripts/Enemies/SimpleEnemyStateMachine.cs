@@ -1,7 +1,6 @@
 using ScalePact.Combat;
 using ScalePact.Core;
 using ScalePact.Utils;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
@@ -15,7 +14,6 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
 
     public float testWaitTimeForAttack = 1f;
 
-    public bool IsGrounded { get; set; }
     public Damageable Target { get => currentTarget; }
     public float SuspicionStateTime { get => suspicionStateTime; }
     public float AttackRange { get => attackRange; }
@@ -23,6 +21,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     public TargetDistributor.TargetFollower FollowerData { get => followerInstance; }
     public Animator Animator { get => animator; }
     public float ImpactDuration { get => impactDuraction; }
+    public Rigidbody Rigidbody { get => rb; }
 
     Vector3 originalPosition;
     Damageable currentTarget = null;
@@ -33,6 +32,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
 
     Animator animator;
     EnemyMovement movement;
+    Rigidbody rb;
 
     private void OnEnable()
     {
@@ -42,6 +42,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
 
         movement = GetComponent<EnemyMovement>();
         animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
 
         originalPosition = transform.position;
 
@@ -178,14 +179,14 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     public void SwitchToDeathState(Damageable.DamageMessage msg)
     {
         SwitchState(new SimpleEnemyDeathState(this));
-        ApplyForces(msg, forceMultiplierOnDeath);
+        ApplyForces(msg, forceMultiplierOnDeath, true);
     }
 
     public void SwitchToImpactState(Damageable.DamageMessage msg)
     {
         animator.CrossFadeInFixedTime("Impact", 0.1f);
         SwitchState(new SimpleEnemyHitState(this));
-        ApplyForces(msg, forceMultiplierOnHit);
+        ApplyForces(msg, forceMultiplierOnHit, false);
     }
 
 
@@ -206,14 +207,21 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
         }
     }
 
-    private void ApplyForces(Damageable.DamageMessage msg, float multiplier)
+    private void ApplyForces(Damageable.DamageMessage msg, float multiplier, bool useGravity)
     {
         Vector3 pushForce = transform.position - msg.damageSource;
 
         pushForce.y = 0;
 
         transform.forward = -pushForce.normalized;
-        movement.AddForce(pushForce.normalized * multiplier, false);
+        if(useGravity)
+        {
+            movement.AddForce(pushForce.normalized * multiplier - Physics.gravity * 0.6f);
+        }
+        else
+        {
+            movement.AddForce(pushForce.normalized * multiplier, useGravity);
+        }
     }
     #endregion
 
