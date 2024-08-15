@@ -1,57 +1,142 @@
-using ScalePact.Core;
-using ScalePact.Utils;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace ScalePact.Enemies
+public class EnemyMovement : MonoBehaviour
 {
-    public class EnemyMovement : MonoBehaviour, IAction
+    [SerializeField] bool shouldInterpolateRotation = false;
+    [SerializeField] float moveSpeed = 4;
+
+    public bool IsGrounded { get => isGrounded; }
+    public bool Rigidbody { get => rb; }
+
+    NavMeshAgent agent;
+    Rigidbody rb;
+
+    bool shouldFollowAgent;
+    bool isGrounded;
+    bool isUnderExternalForces;
+    bool shouldExternalForceAddGravity = true;
+    Vector3 externalForce;
+
+    const float kGroundedRayDistance = 0.8f;
+
+    private void OnEnable()
     {
-        [SerializeField] float maxMoveSpeed = 4f;
+        agent = GetComponent<NavMeshAgent>();
+        agent.updatePosition = false;
 
-        Health health;
-        Animator animator;
-        NavMeshAgent agent;
-        ActionScheduler actionScheduler;
+        rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true;
+        rb.useGravity = false;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
 
-        private void Awake()
+        shouldFollowAgent = true;
+    }
+
+    private void FixedUpdate()
+    {
+        CheckIfGrounded();
+
+        if (isUnderExternalForces)
         {
-            agent = GetComponent<NavMeshAgent>();
-            actionScheduler = GetComponent<ActionScheduler>();
-            health = GetComponent<Health>();
-            animator = GetComponent<Animator>();
+            ForceMovement();
+            return;
+        }
+        else
+        {
+            if (shouldFollowAgent)
+            {
+                agent.speed = moveSpeed;
+                transform.position = agent.nextPosition;
+            }
+            else
+            {
+                //animator things
+            }
+        }
+    }
+
+    public float GetAgentVelocity()
+    {
+        return agent.velocity.magnitude;
+    }
+
+    public void SetShouldFollowAgent(bool shouldFollow)
+    {
+        if (!shouldFollow && agent.enabled)
+        {
+            agent.ResetPath();
+        }
+        else if (shouldFollow && !agent.enabled)
+        {
+            agent.Warp(transform.position);
         }
 
-        private void Update()
+        shouldFollowAgent = shouldFollow;
+        agent.enabled = shouldFollow;
+    }
+
+    public void AddForce(Vector3 force, bool useGravity = true)
+    {
+        if (agent.enabled) agent.ResetPath();
+
+        externalForce = force;
+        agent.enabled = false;
+        isUnderExternalForces = true;
+        shouldExternalForceAddGravity = useGravity;
+    }
+
+    public void ClearForce()
+    {
+        isUnderExternalForces = false;
+        agent.enabled = true;
+        externalForce = Vector3.zero;
+    }
+
+    public void SetDeathRBSettings()
+    {
+        rb.useGravity = true;
+        rb.isKinematic = false;
+        rb.interpolation = RigidbodyInterpolation.None;
+    }
+
+    public void SetForward(Vector3 forward)
+    {
+        Quaternion targetRot = Quaternion.LookRotation(forward);
+
+        if (shouldInterpolateRotation)
         {
-            agent.enabled = !health.IsDead;
-            UpdateAnimator();
+            targetRot = Quaternion.RotateTowards(transform.rotation, targetRot, agent.angularSpeed * Time.deltaTime);
         }
 
-        public void StartMoveAction(Vector3 destination, float speedModifier)
+        transform.rotation = targetRot;
+    }
+
+    public bool SetTarget(Vector3 position)
+    {
+        return agent.SetDestination(position);
+    }
+
+    private void CheckIfGrounded()
+    {
+        Ray ray = new Ray(transform.position + 0.5f * kGroundedRayDistance * Vector3.up, -Vector3.up);
+        isGrounded = Physics.Raycast(ray, out RaycastHit hit, kGroundedRayDistance, Physics.AllLayers, QueryTriggerInteraction.Ignore);
+    }
+
+    private void ForceMovement()
+    {
+        if (shouldExternalForceAddGravity)
         {
-            actionScheduler.StartAction(this);
-            MoveToLocation(destination, speedModifier);
+            externalForce += Physics.gravity * Time.deltaTime;
         }
 
-        public void MoveToLocation(Vector3 destination, float speedModifier)
+        Vector3 movement = externalForce * Time.deltaTime;
+
+        if (!rb.SweepTest(movement.normalized, out RaycastHit hit, movement.sqrMagnitude))
         {
-            agent.isStopped = false;
-            agent.destination = destination;
-            agent.speed = maxMoveSpeed * speedModifier;
+            rb.MovePosition(rb.position + movement);
         }
 
-        public void CancelAction()
-        {
-            agent.isStopped = true;
-        }
-
-        private void UpdateAnimator()
-        {
-            Vector3 velocity = agent.velocity;
-            Vector3 localVelocity = transform.InverseTransformDirection(velocity);
-            float speed = localVelocity.z;
-            animator.SetFloat(EnemyHashIDs.SpeedHash, speed);
-        }
+        agent.Warp(rb.position);
     }
 }

@@ -3746,6 +3746,86 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!1 &8379084183508462173
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7115562630088031287}
+  - component: {fileID: 5747418021851652532}
+  - component: {fileID: 3681812670866464708}
+  m_Layer: 23
+  m_Name: DamageablePart
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7115562630088031287
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8379084183508462173}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7092348869802690847}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5747418021851652532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8379084183508462173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f57ba2d1d1dda0d41a8675fb9bc62a4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 3
+  isImmortal: 0
+  maxInvulnerabilityTime: 0.5
+  hitAngle: 360
+  hitForwardRotation: 360
+  OnReceiveDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHitWhileInvulnerable:
+    m_PersistentCalls:
+      m_Calls: []
+  OnBecomeVulnerable:
+    m_PersistentCalls:
+      m_Calls: []
+  OnResetDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDamageMessageReceivers:
+  - {fileID: 0}
+--- !u!114 &3681812670866464708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8379084183508462173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38e20f88af09d2547a05f21be5f1f313, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetToFollow: {fileID: 7092348869802690847}
 --- !u!1001 &155259233682840584
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3839,6 +3919,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6938501984583963927, guid: dc6fdca5305717b409284d09a06b252f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 22743959269561403}
+    - targetCorrespondingSourceObject: {fileID: 6938501984583963927, guid: dc6fdca5305717b409284d09a06b252f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7115562630088031287}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6290066965850356419, guid: dc6fdca5305717b409284d09a06b252f, type: 3}
       insertIndex: -1
@@ -3884,6 +3967,15 @@ MonoBehaviour:
   maxImpactDuration: 1
   defaultState: 0
   patrollingSpeedModifier: 1
+  chaseRangeScanner:
+    heightOffset: 0
+    detectionRadius: 5
+    detectionAngle: 270
+    maxHeightDifference: 1
+    viewBlockingLayers:
+      serializedVersion: 2
+      m_Bits: 0
+    editorGizmoColor: {r: 0, g: 0, b: 0.7, a: 0.4}
   chaseDistance: 5
   suspicionStateTime: 5
   patrolPath: {fileID: 0}
@@ -3902,11 +3994,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daff2a4e7ae1e914180ee93cca7d2273, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackRangeScanner:
+    heightOffset: 0
+    detectionRadius: 5
+    detectionAngle: 270
+    maxHeightDifference: 1
+    viewBlockingLayers:
+      serializedVersion: 2
+      m_Bits: 0
+    editorGizmoColor: {r: 0, g: 0, b: 0.7, a: 0.4}
   attackRange: 2
   attackSpeed: 2
   attackMoveSpeedModifier: 1
   weaponDamage: 1
   weapon: {fileID: 8862422961083311959}
+  followerData:
+    requireAttackSlot: 0
+    assignedAttackSlot: 0
+    requiredPosition: {x: 0, y: 0, z: 0}
+    distributor: {fileID: 0}
 --- !u!114 &1797413686511936064
 MonoBehaviour:
   m_ObjectHideFlags: 0
