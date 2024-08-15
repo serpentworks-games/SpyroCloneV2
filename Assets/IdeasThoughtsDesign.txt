@@ -1,0 +1,8 @@
+Current Ideas, Thoughts and Design Notes
+
+LAST UPDATED : 8/14/24
+
+== Controls ==
+LSHIFT - Dash
+RMOUSE - Ranged
+1-4 - Abilities
