@@ -14,9 +14,10 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     [SerializeField] float timeBeforeDestroy = 2f;
 
     [Header("Combat Behaviour Settings")]
-    public float testWaitTimeForAttack = 1f;
+    [SerializeField] float attackSpeed = 1f;
     [SerializeField] float attackRange = 2f;
-    [SerializeField] MeleeWeapon weapon;
+    [SerializeField] MeleeWeapon meleeWeapon;
+    [SerializeField] RangeWeapon rangedWeapon;
 
     public Damageable Target { get => currentTarget; }
     public float SuspicionStateTime { get => suspicionStateTime; }
@@ -26,7 +27,8 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     public Animator Animator { get => animator; }
     public float ImpactDuration { get => impactDuraction; }
     public Rigidbody Rigidbody { get => rb; }
-    public MeleeWeapon Weapon { get => weapon; }
+    public MeleeWeapon MeleeWeapon { get => meleeWeapon; }
+    public RangeWeapon RangedWeapon { get => rangedWeapon; }
 
     Vector3 originalPosition;
     Damageable currentTarget = null;
@@ -126,6 +128,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
         movement.SetTarget(originalPosition);
     }
     #endregion
+
     #region Detection Updaters
     public void UpdateDetectionAngle(float newAngle)
     {
@@ -175,6 +178,7 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     {
         animator.CrossFadeInFixedTime("Attack", 0.1f);
         SwitchState(new SimpleEnemyAttackState(this));
+
     }
 
     public void SwitchToSuspicionState()
@@ -238,17 +242,17 @@ public class SimpleEnemyStateMachine : StateMachine, IMessageReceiver
     }
     #endregion
 
-#region Anim Events
+    #region Anim Events
     void StartHit()
     {
-        weapon.BeginAttack();
+        meleeWeapon.BeginAttack();
     }
 
     void EndHit()
     {
-        weapon.EndAttack();
+        meleeWeapon.EndAttack();
     }
-#endregion
+    #endregion
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
